@@ -51,7 +51,7 @@ class Contract extends Notifiable {
     return this;
   }
 
-  Contract canBeConvertedToDoble(String value, String property, String message) {
+  Contract canBeConvertedToDouble(String value, String property, String message) {
     if (value == null) return this;
     if (double.tryParse(value) == null) addNotification(property, message);
     return this;
