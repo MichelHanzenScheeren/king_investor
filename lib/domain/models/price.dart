@@ -30,13 +30,10 @@ class Price extends Model {
     this.yearHigh,
     this.yearLow,
   ) : super(objectId, createdAt) {
-    _ticker = ticker ?? '';
+    _ticker = ticker ?? 'NULL_PRICE';
     _lastUpdate = lastUpdate ?? 0;
     _applyContracts(ticker, lastUpdate);
   }
-
-  String get ticker => _ticker;
-  DateTime get lastUpdate => DateTime.fromMillisecondsSinceEpoch(_lastUpdate * 1000);
 
   void _applyContracts(String ticker, int lastUpdate) {
     addNotifications(
@@ -54,4 +51,7 @@ class Price extends Model {
     addNotifications(yearHigh);
     addNotifications(yearLow);
   }
+
+  String get ticker => _ticker;
+  DateTime get lastUpdate => DateTime.fromMillisecondsSinceEpoch(_lastUpdate * 1000);
 }
