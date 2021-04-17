@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,14 +6,13 @@ import 'package:king_investor/data/services/request_service.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:mockito/mockito.dart';
+import '../../static/statics.dart';
 
 class DioMock extends Mock implements HttpClientAdapter {}
 
-const searchJsonPath = 'assets/test/search_response.json';
-
 main() async {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  final responseData = Map.from(json.decode(await rootBundle.loadString(searchJsonPath)));
+  final responseData = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
 
   Dio dio;
   DioMock dioMock;

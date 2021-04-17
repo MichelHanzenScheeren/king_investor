@@ -1,4 +1,5 @@
 import 'package:king_investor/shared/models/model.dart';
+import 'package:king_investor/shared/notifications/contract.dart';
 
 class Company extends Model {
   String _symbol; // ITUB3, XPML11, AAPL, AMT
@@ -30,6 +31,8 @@ class Company extends Model {
     _securityType = securityType ?? 'Common Stock';
     _exchange = _formatExchange(exchange);
     _country = _formatCountry(country);
+
+    _applyContracts(symbol, ticker, currency);
   }
 
   String _formatExchange(String exchange) {
@@ -39,11 +42,19 @@ class Company extends Model {
     return exchange;
   }
 
-  String _formatCountry(String exchange) {
-    if (exchange == null || exchange == '') return 'Desconhecido';
-    if (exchange.toLowerCase().contains('brazil')) return 'Brasil';
-    if (exchange.toLowerCase().contains('united states')) return 'Estados Unidos';
-    return exchange;
+  String _formatCountry(String country) {
+    if (country == null || country == '') return 'Desconhecido';
+    if (country.toLowerCase().contains('brazil')) return 'Brasil';
+    if (country.toLowerCase().contains('united states')) return 'Estados Unidos';
+    return country;
+  }
+
+  void _applyContracts(String symbol, String ticker, String currency) {
+    addNotifications(Contract()
+        .requires()
+        .isNotNullOrEmpty(symbol, 'Company.symbol', 'O símbolo de uma companhia não pode ser vazio')
+        .isNotNullOrEmpty(ticker, 'Company.ticker', 'O ticker de uma companhia não pode ser vazio')
+        .isNotNullOrEmpty(currency, 'Company.currency', 'A unidade monetária de uma companhia não pode ser vazia'));
   }
 
   String get symbol => _symbol;
