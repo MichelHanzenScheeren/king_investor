@@ -47,7 +47,7 @@ class FinanceRepository implements FinanceAgreement {
     throw UnimplementedError();
   }
 
-  List<Company> _convertToCompaniesList(Map<String, dynamic> map) {
+  List<Company> _convertToCompaniesList(Map map) {
     List<Company> list = [];
     List<Map> results = List.castFrom(map['quote']);
     results.forEach((e) => list.add(CompanyConverter().fromMapToModel(e)));
