@@ -6,8 +6,8 @@ abstract class RequestAgreement {
     int conectTimeoutMiliseconds: 5000,
     int sendTimeoutMiliseconds: 5000,
     int receiveTimeoutMiliseconds: 10000,
-    String baseUrl: '',
     Map headers,
+    String baseUrl: '',
   });
 
   Future<Either<Notification, Map>> request(String url);
