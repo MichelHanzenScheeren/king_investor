@@ -1,0 +1,26 @@
+{
+    "quote": [
+        {
+            "securityType": "Common Stock",
+            "symbol": "PSSA3",
+            "exchange": "B3 Day",
+            "country": "Brazil",
+            "currency": "BRL",
+            "resourceType": "Company",
+            "fundamentalDataCurrency": "BRL",
+            "resourceSubtype": "Public",
+            "region": "AMERICAS",
+            "ticker": "pssa3:bz",
+            "tickerName": "PSSA3:BZ",
+            "template": "Stock",
+            "tinyName": "Porto Seguro SA",
+            "name": "Porto Seguro SA",
+            "watchlist": true,
+            "resourceId": "PSSA3:BZ",
+            "id": "PSSA3:BZ",
+            "title": "Porto Seguro SA",
+            "card": "security"
+        }
+    ],
+    "news": []
+}
