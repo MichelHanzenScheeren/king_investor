@@ -6,10 +6,11 @@ import 'package:king_investor/domain/value_objects/score.dart';
 import 'package:king_investor/shared/models/model.dart';
 
 class Asset extends Model {
-  final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
+  final Company company; // Dados da empresa em questão
   final Amount averagePrice; // preço médio do ativo
   final Score score; // "peso" do ativo na carteira
-  final Company company; // Dados da empresa em questão
+  final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
+
   Price _price; // Valores do ativo (preço atual, variação diária, volume de negociações)
 
   Asset(
