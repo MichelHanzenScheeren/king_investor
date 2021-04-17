@@ -11,6 +11,7 @@ class RequestService implements RequestAgreement {
     _dio = dio;
   }
 
+  @override
   void configureRequests({
     int conectTimeoutMiliseconds: 5000,
     int sendTimeoutMiliseconds: 5000,
@@ -27,6 +28,7 @@ class RequestService implements RequestAgreement {
     );
   }
 
+  @override
   Future<Either<Notification, Map>> request(String url) async {
     try {
       final Response response = await _dio.get(url);
@@ -40,7 +42,7 @@ class RequestService implements RequestAgreement {
     if (response == null || response.statusCode != 200) {
       return Left(Notification('RequestService.invalidResponse', 'O servidor retornou uma resposta inválida.'));
     } else {
-      return Right(Map<String, dynamic>.from(response.data));
+      return Right(Map.from(response.data));
     }
   }
 

@@ -6,7 +6,7 @@ class Company extends Model {
   String _currency; // BRL, USD
   String _region; // Americas,
   String _name; // Porto Seguro S.A., XP MALLS FDO INV IMOB FII
-  String _categoryId; // ação, fii, stock, reit ("securityType")
+  String _securityType; // Common Stock, Closed-End Fund, REIT
   String _exchange; // B3, NASDAQ
   String _country; // Brazil, United States
 
@@ -18,7 +18,7 @@ class Company extends Model {
     String currency,
     String region,
     String name,
-    String categoryId,
+    String securityType,
     String exchange,
     String country,
   ) : super(objectId, createdAt) {
@@ -27,7 +27,7 @@ class Company extends Model {
     _currency = currency ?? '?';
     _region = region ?? 'Desconhecido';
     _name = name ?? 'Indisponível';
-    _categoryId = categoryId ?? '';
+    _securityType = securityType ?? 'Common Stock';
     _exchange = _formatExchange(exchange);
     _country = _formatCountry(country);
   }
@@ -51,7 +51,7 @@ class Company extends Model {
   String get currency => _currency;
   String get region => _region;
   String get name => _name;
-  String get categoryId => _categoryId;
+  String get securityType => _securityType;
   String get exchange => _exchange;
   String get country => _country;
 }

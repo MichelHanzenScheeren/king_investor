@@ -14,16 +14,16 @@ const searchJsonPath = 'assets/test/search_response.json';
 
 main() async {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  final responseData = Map<String, dynamic>.from(json.decode(await rootBundle.loadString(searchJsonPath)));
+  final responseData = Map.from(json.decode(await rootBundle.loadString(searchJsonPath)));
 
   Dio dio;
   DioMock dioMock;
-  RequestAgreement requestAgreement;
+  RequestAgreement requestService;
   setUp(() {
     dio = Dio();
     dioMock = DioMock();
     dio.httpClientAdapter = dioMock;
-    requestAgreement = RequestService(dio);
+    requestService = RequestService(dio);
   });
 
   test('should return Right(map) when success request', () async {
@@ -31,7 +31,7 @@ main() async {
       Headers.contentTypeHeader: [Headers.jsonContentType]
     });
     when(dioMock.fetch(any, any, any)).thenAnswer((_) async => httpResponse);
-    final response = await requestAgreement.request("/any url");
+    final response = await requestService.request("/any url");
 
     expect(response.isRight(), isTrue);
     expect(response.getOrElse(null), responseData);
@@ -40,7 +40,7 @@ main() async {
   test('should return Left(Notification) when failed request', () async {
     final httpResponse = ResponseBody.fromString(jsonEncode({}), 400);
     when(dioMock.fetch(any, any, any)).thenAnswer((_) async => httpResponse);
-    final response = await requestAgreement.request("/any url");
+    final response = await requestService.request("/any url");
 
     expect(response.isLeft(), isTrue);
     response.fold((notification) => expect(notification, isInstanceOf<Notification>()), (map) => false);
