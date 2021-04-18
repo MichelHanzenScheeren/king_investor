@@ -3,10 +3,10 @@ import 'package:king_investor/shared/models/model.dart';
 
 class Category extends Model {
   final String name;
-  final int value;
+  final int order;
   final Score score; // "nota" ou "peso" da categoria na carteira
 
-  Category(String objectId, DateTime createdAt, this.name, this.value, this.score) : super(objectId, createdAt) {
+  Category(String objectId, DateTime createdAt, this.name, this.order, this.score) : super(objectId, createdAt) {
     addNotifications(score);
   }
 }
