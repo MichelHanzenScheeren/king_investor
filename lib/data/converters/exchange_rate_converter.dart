@@ -8,7 +8,7 @@ const kCurrency = 'currency';
 const kLast = 'last';
 
 class ExchangeRateConverter {
-  ExchangeRate fromMapToModel(Map<String, dynamic> map) {
+  ExchangeRate fromMapToModel(Map map) {
     String symbol = map[kSymbol] ?? '';
     String currency = map[kCurrency] ?? '';
     return ExchangeRate(

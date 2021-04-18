@@ -26,7 +26,8 @@ class RequestServiceMock implements RequestAgreement {
       final responseData = Map.from(json.decode(await rootBundle.loadString(kGetPricesJsonPath)));
       return Future.value(Right(responseData));
     } else if (url.contains('USD')) {
-      return Future.value(Right({}));
+      final responseData = Map.from(json.decode(await rootBundle.loadString(kGetExchangeRateJsonPath)));
+      return Future.value(Right(responseData));
     } else {
       return Future.value(Left(Notification('request_service.unkown', 'Erro desconhecido')));
     }
