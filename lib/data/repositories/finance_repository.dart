@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
+import 'package:king_investor/data/converters/price_converter.dart';
 import 'package:king_investor/domain/agreements/finance_agreement.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
@@ -36,9 +37,14 @@ class FinanceRepository implements FinanceAgreement {
   }
 
   @override
-  Future<Either<Notification, List<Price>>> getPrices(List<String> ticker) {
-    // TODO: implement getPrices
-    throw UnimplementedError();
+  Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
+    String symbols = '';
+    tickers?.forEach((e) => symbols += ',' + e);
+    final response = await _requestService.request('/get-compact?id=${symbols.replaceFirst(",", "")}');
+    return response.fold(
+      (notification) => Left(notification),
+      (map) => Right(_convertToPricesList(map)),
+    );
   }
 
   @override
@@ -51,6 +57,13 @@ class FinanceRepository implements FinanceAgreement {
     List<Company> list = [];
     List<Map> results = List.castFrom(map['quote']);
     results.forEach((e) => list.add(CompanyConverter().fromMapToModel(e)));
+    return list;
+  }
+
+  List<Price> _convertToPricesList(Map map) {
+    List<Price> list = [];
+    Map results = map['result'];
+    results.keys.forEach((key) => list.add(PriceConverter().fromMapToModel(results[key])));
     return list;
   }
 }

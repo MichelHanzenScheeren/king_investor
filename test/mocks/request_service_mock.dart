@@ -23,7 +23,8 @@ class RequestServiceMock implements RequestAgreement {
       final responseData = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
       return Future.value(Right(responseData));
     } else if (url.contains('get-compact')) {
-      return Future.value(Right({}));
+      final responseData = Map.from(json.decode(await rootBundle.loadString(kGetPricesJsonPath)));
+      return Future.value(Right(responseData));
     } else if (url.contains('USD')) {
       return Future.value(Right({}));
     } else {
