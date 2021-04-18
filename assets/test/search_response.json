@@ -20,6 +20,27 @@
             "id": "PSSA3:BZ",
             "title": "Porto Seguro SA",
             "card": "security"
+        },
+        {
+            "securityType": "Common Stock",
+            "symbol": "AAPL",
+            "exchange": "NASDAQ GS",
+            "country": "United States",
+            "currency": "USD",
+            "resourceType": "Company",
+            "fundamentalDataCurrency": "USD",
+            "resourceSubtype": "Public",
+            "region": "AMERICAS",
+            "ticker": "aapl:us",
+            "tickerName": "AAPL:US",
+            "template": "Stock",
+            "tinyName": "Apple Inc",
+            "name": "Apple Inc",
+            "watchlist": true,
+            "resourceId": "AAPL:US",
+            "id": "AAPL:US",
+            "title": "Apple Inc",
+            "card": "security"
         }
     ],
     "news": []

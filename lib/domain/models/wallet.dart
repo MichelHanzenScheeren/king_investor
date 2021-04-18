@@ -8,7 +8,7 @@ class Wallet extends Model {
   List<Asset> _assets;
 
   Wallet(String objectId, DateTime createdAt, bool isMainWallet, String name) : super(objectId, createdAt) {
-    _name = name ?? 'Carteira ${DateTime.now().millisecondsSinceEpoch / 1000}';
+    _name = name == null || name.trim().isEmpty ? 'Carteira ${DateTime.now().millisecondsSinceEpoch / 1000}' : name;
     _isMainWallet = isMainWallet ?? false;
     _assets = <Asset>[];
   }
@@ -21,7 +21,7 @@ class Wallet extends Model {
 
   bool get isMainWallet => _isMainWallet;
   String get name => _name;
-  UnmodifiableListView<Asset> get items => UnmodifiableListView<Asset>(_assets);
+  UnmodifiableListView<Asset> get assets => UnmodifiableListView<Asset>(_assets);
 
   void setName(String name) {
     if (name != null && name.trim() != '') _name = name;

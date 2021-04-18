@@ -20,7 +20,7 @@ void main() {
     final response = await financeRepository.search('PSSA3');
     expect(response.isRight(), isTrue);
     expect(response.getOrElse(null), isInstanceOf<List<Company>>());
-    expect(response.getOrElse(null).length, 1);
+    expect(response.getOrElse(null).length, 2);
   });
 
   test('Should return Right with valid list of Price when mock getPrices()', () async {
