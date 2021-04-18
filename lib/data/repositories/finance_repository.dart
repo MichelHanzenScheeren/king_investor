@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
+import 'package:king_investor/data/converters/exchange_rate_converter.dart';
 import 'package:king_investor/data/converters/price_converter.dart';
 import 'package:king_investor/domain/agreements/finance_agreement.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
@@ -48,9 +49,12 @@ class FinanceRepository implements FinanceAgreement {
   }
 
   @override
-  Future<Either<Notification, ExchangeRate>> getExchangeRate(String origin, String destiny) {
-    // TODO: implement getExchangeRate
-    throw UnimplementedError();
+  Future<Either<Notification, ExchangeRate>> getExchangeRate(String origin, String destiny) async {
+    final response = await _requestService.request('get-cross-currencies?id=$origin,$destiny');
+    return response.fold(
+      (notification) => Left(notification),
+      (map) => Right(_convertToExchangeRate(map, origin, destiny)),
+    );
   }
 
   List<Company> _convertToCompaniesList(Map map) {
@@ -65,5 +69,10 @@ class FinanceRepository implements FinanceAgreement {
     Map results = map['result'];
     results.keys.forEach((key) => list.add(PriceConverter().fromMapToModel(results[key])));
     return list;
+  }
+
+  ExchangeRate _convertToExchangeRate(Map map, String origin, String destiny) {
+    Map result = map['result'];
+    return ExchangeRateConverter().fromMapToModel(result['$origin$destiny:cur']);
   }
 }
