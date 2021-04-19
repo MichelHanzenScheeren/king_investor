@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
+import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/company.dart';
 import '../../static/statics.dart';
 

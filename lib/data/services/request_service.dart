@@ -58,12 +58,12 @@ class RequestService implements RequestAgreement {
 
   Notification _dioError(error) {
     switch (error.type) {
-      case DioErrorType.CONNECT_TIMEOUT:
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.connectTimeout:
+      case DioErrorType.sendTimeout:
         return Notification('RequestService.networkError', 'Não foi possível conectar-se a rede.');
-      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.receiveTimeout:
         return Notification('RequestService.receiveTimeout', 'O Servidor demorou para responder.');
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         return Notification('RequestService.invalidResponse', 'O servidor retornou uma resposta inválida.');
       default:
         return Notification('RequestService.unkown', 'Erro desconhecido');
