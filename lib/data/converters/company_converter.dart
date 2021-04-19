@@ -1,15 +1,5 @@
+import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/company.dart';
-
-const kObjectId = 'objectId';
-const kCreatedAt = 'createdAt';
-const kSymbol = 'symbol';
-const kTicker = 'ticker';
-const kCurrency = 'currency';
-const kRegion = 'region';
-const kName = 'name';
-const kSecurityType = 'securityType';
-const kExchange = 'exchange';
-const kCountry = 'country';
 
 class CompanyConverter {
   Company fromMapToModel(Map map) {
