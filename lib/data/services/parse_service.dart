@@ -29,7 +29,7 @@ class ParseService implements ParseAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> edit(String table, Map map) async {
+  Future<Either<Notification, Notification>> update(String table, Map map) async {
     try {
       final parseObject = ParseObject(table, client: _client);
       map.keys.forEach((key) => parseObject.set(key, map[key]));
@@ -54,10 +54,10 @@ class ParseService implements ParseAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(String table, List<String> objectsToInclude) async {
+  Future<Either<Notification, List>> getAll(String table, {List<String> objectsToInclude}) async {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
-      myQuery.includeObject(objectsToInclude);
+      myQuery.includeObject(objectsToInclude ?? <String>[]);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(Notification('ParseService.getAll', ParseException.getDescription(response.statusCode)));
