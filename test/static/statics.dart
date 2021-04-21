@@ -5,3 +5,5 @@ const String kGetPricesJsonPath = 'assets/test/get_prices_response.json';
 const String kGetExchangeRateJsonPath = 'assets/test/get_exchange_rate_response.json';
 
 const String kCategoryJsonPath = 'assets/test/category.json';
+
+const String kParseGetAllResponse = 'assets/test/parse_get_all_response.json';

@@ -9,10 +9,16 @@ import 'package:king_investor/shared/extensions/string_extension.dart';
 const pointerIndicator = 'foreignkey';
 
 class ParseService implements ParseAgreement {
+  ParseClient _client;
+
+  ParseService({ParseClient client}) {
+    _client = client ?? ParseHTTPClient();
+  }
+
   @override
   Future<Either<Notification, String>> create(String table, Map dynamicMap) async {
     try {
-      final parseObject = ParseObject(table);
+      final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, dynamicMap);
       final response = await parseObject.create(allowCustomObjectId: true);
       if (response.success) return Right(parseObject.objectId);
@@ -25,7 +31,7 @@ class ParseService implements ParseAgreement {
   @override
   Future<Either<Notification, Notification>> edit(String table, Map map) async {
     try {
-      final parseObject = ParseObject(table);
+      final parseObject = ParseObject(table, client: _client);
       map.keys.forEach((key) => parseObject.set(key, map[key]));
       final response = await parseObject.update();
       if (response.success) return Right(Notification('ParseService.edit', 'Item editado com sucesso'));
@@ -38,7 +44,7 @@ class ParseService implements ParseAgreement {
   @override
   Future<Either<Notification, Notification>> delete(String table, String objectId) async {
     try {
-      final parseObject = ParseObject(table)..objectId = objectId;
+      final parseObject = ParseObject(table, client: _client)..objectId = objectId;
       final response = await parseObject.delete();
       if (response.success) return Right(Notification('ParseService.delete', 'Item deletado com sucesso'));
       return Left(Notification('ParseService.delete', ParseException.getDescription(response.statusCode)));
@@ -50,7 +56,8 @@ class ParseService implements ParseAgreement {
   @override
   Future<Either<Notification, List>> getAll(String table, List<String> objectsToInclude) async {
     try {
-      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table))..includeObject(objectsToInclude);
+      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      myQuery.includeObject(objectsToInclude);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(Notification('ParseService.getAll', ParseException.getDescription(response.statusCode)));
