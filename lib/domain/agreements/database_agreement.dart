@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
-abstract class ParseAgreement {
+abstract class DatabaseAgreement {
   Future<Either<Notification, String>> create(String table, Map map);
   Future<Either<Notification, Notification>> update(String table, Map map);
   Future<Either<Notification, Notification>> delete(String table, String objectId);

@@ -1,14 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/data/utils/parse_exception.dart';
 import 'package:king_investor/data/utils/parse_tables.dart';
-import 'package:king_investor/domain/agreements/parse_agreement.dart';
+import 'package:king_investor/domain/agreements/database_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:king_investor/shared/extensions/string_extension.dart';
 
 const pointerIndicator = 'foreignkey';
 
-class ParseService implements ParseAgreement {
+class ParseService implements DatabaseAgreement {
   ParseClient _client;
 
   ParseService({ParseClient client}) {
