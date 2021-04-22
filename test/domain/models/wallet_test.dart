@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
@@ -10,22 +9,22 @@ import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/domain/value_objects/score.dart';
-
 import '../../static/statics.dart';
 
 main() async {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
 
   test('should create a valid main Wallet when use Wallet.createMainWallet()', () {
-    final wallet = Wallet.createMainWallet();
+    final wallet = Wallet.createMainWallet('1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isTrue);
     expect(wallet.name, 'Principal');
+    expect(wallet.userForeignKey, '1234');
     expect(wallet.assets.length, 0);
   });
 
   test('should create a valid wallet when null name', () {
-    final wallet = Wallet(null, null, false, null);
+    final wallet = Wallet(null, null, false, null, '1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isFalse);
     expect(wallet.name.contains('Carteira '), isTrue);
@@ -33,22 +32,34 @@ main() async {
   });
 
   test('should create a valid wallet when empty name', () {
-    final wallet = Wallet(null, null, false, ' ');
+    final wallet = Wallet(null, null, false, ' ', '1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.name.contains('Carteira '), isTrue);
   });
 
   test('should create a valid wallet when null isMainWallet', () {
-    final wallet = Wallet(null, null, null, 'Carteira 2');
+    final wallet = Wallet(null, null, null, 'Carteira 2', '1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isFalse);
   });
 
   test('should create a valid wallet when valid data', () {
-    final wallet = Wallet(null, null, true, 'Carteira 2');
+    final wallet = Wallet(null, null, true, 'Carteira 2', '1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isTrue);
     expect(wallet.name, 'Carteira 2');
+  });
+
+  test('should create invalid wallet when null userForeignKey', () {
+    final wallet = Wallet(null, null, true, 'Carteira 2', null);
+    expect(wallet.isValid, isFalse);
+    expect(wallet.userForeignKey, '');
+  });
+
+  test('should create invalid wallet when empty userForeignKey', () {
+    final wallet = Wallet(null, null, true, 'Carteira 2', '');
+    expect(wallet.isValid, isFalse);
+    expect(wallet.userForeignKey, '');
   });
 
   group('Tests about list of assets', () {
@@ -72,7 +83,7 @@ main() async {
     });
 
     setUp(() {
-      wallet = Wallet.createMainWallet();
+      wallet = Wallet.createMainWallet('1234');
     });
 
     test('should add two Assets', () {
