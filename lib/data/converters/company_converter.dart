@@ -2,7 +2,7 @@ import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/company.dart';
 
 class CompanyConverter {
-  Company fromMapToModel(Map map) {
+  Company fromMapToModel(map) {
     return Company(
       map[kObjectId],
       map[kCreatedAt],

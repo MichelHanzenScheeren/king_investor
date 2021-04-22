@@ -3,7 +3,7 @@ import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 
 class PriceConverter {
-  Price fromMapToModel(Map map) {
+  Price fromMapToModel(map) {
     return Price(
       map[kObjectId],
       map[kCreatedAt],

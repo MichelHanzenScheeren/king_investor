@@ -2,7 +2,7 @@ import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/category.dart';
 
 class CategoryConverter {
-  Category fromMapToModel(Map map) {
+  Category fromMapToModel(map) {
     return Category(
       map[kObjectId],
       map[kCreatedAt],

@@ -13,11 +13,11 @@ abstract class Model extends Notifiable {
   String get objectId => _objectId;
   DateTime get createdAt => _createdAt;
 
-  set setObjectId(String objectId) {
+  void setObjectId(String objectId) {
     if (objectId != null) _objectId = objectId;
   }
 
-  set setCreatedAt(DateTime createdAt) {
+  void setCreatedAt(DateTime createdAt) {
     if (createdAt != null) _createdAt = createdAt;
   }
 }

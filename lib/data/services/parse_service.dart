@@ -6,7 +6,7 @@ import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:king_investor/shared/extensions/string_extension.dart';
 
-const pointerIndicator = 'foreignkey';
+const pointerIndicator = 'ForeignKey';
 
 class ParseService implements DatabaseAgreement {
   ParseClient _client;
@@ -32,7 +32,7 @@ class ParseService implements DatabaseAgreement {
   Future<Either<Notification, Notification>> update(String table, Map map) async {
     try {
       final parseObject = ParseObject(table, client: _client);
-      map.keys.forEach((key) => parseObject.set(key, map[key]));
+      _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.update();
       if (response.success) return Right(Notification('ParseService.edit', 'Item editado com sucesso'));
       return Left(Notification('ParseService.edit', ParseException.getDescription(response.statusCode)));
@@ -67,10 +67,10 @@ class ParseService implements DatabaseAgreement {
   }
 
   void _registerDataOfCreateObject(ParseObject parseObject, Map dynamicMap) {
-    Map map = Map<String, dynamic>.from(dynamicMap);
+    Map<String, dynamic> map = Map<String, dynamic>.from(dynamicMap);
     map.keys.forEach((key) {
-      if (key.toLowerCase().contains(pointerIndicator)) {
-        String newKey = key.toLowerCase().replace(pointerIndicator, '');
+      if (key.contains(pointerIndicator)) {
+        String newKey = key.replaceAll(pointerIndicator, '');
         if (newKey.capitalize() == kUserTable)
           parseObject.set<ParseUser>(newKey, ParseUser('', '', '')..objectId = map[key]);
         else
