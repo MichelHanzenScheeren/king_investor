@@ -12,6 +12,7 @@ class Asset extends Model {
   final Amount averagePrice; // preço médio do ativo
   final Score score; // "peso" do ativo na carteira
   final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
+  final String walletForeignKey;
 
   Price _price; // Valores do ativo (preço atual, variação diária, volume de negociações)
 
@@ -23,6 +24,7 @@ class Asset extends Model {
     this.averagePrice,
     this.score,
     this.quantity,
+    this.walletForeignKey,
   ) : super(objectId, createdAt) {
     addNotifications(quantity);
     addNotifications(averagePrice);

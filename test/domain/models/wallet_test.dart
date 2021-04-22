@@ -48,18 +48,7 @@ main() async {
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isTrue);
     expect(wallet.name, 'Carteira 2');
-  });
-
-  test('should create invalid wallet when null userForeignKey', () {
-    final wallet = Wallet(null, null, true, 'Carteira 2', null);
-    expect(wallet.isValid, isFalse);
-    expect(wallet.userForeignKey, '');
-  });
-
-  test('should create invalid wallet when empty userForeignKey', () {
-    final wallet = Wallet(null, null, true, 'Carteira 2', '');
-    expect(wallet.isValid, isFalse);
-    expect(wallet.userForeignKey, '');
+    expect(wallet.userForeignKey, '1234');
   });
 
   group('Tests about list of assets', () {
@@ -76,10 +65,10 @@ main() async {
       companies = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
       company1 = CompanyConverter().fromMapToModel(companies['quote'][0]);
       company2 = CompanyConverter().fromMapToModel(companies['quote'][1]);
-      category1 = Category(null, null, 'Itausa', 0, Score(10));
-      category2 = Category(null, null, 'Itaú', 1, Score(10));
-      asset1 = Asset('1', null, company1, category1, Amount(100.0), Score(10), Quantity(5));
-      asset2 = Asset('2', null, company2, category2, Amount(150.0), Score(9), Quantity(3));
+      category1 = Category(null, null, 'Itausa', 0);
+      category2 = Category(null, null, 'Itaú', 1);
+      asset1 = Asset('1', null, company1, category1, Amount(100.0), Score(10), Quantity(5), '1234');
+      asset2 = Asset('2', null, company2, category2, Amount(150.0), Score(9), Quantity(3), '1234');
     });
 
     setUp(() {

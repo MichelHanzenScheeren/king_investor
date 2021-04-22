@@ -16,6 +16,5 @@ main() async {
     expect(item.isValid, true);
     expect(item.order, 1);
     expect(item.name, 'Fii');
-    expect(item.score.value, 10);
   });
 }
