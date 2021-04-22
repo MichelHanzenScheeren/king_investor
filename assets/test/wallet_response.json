@@ -1,0 +1,10 @@
+{
+    "objectId": "MlZIPMNohV",
+    "name": "Principal",
+    "isMainWallet": true,
+    "user": {
+        "__type": "Pointer",
+        "className": "_User",
+        "objectId": "02MdXde5TW"
+    }
+}

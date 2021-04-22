@@ -6,6 +6,10 @@ const kCurrency = 'currency';
 const kSymbol = 'symbol';
 const kTicker = 'ticker';
 
+// FOREIGN KEYS
+const kUser = 'user';
+const kUserForeignKey = 'userForeignKey';
+
 // CATEGORIES_CONVERTER
 const kOrder = 'order';
 const kScore = 'score';
@@ -30,3 +34,6 @@ const kDayHigh = 'dayHigh';
 const kDayLow = 'dayLow';
 const kYearHigh = 'yearHigh';
 const kYearLow = 'yearLow';
+
+// Wallet
+const kIsMainWallet = 'isMainWallet';
