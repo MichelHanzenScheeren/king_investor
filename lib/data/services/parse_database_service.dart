@@ -8,10 +8,10 @@ import 'package:king_investor/shared/extensions/string_extension.dart';
 
 const pointerIndicator = 'ForeignKey';
 
-class ParseService implements DatabaseAgreement {
+class ParseDatabaseService implements DatabaseAgreement {
   ParseClient _client;
 
-  ParseService({ParseClient client}) {
+  ParseDatabaseService({ParseClient client}) {
     _client = client ?? ParseHTTPClient();
   }
 
