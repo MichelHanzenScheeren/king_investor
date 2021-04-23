@@ -1,11 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/asset_converter.dart';
-import 'package:king_investor/data/converters/category_score_converter.dart';
 import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/data/utils/parse_tables.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
-import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
