@@ -9,12 +9,17 @@ const kTicker = 'ticker';
 // FOREIGN KEYS
 const kUser = 'user';
 const kUserForeignKey = 'userForeignKey';
+const kCategory = 'category';
+const kCategoryForeignKey = 'categoryForeignKey';
+const kWallet = 'wallet';
+const kWalletForeignKey = 'walletForeignKey';
+const kCompany = 'company';
+const kCompanyForeignKey = 'companyForeignKey';
 
-// CATEGORIES_CONVERTER
+// CATEGORY
 const kOrder = 'order';
-const kScore = 'score';
 
-// COMPANY_CONVERTER
+// COMPANY
 const kRegion = 'region';
 const kSecurityType = 'securityType';
 const kExchange = 'exchange';
@@ -35,5 +40,12 @@ const kDayLow = 'dayLow';
 const kYearHigh = 'yearHigh';
 const kYearLow = 'yearLow';
 
-// Wallet
+// WALLET
 const kIsMainWallet = 'isMainWallet';
+
+// CATEGORY_SCORE
+const kScore = 'score';
+
+// ASSET
+const kAveragePrice = 'averagePrice';
+const kQuantity = 'quantity';
