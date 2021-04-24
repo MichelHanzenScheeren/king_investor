@@ -49,3 +49,10 @@ const kScore = 'score';
 // ASSET
 const kAveragePrice = 'averagePrice';
 const kQuantity = 'quantity';
+
+// USER
+const kFirstName = 'firstName';
+const kLastName = 'lastName';
+const kEmail = 'email';
+const kSessionToken = 'sessionToken';
+const kEmailVerified = 'emailVerified';

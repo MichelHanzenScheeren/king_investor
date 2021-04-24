@@ -22,9 +22,9 @@ class ParseDatabaseService implements DatabaseAgreement {
       _registerDataOfCreateObject(parseObject, dynamicMap);
       final response = await parseObject.create(allowCustomObjectId: true);
       if (response.success) return Right(parseObject.objectId);
-      return Left(Notification('ParseService.create', ParseException.getDescription(response.statusCode)));
+      return Left(Notification('ParseDatabaseService.create', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
-      return Left(Notification('ParseService.create', erro.toString()));
+      return Left(Notification('ParseDatabaseService.create', erro.toString()));
     }
   }
 
@@ -34,10 +34,10 @@ class ParseDatabaseService implements DatabaseAgreement {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.update();
-      if (response.success) return Right(Notification('ParseService.edit', 'Item editado com sucesso'));
-      return Left(Notification('ParseService.edit', ParseException.getDescription(response.statusCode)));
+      if (response.success) return Right(Notification('ParseDatabaseService.edit', 'Item editado com sucesso'));
+      return Left(Notification('ParseDatabaseService.edit', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
-      return Left(Notification('ParseService.edit', erro.toString()));
+      return Left(Notification('ParseDatabaseService.edit', erro.toString()));
     }
   }
 
@@ -46,10 +46,10 @@ class ParseDatabaseService implements DatabaseAgreement {
     try {
       final parseObject = ParseObject(table, client: _client)..objectId = objectId;
       final response = await parseObject.delete();
-      if (response.success) return Right(Notification('ParseService.delete', 'Item deletado com sucesso'));
-      return Left(Notification('ParseService.delete', ParseException.getDescription(response.statusCode)));
+      if (response.success) return Right(Notification('ParseDatabaseService.delete', 'Item deletado com sucesso'));
+      return Left(Notification('ParseDatabaseService.delete', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
-      return Left(Notification('ParseService.delete', erro.toString()));
+      return Left(Notification('ParseDatabaseService.delete', erro.toString()));
     }
   }
 
@@ -60,9 +60,9 @@ class ParseDatabaseService implements DatabaseAgreement {
       myQuery.includeObject(objectsToInclude ?? <String>[]);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
-      return Left(Notification('ParseService.getAll', ParseException.getDescription(response.statusCode)));
+      return Left(Notification('ParseDatabaseService.getAll', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
-      return Left(Notification('ParseService.getAll', erro.toString()));
+      return Left(Notification('ParseDatabaseService.getAll', erro.toString()));
     }
   }
 
