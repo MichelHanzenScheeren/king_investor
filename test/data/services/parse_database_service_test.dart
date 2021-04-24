@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/services/parse_database_service.dart';
-import 'package:king_investor/domain/agreements/database_agreement.dart';
+import 'package:king_investor/domain/agreements/database_service_agreement.dart';
 import 'package:mockito/mockito.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/parse_http_client_mock.dart';
@@ -15,7 +15,7 @@ main() async {
   final expectedCreateResponse = await rootBundle.loadString(kParseCreateResponse);
 
   ParseHTTPClientMock httpClientMock = ParseHTTPClientMock();
-  DatabaseAgreement parseService = ParseDatabaseService(client: httpClientMock);
+  DatabaseServiceAgreement parseService = ParseDatabaseService(client: httpClientMock);
 
   test('should return Right(String) when success create response', () async {
     final httpResponse = ParseNetworkResponse(data: expectedCreateResponse, statusCode: 200);

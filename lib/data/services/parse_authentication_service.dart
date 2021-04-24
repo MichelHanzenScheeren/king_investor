@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/data/utils/parse_exception.dart';
-import 'package:king_investor/domain/agreements/authentication_agreement.dart';
+import 'package:king_investor/domain/agreements/authentication_service_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-class ParseAuthenticationService implements AuthenticationAgreement {
+class ParseAuthenticationService implements AuthenticationServiceAgreement {
   @override
   Future<Either<Notification, dynamic>> signUp(
     String email,
