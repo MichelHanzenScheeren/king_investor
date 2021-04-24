@@ -16,10 +16,11 @@ class ParseDatabaseService implements DatabaseAgreement {
   }
 
   @override
-  Future<Either<Notification, String>> create(String table, Map dynamicMap) async {
+  Future<Either<Notification, String>> create(String table, Map map, {String ownerId}) async {
     try {
       final parseObject = ParseObject(table, client: _client);
-      _registerDataOfCreateObject(parseObject, dynamicMap);
+      _registerDataOfCreateObject(parseObject, map);
+      _registerPermissions(parseObject, ownerId);
       final response = await parseObject.create(allowCustomObjectId: true);
       if (response.success) return Right(parseObject.objectId);
       return Left(Notification('ParseDatabaseService.create', ParseException.getDescription(response.statusCode)));
@@ -79,5 +80,12 @@ class ParseDatabaseService implements DatabaseAgreement {
         parseObject.set(key, map[key]);
       }
     });
+  }
+
+  void _registerPermissions(ParseObject parseObject, String ownerId) {
+    if (ownerId == null) return;
+    final parseUser = ParseUser('', '', '')..objectId = ownerId;
+    final parseACL = ParseACL(owner: parseUser);
+    parseObject.setACL(parseACL);
   }
 }

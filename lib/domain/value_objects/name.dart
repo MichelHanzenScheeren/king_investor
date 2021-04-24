@@ -14,6 +14,9 @@ class Name extends ValueObject {
   String get firstName => _firstName;
   String get lastName => _lastName;
 
+  @override
+  String toString() => _firstName + ' ' + _lastName;
+
   void setName(String firstName, String lastName) {
     clearNotifications();
     _applyContracts(firstName, lastName);

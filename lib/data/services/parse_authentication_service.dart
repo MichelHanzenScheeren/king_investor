@@ -14,6 +14,7 @@ class ParseAuthenticationService implements AuthenticationAgreement {
     try {
       ParseUser parseUser = ParseUser(email, password, email);
       userData.keys.forEach((key) => parseUser.set(key, userData[key]));
+      parseUser.setACL(ParseACL()..setPublicReadAccess(allowed: false));
       final response = await parseUser.signUp();
       if (response.success) return Right(parseUser);
       return _error('ParseAuthenticationService.signUp', ParseException.getDescription((response.statusCode)));
@@ -26,7 +27,7 @@ class ParseAuthenticationService implements AuthenticationAgreement {
   Future<Either<Notification, dynamic>> login(String email, String password) async {
     try {
       ParseUser parseUser = ParseUser(email, password, email);
-      final response = await parseUser.signUp();
+      final response = await parseUser.login();
       if (response.success) return Right(response.results.first);
       return _error('ParseAuthenticationService.login', ParseException.getDescription((response.statusCode)));
     } catch (erro) {
@@ -49,7 +50,7 @@ class ParseAuthenticationService implements AuthenticationAgreement {
   @override
   Future<Either<Notification, dynamic>> currentUser() async {
     try {
-      ParseUser user = await ParseUser.currentUser();
+      final user = await ParseUser.currentUser();
       if (user != null) return Right(user);
       return Left(Notification('ParseAuthenticationService.currentUser', 'Nenhum usuário encontrado'));
     } catch (erro) {
