@@ -20,7 +20,6 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     try {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
-      _registerPermissions(parseObject, ownerId);
       final response = await parseObject.create(allowCustomObjectId: true);
       if (response.success) return Right(parseObject.objectId);
       return Left(Notification('ParseDatabaseService.create', ParseException.getDescription(response.statusCode)));
@@ -80,12 +79,5 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
         parseObject.set(key, map[key]);
       }
     });
-  }
-
-  void _registerPermissions(ParseObject parseObject, String ownerId) {
-    if (ownerId == null) return;
-    final parseUser = ParseUser('', '', '')..objectId = ownerId;
-    final parseACL = ParseACL(owner: parseUser);
-    parseObject.setACL(parseACL);
   }
 }

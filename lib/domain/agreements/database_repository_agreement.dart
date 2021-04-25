@@ -5,5 +5,5 @@ abstract class DatabaseRepositoryAgreement {
   Future<Either<Notification, String>> create(Object appObject);
   Future<Either<Notification, Notification>> update(Object appObject);
   Future<Either<Notification, Notification>> delete(Object appObject);
-  Future<Either<Notification, List<Object>>> getAll(Type appClass);
+  Future<Either<Notification, List>> getAll(Type appClass);
 }
