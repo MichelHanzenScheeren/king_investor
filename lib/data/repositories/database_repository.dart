@@ -60,7 +60,8 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   Future<Either<Notification, List>> getAll(Type appClass) async {
     try {
       String tableName = getTableName(appClass);
-      final response = await _database.getAll(tableName);
+      List<String> toInclude = getObjectsToInclude(appClass);
+      final response = await _database.getAll(tableName, objectsToInclude: toInclude);
       return response.fold(
         (notification) => Left(notification),
         (list) => Right(_convertList(list, appClass)),
@@ -85,6 +86,12 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     if (object is Company) return CompanyConverter().fromModelToMap(object);
     if (object is Wallet) return WalletConverter().fromModelToMap(object);
     throw Exception('O tipo de dado não corresponde a uma conversão válida para o banco de dados');
+  }
+
+  List<String> getObjectsToInclude(Type type) {
+    if (type == CategoryScore) return <String>[kCategory];
+    if (type == Asset) return <String>[kCompany, kCategory];
+    return <String>[];
   }
 
   List _convertList(List list, Type type) {

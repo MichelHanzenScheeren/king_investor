@@ -54,10 +54,10 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(String table, {List<String> objectsToInclude}) async {
+  Future<Either<Notification, List>> getAll(String table, {List<String> objectsToInclude: const <String>[]}) async {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
-      myQuery.includeObject(objectsToInclude ?? <String>[]);
+      myQuery.includeObject(objectsToInclude);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(Notification('ParseDatabaseService.getAll', ParseException.getDescription(response.statusCode)));
