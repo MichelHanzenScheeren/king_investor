@@ -5,6 +5,12 @@ import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class ParseAuthenticationService implements AuthenticationServiceAgreement {
+  ParseClient _client;
+
+  ParseAuthenticationService({ParseClient client}) {
+    _client = client ?? ParseHTTPClient();
+  }
+
   @override
   Future<Either<Notification, dynamic>> signUp(
     String email,
@@ -12,7 +18,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
     Map userData,
   ) async {
     try {
-      ParseUser parseUser = ParseUser(email, password, email);
+      ParseUser parseUser = ParseUser(email, password, email, client: _client);
       userData.keys.forEach((key) => parseUser.set(key, userData[key]));
       parseUser.setACL(ParseACL()..setPublicReadAccess(allowed: false));
       final response = await parseUser.signUp();
@@ -26,7 +32,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   @override
   Future<Either<Notification, dynamic>> login(String email, String password) async {
     try {
-      ParseUser parseUser = ParseUser(email, password, email);
+      ParseUser parseUser = ParseUser(email, password, email, client: _client);
       final response = await parseUser.login();
       if (response.success) return Right(response.results.first);
       return Left(_error('login', ParseException.getDescription((response.statusCode))));
@@ -38,8 +44,9 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   @override
   Future<Either<Notification, Notification>> logout() async {
     try {
-      ParseUser user = await ParseUser.currentUser();
-      if (user == null) return Left(_error('logout', 'Nenhum usuário conectado'));
+      final current = await ParseUser.currentUser();
+      if (current == null) return Left(_error('logout', 'Nenhum usuário conectado'));
+      final user = ParseUser('', '', '', client: _client)..sessionToken = current['sessionToken'];
       final response = await user.logout();
       if (response.success) return Right(Notification('ParseAuthenticationService.logout', 'Logout concluído'));
       return Left(_error('logout', ParseException.getDescription((response.statusCode))));
@@ -62,7 +69,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   @override
   Future<Either<Notification, dynamic>> updateCurrentUser(String sessionToken) async {
     try {
-      final response = await ParseUser.getCurrentUserFromServer(sessionToken);
+      final response = await ParseUser.getCurrentUserFromServer(sessionToken, client: _client);
       if (response.success) return Right(response.results.first);
       return Left(_error('updateCurrentUser', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
