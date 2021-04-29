@@ -12,11 +12,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, dynamic>> signUp(
-    String email,
-    String password,
-    Map userData,
-  ) async {
+  Future<Either<Notification, dynamic>> signUp(String email, String password, Map userData) async {
     try {
       ParseUser parseUser = ParseUser(email, password, email, client: _client);
       userData.keys.forEach((key) => parseUser.set(key, userData[key]));

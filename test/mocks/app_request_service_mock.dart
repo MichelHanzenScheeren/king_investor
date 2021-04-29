@@ -1,13 +1,11 @@
 import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
-
 import '../static/statics.dart';
 
-class RequestServiceMock implements RequestAgreement {
+class AppRequestServiceMock implements RequestAgreement {
   @override
   void configureRequests({
     int conectTimeoutMiliseconds: 5000,

@@ -4,7 +4,7 @@ import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/domain/models/exchange_rate.dart';
 import 'package:king_investor/domain/models/price.dart';
-import '../../mocks/request_service_mock.dart';
+import '../../mocks/app_request_service_mock.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
@@ -12,7 +12,7 @@ void main() {
   FinanceRepository financeRepository;
 
   setUp(() {
-    requetMock = RequestServiceMock();
+    requetMock = AppRequestServiceMock();
     financeRepository = FinanceRepository(requetMock);
   });
 
