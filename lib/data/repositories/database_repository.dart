@@ -112,8 +112,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   List _convertList(List list, Type type) {
-    if (list == null) return <CategoryScore>[];
-    int len = list.length;
+    int len = list?.length ?? 0;
     if (type == Asset) return List<Asset>.generate(len, (i) => AssetConverter().fromMapToModel(list[i]));
     if (type == Category) return List<Category>.generate(len, (i) => CategoryConverter().fromMapToModel(list[i]));
     if (type == Company) return List<Company>.generate(len, (i) => CompanyConverter().fromMapToModel(list[i]));

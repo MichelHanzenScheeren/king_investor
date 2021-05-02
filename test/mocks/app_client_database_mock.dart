@@ -6,14 +6,14 @@ import 'package:uuid/uuid.dart';
 /* Classe para definir os retornos esperados do servidor de database;
 // Útil durante o desenvolvimento, para evitar excessso de requisições; */
 
-class AppClientAuthenticationMock extends Mock implements ParseClient {
+class AppClientDatabaseMock extends Mock implements ParseClient {
   @override
   Future<ParseNetworkResponse> post(String path, {String data, ParseNetworkOptions options}) async {
     await Future.delayed(Duration(milliseconds: 200));
     String uuid = Uuid().v1().replaceAll('-', '').substring(0, 10);
-    String date = DateTime.now().toIso8601String() + 'Z';
-    final response = {"objectId": uuid, "createdAt": date};
-    return ParseNetworkResponse(data: '$response', statusCode: 200);
+    String date = DateTime.now().toIso8601String().substring(0, 23) + 'Z';
+    final response = '{"objectId": "$uuid", "createdAt": "$date"}';
+    return ParseNetworkResponse(data: response, statusCode: 201);
   }
 
   @override
@@ -24,7 +24,8 @@ class AppClientAuthenticationMock extends Mock implements ParseClient {
   }) async {
     String responseData = '';
     if (path.contains(kWalletTable))
-      responseData = kGetAllWallets;
+      //responseData = kGetAllWallets;
+      responseData = '{"results": []}';
     else if (path.contains(kCategoryTable))
       responseData = kGetAllCategory;
     else if (path.contains(kCompanyTable))
@@ -41,7 +42,7 @@ class AppClientAuthenticationMock extends Mock implements ParseClient {
   Future<ParseNetworkResponse> put(String path, {String data, ParseNetworkOptions options}) async {
     await Future.delayed(Duration(milliseconds: 200));
     String date = DateTime.now().toIso8601String() + 'Z';
-    return ParseNetworkResponse(data: '{"updatedAt": $date}', statusCode: 200);
+    return ParseNetworkResponse(data: '{"updatedAt": "$date"}', statusCode: 200);
   }
 
   @override
@@ -52,7 +53,7 @@ class AppClientAuthenticationMock extends Mock implements ParseClient {
 }
 
 const kGetAllWallets =
-    '{"results":[{"objectId":"7jgnYX0BBi","name":"Principal","isMainWallet":true,"client":{"__type":"Pointer","className":"Client","objectId":"4BwpMWdCnm"},"createdAt":"2021-04-19T00:12:32.750Z","updatedAt":"2021-04-19T00:12:32.750Z"},{"objectId":"sI92wSvh9l","name":"Adicional","isMainWallet":false,"client":{"__type":"Pointer","className":"Client","objectId":"4BwpMWdCnm"},"createdAt":"2021-04-19T00:12:32.750Z","updatedAt":"2021-04-19T00:12:32.750Z"}]}';
+    '{"results":[{"objectId":"7jgnYX0BBi","name":"Principal","isMainWallet":true,"user":{"__type":"Pointer","className":"_User","objectId":"4BwpMWdCnm"},"createdAt":"2021-04-19T00:12:32.750Z","updatedAt":"2021-04-19T00:12:32.750Z"},{"objectId":"sI92wSvh9l","name":"Adicional","isMainWallet":false,"user":{"__type":"Pointer","className":"_user","objectId":"4BwpMWdCnm"},"createdAt":"2021-04-19T00:12:32.750Z","updatedAt":"2021-04-19T00:12:32.750Z"}]}';
 
 const kGetAllCategory =
     '{"results":[{"objectId":"zJxVP17mTi","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Ação","order":0},{"objectId":"gd8djpy4lk","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Fii","order":1},{"objectId":"sDX2g0D7WP","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Fundo de \u00cdndice","order":2},{"objectId":"E6Bzg4w3lX","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Stock","order":3},{"objectId":"rvwdRmdpP4","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"REIT","order":4},{"objectId":"uEMtszTO2V","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"ETF","order":5},{"objectId":"YNs2Ehoady","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Outro","order":6}]}';
