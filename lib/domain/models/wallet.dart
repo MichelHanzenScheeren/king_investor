@@ -16,7 +16,7 @@ class Wallet extends Model {
     String name,
     this.userForeignKey,
   ) : super(objectId, createdAt) {
-    _name = name == null || name.trim().isEmpty ? 'Carteira ${DateTime.now().millisecondsSinceEpoch / 1000}' : name;
+    _name = name == null || name.trim().isEmpty ? 'Nova Carteira' : name;
     _isMainWallet = isMainWallet ?? false;
     _assets = <Asset>[];
   }
@@ -32,14 +32,17 @@ class Wallet extends Model {
   UnmodifiableListView<Asset> get assets => UnmodifiableListView<Asset>(_assets);
 
   void setName(String name) {
-    if (name != null && name.trim() != '') _name = name;
+    if (name != null && name.trim().isNotEmpty) _name = name;
   }
 
   void addAsset(Asset asset) {
     clearNotifications();
     if (asset == null) addNotification('Wallet.assets', 'O item adicionado não pode ser "null"');
     if (_assets.contains(asset)) addNotification('Wallet.assets', 'Não é possivel adicionar itens duplicados');
-    if (isValid) _assets.add(asset);
+    if (isValid) {
+      _assets.add(asset);
+      addNotifications(asset);
+    }
   }
 
   void removeAsset(Asset asset) {

@@ -13,5 +13,7 @@ class CategoryScore extends Model {
     this.score,
     this.category,
     this.walletForeignKey,
-  ) : super(objectId, createdAt);
+  ) : super(objectId, createdAt) {
+    addNotifications(score);
+  }
 }
