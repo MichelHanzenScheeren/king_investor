@@ -22,7 +22,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.create(allowCustomObjectId: true);
       if (response.success) return Right(parseObject.objectId);
-      return Left(Notification('ParseDatabaseService.create', ParseException.getDescription(response.statusCode)));
+      return Left(_getError('create', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.create', erro.toString()));
     }
@@ -35,7 +35,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.update();
       if (response.success) return Right(Notification('ParseDatabaseService.edit', 'Item editado com sucesso'));
-      return Left(Notification('ParseDatabaseService.edit', ParseException.getDescription(response.statusCode)));
+      return Left(_getError('update', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.edit', erro.toString()));
     }
@@ -47,7 +47,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       final parseObject = ParseObject(table, client: _client)..objectId = objectId;
       final response = await parseObject.delete();
       if (response.success) return Right(Notification('ParseDatabaseService.delete', 'Item deletado com sucesso'));
-      return Left(Notification('ParseDatabaseService.delete', ParseException.getDescription(response.statusCode)));
+      return Left(_getError('delete', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.delete', erro.toString()));
     }
@@ -60,9 +60,31 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       myQuery.includeObject(objectsToInclude);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
-      return Left(Notification('ParseDatabaseService.getAll', ParseException.getDescription(response.statusCode)));
+      return Left(_getError('getAll', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.getAll', erro.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Notification, List>> filterByRelation(
+    String table,
+    List<String> relations,
+    List<String> keys, {
+    List<String> objectsToInclude: const <String>[],
+  }) async {
+    try {
+      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      for (int i = 0; i < relations.length; i++) {
+        final parseObject = ParseObject(relations[i])..objectId = keys[i];
+        myQuery.whereNotEqualTo(relations[i].toLowerCase(), parseObject);
+      }
+      myQuery.includeObject(objectsToInclude);
+      final response = await myQuery.query();
+      if (response.success) return Right(response.results);
+      return Left(_getError('filterByRelation', response.statusCode));
+    } catch (erro) {
+      return Left(Notification('ParseDatabaseService.filterByRelation', erro.toString()));
     }
   }
 
@@ -79,5 +101,9 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
         parseObject.set(key, map[key]);
       }
     });
+  }
+
+  Notification _getError(String function, int number) {
+    return Notification('ParseDatabaseService.$function', ParseException.getDescription(number));
   }
 }

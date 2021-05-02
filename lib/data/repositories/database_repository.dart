@@ -71,6 +71,15 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, List>> filterByRelation(Type appClass, List<Type> relations, List<String> keys) async {
+    try {
+      final tables = List<String>.generate(relations.length, (index) => getTableName(relations[index]));
+    } catch (erro) {
+      return Left(_getError('filterByRelation', erro));
+    }
+  }
+
   String getTableName(Type type) {
     if (type == Asset) return kAssetTable;
     if (type == CategoryScore) return kCategoryScoreTable;
