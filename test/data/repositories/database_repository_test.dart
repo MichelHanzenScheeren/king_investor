@@ -4,10 +4,8 @@ import 'package:king_investor/data/services/parse_database_service.dart';
 import 'package:king_investor/domain/agreements/database_repository_agreement.dart';
 import 'package:king_investor/domain/agreements/database_service_agreement.dart';
 import 'package:king_investor/domain/models/category.dart';
-import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
-import 'package:king_investor/domain/value_objects/score.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/app_client_database_mock.dart';
 

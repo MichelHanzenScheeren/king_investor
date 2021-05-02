@@ -22,7 +22,7 @@ class UserUseCase {
   Future<Either<Notification, User>> signUp(User user, String password) async {
     final response = await _authentication.signUp(user, password);
     return response.fold((notification) => Left(notification), (user) {
-      _appData.currentUser = user;
+      _appData.registerNewUser(user);
       return Right(user);
     });
   }
@@ -30,7 +30,7 @@ class UserUseCase {
   Future<Either<Notification, User>> login(String email, String password) async {
     final response = await _authentication.login(email, password);
     return response.fold((notification) => Left(notification), (user) {
-      _appData.currentUser = user;
+      _appData.registerNewUser(user);
       return Right(user);
     });
   }
@@ -38,7 +38,7 @@ class UserUseCase {
   Future<Either<Notification, Notification>> logout() async {
     final response = await _authentication.logout();
     return response.fold((notification) => Left(notification), (notification2) {
-      _appData.currentUser = null;
+      _appData.removeCurrentUser();
       return Right(notification2);
     });
   }
@@ -47,7 +47,7 @@ class UserUseCase {
     if (_appData.currentUser == null) {
       final response = await _authentication.currentUser();
       return response.fold((notification) => Left(notification), (user) {
-        _appData.currentUser = user;
+        _appData.registerNewUser(user);
         updateCurrentUser(user.sessionToken);
         return Right(user);
       });
@@ -60,11 +60,10 @@ class UserUseCase {
     return response.fold((notification) {
       _messages.add(notification);
       return Left(notification);
-    }, (updateUser) {
-      _appData.currentUser = updateUser;
-      _appData.wasUpdated = true;
+    }, (updatedUser) {
+      _appData.updateCurrentUser(updatedUser);
       _messages.clear();
-      return Right(updateUser);
+      return Right(updatedUser);
     });
   }
 }

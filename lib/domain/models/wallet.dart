@@ -35,6 +35,10 @@ class Wallet extends Model {
     if (name != null && name.trim().isNotEmpty) _name = name;
   }
 
+  void setMainWallet(bool isMainWallet) {
+    if (isMainWallet != null) _isMainWallet = isMainWallet;
+  }
+
   void addAsset(Asset asset) {
     clearNotifications();
     if (asset == null) addNotification('Wallet.assets', 'O item adicionado não pode ser "null"');
