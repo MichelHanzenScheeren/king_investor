@@ -12,6 +12,7 @@ import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/company.dart';
+import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/shared/models/model.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
@@ -74,7 +75,13 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   @override
   Future<Either<Notification, List>> filterByRelation(Type appClass, List<Type> relations, List<String> keys) async {
     try {
-      final tables = List<String>.generate(relations.length, (index) => getTableName(relations[index]));
+      String table = getTableName(appClass);
+      final relationsName = List<String>.generate(relations.length, (index) => getTableName(relations[index]));
+      final response = await _database.filterByRelation(table, relationsName, keys);
+      return response.fold(
+        (notification) => Left(notification),
+        (list) => Right(_convertList(list, appClass)),
+      );
     } catch (erro) {
       return Left(_getError('filterByRelation', erro));
     }
@@ -86,6 +93,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     if (type == Category) return kCategoryTable;
     if (type == Company) return kCompanyTable;
     if (type == Wallet) return kWalletTable;
+    if (type == User) return kUserTable;
     throw Exception('O tipo de dado não corresponde a nenhuma tabela válida do banco de dados');
   }
 
@@ -104,6 +112,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   List _convertList(List list, Type type) {
+    if (list == null) return <CategoryScore>[];
     int len = list.length;
     if (type == Asset) return List<Asset>.generate(len, (i) => AssetConverter().fromMapToModel(list[i]));
     if (type == Category) return List<Category>.generate(len, (i) => CategoryConverter().fromMapToModel(list[i]));

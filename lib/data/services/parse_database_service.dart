@@ -76,8 +76,12 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       for (int i = 0; i < relations.length; i++) {
-        final parseObject = ParseObject(relations[i])..objectId = keys[i];
-        myQuery.whereNotEqualTo(relations[i].toLowerCase(), parseObject);
+        dynamic parse;
+        if (relations[i] == 'User')
+          parse = ParseUser('', '', '')..objectId = keys[i];
+        else
+          parse = ParseObject(relations[i])..objectId = keys[i];
+        myQuery.whereEqualTo(relations[i].toLowerCase(), parse);
       }
       myQuery.includeObject(objectsToInclude);
       final response = await myQuery.query();
