@@ -44,7 +44,7 @@ class AppData extends Model {
   bool hasCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
 
   /* SETTERS */
-  void registerNewUser(User newUser) => _currentUser = newUser;
+  void registerUser(User newUser) => _currentUser = newUser;
 
   void updateCurrentUser(User updatedUser) {
     _currentUser = updatedUser;

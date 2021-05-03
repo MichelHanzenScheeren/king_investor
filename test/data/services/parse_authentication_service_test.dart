@@ -26,7 +26,7 @@ main() async {
       httpClientMock.defineResponse(response: expected, statusCode: 201);
       final response = await authentication.signUp('any', 'any', {});
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(null).get(kObjectId), 'nr7hAYS43a');
+      expect(response.getOrElse(null).get(kObjectId), 'ySHIHT13xA');
     });
     test('should return Left(Notification) when invalid signup', () async {
       final expected = '{"code": 202, "error": "A"}';
@@ -92,7 +92,7 @@ main() async {
       httpClientMock.defineResponse(response: expected, statusCode: 200);
       final response = await authentication.updateCurrentUser('r:acc24187bc16109398c5a2fad2f06d0a');
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(null).get(kObjectId), 'nr7hAYS43a');
+      expect(response.getOrElse(null).get(kObjectId), 'ySHIHT13xA');
     });
   });
 }

@@ -24,8 +24,7 @@ class AppClientDatabaseMock extends Mock implements ParseClient {
   }) async {
     String responseData = '';
     if (path.contains(kWalletTable))
-      //responseData = kGetAllWallets;
-      responseData = '{"results": []}';
+      responseData = kGetAllWallets;
     else if (path.contains(kCategoryTable))
       responseData = kGetAllCategory;
     else if (path.contains(kCompanyTable))
