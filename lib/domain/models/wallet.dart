@@ -41,18 +41,28 @@ class Wallet extends Model {
 
   void addAsset(Asset asset) {
     clearNotifications();
-    if (asset == null) addNotification('Wallet.assets', 'O item adicionado não pode ser "null"');
-    if (_assets.contains(asset)) addNotification('Wallet.assets', 'Não é possivel adicionar itens duplicados');
+    if (asset == null || asset?.company == null) addNotification('Wallet.assets', 'O item não pode ser nulo');
+    if (_assets.any((item) => item.objectId == asset?.objectId || item.company.symbol == asset?.company?.symbol))
+      addNotification('Wallet.assets', 'Não é possivel adicionar itens duplicados');
     if (isValid) {
       _assets.add(asset);
       addNotifications(asset);
     }
   }
 
-  void removeAsset(Asset asset) {
+  void removeAsset(String assetId) {
     clearNotifications();
-    if (asset == null) addNotification('Wallet.assets', '"Null" não é um valor válido para esta lista');
-    if (!_assets.contains(asset)) addNotification('Wallet.assets', 'O item não existe na lista');
-    if (isValid) _assets.remove(asset);
+    if (!_assets.any((item) => item.objectId == assetId))
+      addNotification('Wallet.assets', 'O item não existe na lista');
+    if (isValid) _assets.removeWhere((item) => item.objectId == assetId);
+  }
+
+  bool hasAsset(String objectId) => _assets.any((asset) => asset.objectId == objectId);
+
+  void updateAsset(Asset asset) {
+    clearNotifications();
+    int index = _assets.indexWhere((item) => item.objectId == asset.objectId);
+    if (index == -1) addNotification('Wallet.assets', 'Ativo não encontrado na carteira');
+    if (isValid) _assets[index] = asset;
   }
 }

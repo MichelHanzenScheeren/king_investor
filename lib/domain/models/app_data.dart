@@ -5,7 +5,6 @@ import 'package:king_investor/domain/models/exchange_rate.dart';
 import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/shared/models/model.dart';
-import 'package:king_investor/shared/notifications/notification.dart';
 
 class AppData extends Model {
   User _currentUser;
@@ -65,7 +64,7 @@ class AppData extends Model {
   }
 
   void updateWallet(Wallet wallet) {
-    int index = _wallets.indexOf(wallet);
+    int index = _wallets.indexWhere((item) => item.objectId == wallet.objectId);
     _wallets[index] = wallet;
   }
 }

@@ -58,10 +58,10 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(Type appClass) async {
+  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> objectsToInclude: const []}) async {
     try {
       String tableName = getTableName(appClass);
-      List<String> toInclude = getObjectsToInclude(appClass);
+      final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
       final response = await _database.getAll(tableName, objectsToInclude: toInclude);
       return response.fold(
         (notification) => Left(notification),
@@ -73,11 +73,17 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> filterByRelation(Type appClass, List<Type> relations, List<String> keys) async {
+  Future<Either<Notification, List>> filterByRelation(
+    Type appClass,
+    List<Type> relations,
+    List<String> keys, {
+    List<Type> objectsToInclude: const [],
+  }) async {
     try {
       String table = getTableName(appClass);
-      final relationsName = List<String>.generate(relations.length, (index) => getTableName(relations[index]));
-      final response = await _database.filterByRelation(table, relationsName, keys);
+      final relationsName = List<String>.generate(relations.length, (i) => getTableName(relations[i]));
+      final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
+      final response = await _database.filterByRelation(table, relationsName, keys, objectsToInclude: toInclude);
       return response.fold(
         (notification) => Left(notification),
         (list) => Right(_convertList(list, appClass)),
@@ -105,10 +111,10 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     throw Exception('O tipo de dado não corresponde a uma conversão válida para o banco de dados');
   }
 
-  List<String> getObjectsToInclude(Type type) {
-    if (type == CategoryScore) return <String>[kCategory];
-    if (type == Asset) return <String>[kCompany, kCategory];
-    return <String>[];
+  String getObjectsToInclude(Type type) {
+    if (type == Category) return kCategory;
+    if (type == Company) return kCategory;
+    throw Exception('O tipo de dado não corresponde a uma inclusão válida de uma tabela');
   }
 
   List _convertList(List list, Type type) {

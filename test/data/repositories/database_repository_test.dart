@@ -49,6 +49,19 @@ main() {
     response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));
   });
 
+  test('Should return correct list of wallets when use getAll() and include objects', () async {
+    final response = await repository.getAll(Wallet, objectsToInclude: [Category]);
+    response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));
+  });
+
+  test('Should return Left(Notification) when use getAll() and include invalid object', () async {
+    final response = await repository.getAll(Wallet, objectsToInclude: [User]);
+    response.fold(
+      (l) => expect(l.message.contains('O tipo de dado não corresponde a uma inclusão válida de uma tabela'), isTrue),
+      (r) => expect(isTrue, isFalse),
+    );
+  });
+
   test('Should return correct list of wallets when use filterByRelation()', () async {
     final response = await repository.filterByRelation(Wallet, [User, Category], ['1234', '5678']);
     response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));

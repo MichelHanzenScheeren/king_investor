@@ -27,14 +27,14 @@ main() async {
     final wallet = Wallet(null, null, false, null, '1234');
     expect(wallet.isValid, isTrue);
     expect(wallet.isMainWallet, isFalse);
-    expect(wallet.name.contains('Carteira '), isTrue);
+    expect(wallet.name.contains('Nova Carteira'), isTrue);
     expect(wallet.assets.length, 0);
   });
 
   test('should create a valid wallet when empty name', () {
     final wallet = Wallet(null, null, false, ' ', '1234');
     expect(wallet.isValid, isTrue);
-    expect(wallet.name.contains('Carteira '), isTrue);
+    expect(wallet.name.contains('Nova Carteira'), isTrue);
   });
 
   test('should create a valid wallet when null isMainWallet', () {
@@ -96,13 +96,35 @@ main() async {
 
     test('should be valid when try to remove valid asset', () {
       wallet.addAsset(asset1);
-      wallet.removeAsset(asset1);
+      wallet.removeAsset(asset1.objectId);
       expect(wallet.isValid, isTrue);
       expect(wallet.assets.length, 0);
     });
 
     test('should be invalid when try to remove invalid asset', () {
-      wallet.removeAsset(asset2);
+      wallet.removeAsset(asset2.objectId);
+      expect(wallet.isValid, isFalse);
+    });
+
+    test('should return true when try find valid asset', () {
+      wallet.addAsset(asset1);
+      expect(wallet.hasAsset(asset1.objectId), isTrue);
+    });
+
+    test('should return false when try find invalid asset', () {
+      expect(wallet.hasAsset(asset1.objectId), isFalse);
+    });
+
+    test('should be valid when try to update valid asset', () {
+      wallet.addAsset(asset1);
+      wallet.updateAsset(wallet.assets.first..quantity.setValue(999));
+      expect(wallet.isValid, isTrue);
+      expect(wallet.assets.first.quantity.value, 999);
+    });
+
+    test('should be invalid when try to update invalid asset', () {
+      wallet.addAsset(asset1);
+      wallet.updateAsset(asset2);
       expect(wallet.isValid, isFalse);
     });
   });
