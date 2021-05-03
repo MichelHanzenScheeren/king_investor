@@ -53,7 +53,7 @@ main() {
 
     test('should return Left when try add invalid wallet', () async {
       Wallet wallet = Wallet.createMainWallet('123456');
-      wallet.addAsset(null); // will invalidate the wallet
+      wallet.isValidAssetToAdd(null); // will invalidate the wallet
       final response = await walletsUseCase.addWallet(wallet);
       expect(response.isLeft(), isTrue);
       expect(appData.wallets.length, 2);

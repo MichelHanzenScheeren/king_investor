@@ -28,7 +28,9 @@ class Wallet extends Model {
   }
 
   bool get isMainWallet => _isMainWallet;
+
   String get name => _name;
+
   UnmodifiableListView<Asset> get assets => UnmodifiableListView<Asset>(_assets);
 
   void setName(String name) {
@@ -39,31 +41,47 @@ class Wallet extends Model {
     if (isMainWallet != null) _isMainWallet = isMainWallet;
   }
 
-  void addAsset(Asset asset) {
+  bool isValidAssetToAdd(Asset asset) {
     clearNotifications();
-    if (asset == null || asset?.company == null) addNotification('Wallet.assets', 'O item não pode ser nulo');
-    if (_assets.any((item) => item.objectId == asset?.objectId || item.company.symbol == asset?.company?.symbol))
-      addNotification('Wallet.assets', 'Não é possivel adicionar itens duplicados');
-    if (isValid) {
-      _assets.add(asset);
-      addNotifications(asset);
+    if (asset == null || asset?.company == null) {
+      addNotification('Wallet.assets', 'O item não pode ser nulo');
+      return false;
+    } else if (!asset.isValid) {
+      addNotification('Wallet.assets', 'Não é possível adicionar um item inválido');
+      return false;
     }
+    if (_assets.any((item) => item.objectId == asset.objectId || item.company.symbol == asset.company.symbol)) {
+      addNotification('Wallet.assets', 'Não é possivel adicionar itens duplicados');
+      return false;
+    }
+    return true;
+  }
+
+  void addAsset(Asset asset) {
+    if (!isValidAssetToAdd(asset)) throw Exception('Tentativa de adicionar um item inválido a uma carteira');
+    _assets.add(asset);
+    addNotifications(asset);
+  }
+
+  bool isValidAssetToManipulate(String assetId) {
+    if (hasAsset(assetId)) return true;
+    clearNotifications();
+    addNotification('Wallet.assets', 'O item não existe na lista');
+    return false;
   }
 
   void removeAsset(String assetId) {
-    clearNotifications();
-    if (!_assets.any((item) => item.objectId == assetId))
-      addNotification('Wallet.assets', 'O item não existe na lista');
-    if (isValid) _assets.removeWhere((item) => item.objectId == assetId);
+    if (!isValidAssetToManipulate(assetId)) throw Exception('Tentativa de remoção de item que não existe na carteira');
+    _assets.removeWhere((item) => item.objectId == assetId);
   }
 
   bool hasAsset(String objectId) => _assets.any((asset) => asset.objectId == objectId);
 
   void updateAsset(Asset asset) {
-    clearNotifications();
+    if (!isValidAssetToManipulate(asset?.objectId))
+      throw Exception('Tentativa de edição de item que não existe na carteira');
     int index = _assets.indexWhere((item) => item.objectId == asset.objectId);
-    if (index == -1) addNotification('Wallet.assets', 'Ativo não encontrado na carteira');
-    if (isValid) _assets[index] = asset;
+    _assets[index] = asset;
   }
 
   Asset getAsset(String id) => _assets.firstWhere((item) => item.objectId == id, orElse: () => null);

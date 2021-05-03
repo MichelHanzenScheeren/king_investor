@@ -82,15 +82,37 @@ main() async {
       expect(wallet.assets.length, 2);
     });
 
-    test('should be invalid when try add repeated asset', () {
+    test('should be invalid and return false when send duplicated asset to method isValidAssetToAdd ', () {
       wallet.addAsset(asset1);
-      wallet.addAsset(asset1);
+      wallet.isValidAssetToAdd(asset1);
       expect(wallet.isValid, isFalse);
       expect(wallet.assets.length, 1);
     });
 
-    test('should be invalid when try add null asset', () {
-      wallet.addAsset(null);
+    test('should throw error when try add duplicated asset', () {
+      wallet.addAsset(asset1);
+      expect(() => wallet.addAsset(asset1), throwsException);
+      expect(wallet.assets.length, 1);
+    });
+
+    test('should be invalid and return false when send null to method isValidAssetToAdd ', () {
+      wallet.isValidAssetToAdd(null);
+      expect(wallet.isValid, isFalse);
+    });
+
+    test('should throw error when send null to addAsset', () {
+      expect(() => wallet.addAsset(null), throwsException);
+    });
+
+    test('should be invalid and return false when send asset with null company to method isValidAssetToAdd ', () {
+      Asset asset3 = Asset('1', null, null, category1, Amount(100.0), Score(10), Quantity(5), '1234');
+      wallet.isValidAssetToAdd(asset3);
+      expect(wallet.isValid, isFalse);
+    });
+
+    test('should be invalid and return false when send invalid asset to method isValidAssetToAdd ', () {
+      Asset asset3 = Asset('1', null, company1, category1, Amount(100.0), Score(-5), Quantity(5), '1234');
+      wallet.isValidAssetToAdd(asset3);
       expect(wallet.isValid, isFalse);
     });
 
@@ -101,9 +123,13 @@ main() async {
       expect(wallet.assets.length, 0);
     });
 
-    test('should be invalid when try to remove invalid asset', () {
-      wallet.removeAsset(asset2.objectId);
+    test('should be invalid and return false when send asset that not exists to isValidAssetToManipulate', () {
+      wallet.isValidAssetToManipulate(asset2.objectId);
       expect(wallet.isValid, isFalse);
+    });
+
+    test('should throw error when try to remove invalid asset', () {
+      expect(() => wallet.removeAsset(asset2.objectId), throwsException);
     });
 
     test('should return true when try find valid asset', () {
@@ -122,10 +148,9 @@ main() async {
       expect(wallet.assets.first.quantity.value, 999);
     });
 
-    test('should be invalid when try to update invalid asset', () {
+    test('should throws Exception when try to update invalid asset', () {
       wallet.addAsset(asset1);
-      wallet.updateAsset(asset2);
-      expect(wallet.isValid, isFalse);
+      expect(() => wallet.updateAsset(asset2), throwsException);
     });
   });
 }
