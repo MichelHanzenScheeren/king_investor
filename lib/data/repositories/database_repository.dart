@@ -93,6 +93,22 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, List>> filterByProperties(
+    Type appClass,
+    List<String> properties,
+    List<String> values, {
+    List<Type> objectsToInclude: const [],
+  }) async {
+    String table = getTableName(appClass);
+    final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
+    final response = await _database.filterByProperties(table, properties, values, objectsToInclude: toInclude);
+    return response.fold(
+      (notification) => Left(notification),
+      (list) => Right(_convertList(list, appClass)),
+    );
+  }
+
   String getTableName(Type type) {
     if (type == Asset) return kAssetTable;
     if (type == CategoryScore) return kCategoryScoreTable;

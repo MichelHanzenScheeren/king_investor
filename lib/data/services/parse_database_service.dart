@@ -92,6 +92,27 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, List>> filterByProperties(
+    String table,
+    List<String> properties,
+    List<String> values, {
+    List<String> objectsToInclude: const <String>[],
+  }) async {
+    try {
+      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      for (int i = 0; i < properties.length; i++) {
+        myQuery.whereEqualTo(properties[i], values[i]);
+      }
+      myQuery.includeObject(objectsToInclude);
+      final response = await myQuery.query();
+      if (response.success) return Right(response.results);
+      return Left(_getError('filterByProperties', response.statusCode));
+    } catch (erro) {
+      return Left(Notification('ParseDatabaseService.filterByProperties', erro.toString()));
+    }
+  }
+
   void _registerDataOfCreateObject(ParseObject parseObject, Map dynamicMap) {
     Map<String, dynamic> map = Map<String, dynamic>.from(dynamicMap);
     map.keys.forEach((key) {

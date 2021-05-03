@@ -16,4 +16,11 @@ abstract class DatabaseRepositoryAgreement {
     List<String> keys, {
     List<Type> objectsToInclude,
   });
+
+  Future<Either<Notification, List>> filterByProperties(
+    Type appClass,
+    List<String> properties,
+    List<String> values, {
+    List<Type> objectsToInclude,
+  });
 }

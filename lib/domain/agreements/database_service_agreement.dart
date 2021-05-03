@@ -16,4 +16,11 @@ abstract class DatabaseServiceAgreement {
     List<String> keys, {
     List<String> objectsToInclude,
   });
+
+  Future<Either<Notification, List>> filterByProperties(
+    String table,
+    List<String> properties,
+    List<String> values, {
+    List<String> objectsToInclude,
+  });
 }

@@ -66,4 +66,14 @@ main() {
     final response = await repository.filterByRelation(Wallet, [User, Category], ['1234', '5678']);
     response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));
   });
+
+  test('Should return correct list of wallets when use filterByRelation()', () async {
+    final response = await repository.filterByRelation(Wallet, [User, Category], ['1234', '5678']);
+    response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));
+  });
+
+  test('Should return correct list of wallets when use filterByProperties()', () async {
+    final response = await repository.filterByProperties(Wallet, ['objectId'], ['12345']);
+    response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<List>()));
+  });
 }

@@ -85,4 +85,36 @@ main() async {
       response.fold((notification) => expect(notification.message, 'Consulta inválida (InvalidQuery)'), (map) => false);
     });
   });
+
+  group('Test ParseDatabaseService.filterByRelation', () {
+    test('should return Right(List) when success filterByRelation response', () async {
+      final expectedGetAllResponse = await rootBundle.loadString(kParseGetAllResponse);
+      httpClientMock.defineResponse(response: expectedGetAllResponse, statusCode: 200);
+      final response = await database.filterByRelation('Wallet', ['category'], ['123456']);
+      expect(response.isRight(), isTrue);
+      expect(response.getOrElse(null).first, isInstanceOf<ParseObject>());
+    });
+    test('should return Left(Notification) when filterByRelation response', () async {
+      httpClientMock.defineResponse(response: '{"code": 102}', statusCode: 102);
+      final response = await database.filterByRelation('Wallet', ['user'], ['123456']);
+      expect(response.isLeft(), isTrue);
+      response.fold((notification) => expect(notification.message, 'Consulta inválida (InvalidQuery)'), (map) => false);
+    });
+  });
+
+  group('Test ParseDatabaseService.filterByProperties', () {
+    test('should return Right(List) when success filterByProperties response', () async {
+      final expectedGetAllResponse = await rootBundle.loadString(kParseGetAllResponse);
+      httpClientMock.defineResponse(response: expectedGetAllResponse, statusCode: 200);
+      final response = await database.filterByProperties('Wallet', ['objectId'], ['123456']);
+      expect(response.isRight(), isTrue);
+      expect(response.getOrElse(null).first, isInstanceOf<ParseObject>());
+    });
+    test('should return Left(Notification) when filterByProperties response', () async {
+      httpClientMock.defineResponse(response: '{"code": 102}', statusCode: 102);
+      final response = await database.filterByProperties('Wallet', ['objectId'], ['123456']);
+      expect(response.isLeft(), isTrue);
+      response.fold((notification) => expect(notification.message, 'Consulta inválida (InvalidQuery)'), (map) => false);
+    });
+  });
 }
