@@ -65,4 +65,6 @@ class Wallet extends Model {
     if (index == -1) addNotification('Wallet.assets', 'Ativo não encontrado na carteira');
     if (isValid) _assets[index] = asset;
   }
+
+  Asset getAsset(String id) => _assets.firstWhere((item) => item.objectId == id, orElse: () => null);
 }

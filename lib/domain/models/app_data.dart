@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/exchange_rate.dart';
@@ -40,6 +41,8 @@ class AppData extends Model {
 
   Wallet getMainWallet() => _wallets.firstWhere((element) => element.isMainWallet, orElse: () => null);
 
+  bool hasCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
+
   /* SETTERS */
   void registerNewUser(User newUser) => _currentUser = newUser;
 
@@ -66,5 +69,13 @@ class AppData extends Model {
   void updateWallet(Wallet wallet) {
     int index = _wallets.indexWhere((item) => item.objectId == wallet.objectId);
     _wallets[index] = wallet;
+  }
+
+  Asset findAsset(String objectId) {
+    Asset asset;
+    _wallets.forEach((wallet) {
+      if (wallet.hasAsset(objectId)) asset = wallet.getAsset(objectId);
+    });
+    return asset;
   }
 }
