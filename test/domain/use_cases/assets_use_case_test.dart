@@ -10,7 +10,6 @@ import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
-import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/email.dart';
 import 'package:king_investor/domain/value_objects/name.dart';
@@ -20,31 +19,34 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/app_client_database_mock.dart';
 
 main() {
+  DatabaseRepositoryAgreement database;
   AppData appData;
   AssetsUseCase assetsUseCase;
-  Wallet mainWallet, otherWallet;
-  Company company1, company2;
-  Category category1, category2, category3;
+  Wallet wallet1, wallet2;
+  Category category1, category2;
 
   setUpAll(() async {
     await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
     AppClientDatabaseMock client = AppClientDatabaseMock();
     DatabaseServiceAgreement databaseService = ParseDatabaseService(client: client);
-    DatabaseRepositoryAgreement database = DatabaseRepository(databaseService);
-    appData = AppData()..updateCurrentUser(User(null, null, Name('Michel', 'Scheeren'), Email('michel@gmail.com')));
-    assetsUseCase = AssetsUseCase(database, appData);
-    await WalletsUseCase(database, appData).getAllUserWallets();
-    mainWallet = appData.wallets.firstWhere((e) => e.isMainWallet);
-    otherWallet = appData.wallets.firstWhere((e) => !e.isMainWallet);
-    company1 = Company(null, null, 'ITUB3', 'ITUB3:BZ', 'BRL', 'Americas', 'Itaú', 'Common Stock', 'B3', 'Brasil');
-    company2 = Company(null, null, 'PSSA3', 'PSSA3:BZ', 'BRL', 'Americas', 'PS', 'Common Stock', 'B3', 'Brasil');
-    category1 = Category(null, null, 'Cripto', 9);
-    category2 = Category('qnB4cH9sJs', null, 'Ação', 0);
-    category3 = Category('ukhIcvLzZl', null, 'Fii', 1);
-    appData.registerCategories([category2]);
+    database = DatabaseRepository(databaseService);
   });
 
+  void groupSetUpAll() {
+    appData = AppData();
+    assetsUseCase = AssetsUseCase(database, appData);
+    wallet1 = Wallet('wallet1_id', null, true, 'Principal', '1234567890');
+    wallet2 = Wallet('wallet2_id', null, false, 'Secundária', '1234567890');
+    category1 = Category('category1_id', null, 'Ação', 0);
+    category2 = Category('category2_id', null, 'Fii', 1);
+    appData.updateCurrentUser(User(null, null, Name('Michel', 'Scheeren'), Email('michel@gmail.com')));
+    appData.registerWallets([wallet1, wallet2]);
+    appData.registerCategories([category1, category2]);
+  }
+
   group('Tests about AssetsUseCase.getAssets', () {
+    setUpAll(() => groupSetUpAll());
+
     test('should return Left when send null wallet', () async {
       final response = await assetsUseCase.getAssets(null);
       expect(response.isLeft(), isTrue);
@@ -56,16 +58,24 @@ main() {
     });
 
     test('should return Right when valid wallet', () async {
-      final response = await assetsUseCase.getAssets(mainWallet.objectId);
+      final response = await assetsUseCase.getAssets(wallet1.objectId);
       expect(response.isRight(), isTrue);
     });
 
     test('wallet should contain assets after succes getAssets', () async {
-      expect(mainWallet.assets.isNotEmpty, isTrue);
+      expect(wallet1.assets.isNotEmpty, isTrue);
     });
   });
 
   group('Tests about AssetsUseCase.addAsset', () {
+    Company company1;
+    Asset asset1;
+    setUpAll(() {
+      groupSetUpAll();
+      company1 = Company('company1_id', null, 'ITUB3', 'ITUB3:BZ', 'BRL', 'A', 'Itaú', 'Ação', 'B3', 'Brasil');
+      asset1 = Asset('asset1_id', null, company1, category1, Amount(100), Score(10), Quantity(2), wallet1.objectId);
+    });
+
     test('should return Left when send null asset ', () async {
       final response = await assetsUseCase.addAsset(null);
       expect(response.isLeft(), isTrue);
@@ -77,30 +87,38 @@ main() {
       expect(response.isLeft(), isTrue);
     });
 
-    test('should return Left when send  asset without invalid category', () async {
-      Asset asset1 = Asset(null, null, company1, category1, Amount(100), Score(10), Quantity(2), mainWallet.objectId);
-      final response = await assetsUseCase.addAsset(asset1);
+    test('should return Left when send asset with invalid category', () async {
+      Category aux1 = Category('1234567', null, 'Bitcoin', 1); // categoria inválida
+      Asset assetInvalid = Asset(null, null, company1, aux1, Amount(100), Score(10), Quantity(2), wallet1.objectId);
+      final response = await assetsUseCase.addAsset(assetInvalid);
       expect(response.isLeft(), isTrue);
       expect(response.fold((l) => l.message, (r) => null), 'A categoria informada não foi localizada');
     });
 
-    test('should return Left when send  asset that cannot be valid to add', () async {
-      var aux1 = Asset('INBOMkNhQE', null, company1, category2, Amount(1), Score(1), Quantity(2), mainWallet.objectId);
-      final response = await assetsUseCase.addAsset(aux1);
-      expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l.message, (r) => null), 'Não é possivel adicionar itens duplicados');
-    });
-
     test('should return Right when valid asset to add', () async {
-      var aux1 = Asset('ABCZ', null, company1, category2, Amount(1), Score(1), Quantity(2), mainWallet.objectId);
       int initialLength = appData.wallets.first.assets.length;
-      final response = await assetsUseCase.addAsset(aux1);
+      final response = await assetsUseCase.addAsset(asset1);
       expect(response.isRight(), isTrue);
       expect(appData.wallets.first.assets.length, initialLength + 1);
+    });
+
+    test('should return Left when send repeated asset', () async {
+      final response = await assetsUseCase.addAsset(asset1);
+      expect(response.isLeft(), isTrue);
+      expect(response.fold((l) => l.message, (r) => null), 'Não é possivel adicionar itens duplicados');
     });
   });
 
   group('Tests about AssetsUseCase.deleteAsset', () {
+    Company company1;
+    Asset asset1;
+    setUpAll(() {
+      groupSetUpAll();
+      company1 = Company('company1_id', null, 'ITUB3', 'ITUB3:BZ', 'BRL', 'A', 'Itaú', 'Ação', 'B3', 'Brasil');
+      asset1 = Asset('asset1_id', null, company1, category1, Amount(100), Score(10), Quantity(2), wallet1.objectId);
+      wallet1.addAsset(asset1);
+    });
+
     test('should return Left when send null value', () async {
       final response = await assetsUseCase.deleteAsset(null, null);
       expect(response.isLeft(), isTrue);
@@ -113,34 +131,89 @@ main() {
     });
 
     test('should return Left when send invalid asset key', () async {
-      final response = await assetsUseCase.deleteAsset(mainWallet.objectId, '145687');
+      final response = await assetsUseCase.deleteAsset(wallet1.objectId, '145687');
       expect(response.isLeft(), isTrue);
       expect(response.fold((l) => l.message, (r) => null), 'O item não existe na lista');
     });
 
     test('should return Right and remove when send valid data', () async {
       int initialLength = appData.wallets.first.assets.length;
-      final response = await assetsUseCase.deleteAsset(mainWallet.objectId, '2Idh2KIgrc');
+      final response = await assetsUseCase.deleteAsset(wallet1.objectId, asset1.objectId);
       expect(response.isRight(), isTrue);
       expect(appData.wallets.first.assets.length, initialLength - 1);
     });
   });
 
   group('Tests about AssetsUseCase.updateAsset', () {
-    test('should return Left when send asset that not exists', () async {
-      var aux1 = Asset(null, null, company1, category2, Amount(1), Score(1), Quantity(2), mainWallet.objectId);
-      final response = await assetsUseCase.updateAsset(aux1);
+    Company company1, company2;
+    Asset asset1, asset2, asset3;
+    setUpAll(() {
+      groupSetUpAll();
+      company1 = Company('company1_id', null, 'ITUB3', 'ITUB3:BZ', 'BRL', 'A', 'Itaú', 'Ação', 'B3', 'Brasil');
+      company2 = Company('company2_id', null, 'PSSA3', 'PSSA3:BZ', 'BRL', 'A', 'Itaú', 'Ação', 'B3', 'Brasil');
+      asset1 = Asset('asset1_id', null, company1, category1, Amount(100), Score(10), Quantity(2), wallet1.objectId);
+      wallet1.addAsset(asset1);
+      asset2 = Asset('asset2_id', null, company2, category1, Amount(100), Score(10), Quantity(2), wallet1.objectId);
+      wallet1.addAsset(asset2);
+      asset3 = Asset('asset3_id', null, company2, category1, Amount(200), Score(10), Quantity(5), wallet2.objectId);
+      wallet2.addAsset(asset3);
+    });
+
+    test('should return Left when send null', () async {
+      final response = await assetsUseCase.updateAsset(null);
+      expect(response.isLeft(), isTrue);
+      expect(response.fold((l) => l.message, (r) => null), 'Não é possível editar um ativo inválido');
+    });
+
+    test('should return Left when send asset with invalid wallet', () async {
+      asset3.setWalletForeignKey('123456');
+      final response = await assetsUseCase.updateAsset(asset3);
+      expect(response.isLeft(), isTrue);
+      expect(response.fold((l) => l.message, (r) => null), 'A carteira informada não foi localizada');
+      asset3.setWalletForeignKey(wallet2.objectId);
+    });
+
+    //
+
+    test('should return Left when send asset with invalid category', () async {
+      Category invalid = Category('1234567', null, 'Bitcoin', 1); // categoria inválida
+      asset3.setCategory(invalid);
+      final response = await assetsUseCase.updateAsset(asset3);
+      expect(response.isLeft(), isTrue);
+      expect(response.fold((l) => l.message, (r) => null), 'A categoria informada não foi localizada');
+      asset3.setCategory(category1);
+    });
+
+    test('should return Left when send asset was not saved', () async {
+      Asset notSaved = Asset('15P', null, company2, category2, Amount(1), Score(5), Quantity(2), wallet1.objectId);
+      final response = await assetsUseCase.updateAsset(notSaved);
       expect(response.isLeft(), isTrue);
       expect(response.fold((l) => l.message, (r) => null), 'O ativo informado não foi encontrado');
     });
 
+    test('should return Left when try change wallet of asset and newWallet not can save asset', () async {
+      Asset aux = Asset('asset2_id', null, company2, category1, Amount(100), Score(10), Quantity(2), wallet2.objectId);
+      final response = await assetsUseCase.updateAsset(aux);
+      expect(response.isLeft(), isTrue);
+      expect(response.fold((l) => l.message, (r) => null), 'Não é possível adicionar o ativo a esta carteira');
+    });
+
     test('should return Right when try update correct asset', () async {
-      final Wallet wallet = appData.wallets.first;
-      final Asset asset = wallet.assets.first;
-      asset.setWalletForeignKey(wallet.objectId);
-      asset.quantity.setValue(999);
-      final response = await assetsUseCase.updateAsset(asset);
+      Asset aux = Asset('asset2_id', null, company2, category1, Amount(999), Score(10), Quantity(2), wallet1.objectId);
+      final response = await assetsUseCase.updateAsset(aux);
       expect(response.isRight(), isTrue);
+      expect(appData.wallets.first.getAsset('asset2_id').averagePrice.value, 999);
+    });
+
+    test('should return Right when try change wallet of asset and is valid', () async {
+      Asset aux = Asset('asset1_id', null, company1, category1, Amount(100), Score(10), Quantity(3), wallet2.objectId);
+      int wallet1Lenght = appData.wallets[0].assets.length;
+      int wallet2Lenght = appData.wallets[1].assets.length;
+      final response = await assetsUseCase.updateAsset(aux);
+      expect(response.isRight(), isTrue);
+      expect(appData.wallets[0].assets.length, wallet1Lenght - 1);
+      expect(appData.wallets[1].assets.length, wallet2Lenght + 1);
+      expect(appData.findAsset('asset1_id')?.quantity?.value, 3);
     });
   });
 }

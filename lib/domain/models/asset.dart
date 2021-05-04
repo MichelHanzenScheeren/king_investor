@@ -9,37 +9,45 @@ import 'package:king_investor/shared/notifications/contract.dart';
 
 class Asset extends Model {
   final Company company; // Dados da empresa em questão
-  final Category category; // ação, fii, stock, reit ("securityType")
+  Category _category; // ação, fii, stock, reit ("securityType")
   final Amount averagePrice; // preço médio do ativo
   final Score score; // "peso" do ativo na carteira
   final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
   String _walletForeignKey;
-
   Price _price; // Valores do ativo (preço atual, variação diária, volume de negociações)
 
   Asset(
     String objectId,
     DateTime createdAt,
     this.company,
-    this.category,
+    Category category,
     this.averagePrice,
     this.score,
     this.quantity,
     String walletForeignKey,
   ) : super(objectId, createdAt) {
+    _category = category;
     _walletForeignKey = walletForeignKey;
-    _applyContracts();
+    _applyContracts(category, walletForeignKey);
     addNotifications(quantity);
     addNotifications(averagePrice);
     addNotifications(score);
   }
 
+  Category get category => _category;
   String get walletForeignKey => _walletForeignKey;
   Price get price => _price;
 
+  void setCategory(Category category) {
+    clearNotifications();
+    _applyContracts(category, _walletForeignKey);
+    if (isValid) _category = category;
+  }
+
   void setWalletForeignKey(String walletForeignKey) {
-    _walletForeignKey = walletForeignKey;
-    _applyContracts();
+    clearNotifications();
+    _applyContracts(_category, walletForeignKey);
+    if (isValid) _walletForeignKey = walletForeignKey;
   }
 
   void registerPrices(Price price) {
@@ -47,11 +55,11 @@ class Asset extends Model {
     addNotifications(_price);
   }
 
-  void _applyContracts() {
+  void _applyContracts(Category category, String walletForeignKey) {
     addNotifications(Contract()
         .requires()
         .isNotNull(company, 'Asset.company', 'A companhianão pode ser nula')
         .isNotNull(category, 'Asset.category', 'A categoria não pode ser nula')
-        .isNotNullOrEmpty(_walletForeignKey, 'Asset.walletForeignKey', 'Valor inválido para relação com carteira'));
+        .isNotNullOrEmpty(walletForeignKey, 'Asset.walletForeignKey', 'Valor inválido para relação com carteira'));
   }
 }

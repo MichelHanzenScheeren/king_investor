@@ -100,7 +100,7 @@ class AssetsUseCase {
 
   Either<Notification, Notification> _validateAssetToUpdate(Asset asset) {
     if (asset == null || !asset.isValid || asset.company == null)
-      return Left(Notification('AssetUseCase.updateAsset', 'Nã é possível editar um ativo inválido'));
+      return Left(Notification('AssetUseCase.updateAsset', 'Não é possível editar um ativo inválido'));
     if (!_appData.hasWallet(asset.walletForeignKey))
       return Left(Notification('AssetsUseCase.updateAsset', 'A carteira informada não foi localizada'));
     if (!_appData.hasCategory(asset?.category?.objectId))
