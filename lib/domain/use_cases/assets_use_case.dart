@@ -34,20 +34,19 @@ class AssetsUseCase {
     );
   }
 
-  Future<Either<Notification, String>> addAsset(Asset newAsset) async {
+  Future<Either<Notification, Notification>> addAsset(Asset newAsset) async {
     final validation = _validateAssetToAdd(newAsset);
     if (validation.isLeft()) return validation;
 
     final saveCompanyResponse = await _saveOrGetSavedCompanyId(newAsset.company);
-    if (saveCompanyResponse.isLeft()) return saveCompanyResponse;
+    if (saveCompanyResponse.isLeft()) return Left(saveCompanyResponse.fold((notif) => notif, (r) => null));
     newAsset.company.setObjectId(saveCompanyResponse.getOrElse(() => ''));
     final response = await _database.create(newAsset);
     return response.fold(
       (notification) => Left(notification),
-      (objectId) {
-        newAsset.setObjectId(objectId);
+      (notification2) {
         _appData.getWalletById(newAsset.walletForeignKey).addAsset(newAsset);
-        return Right(objectId);
+        return Right(notification2);
       },
     );
   }
@@ -77,7 +76,7 @@ class AssetsUseCase {
     });
   }
 
-  Either<Notification, String> _validateAssetToAdd(Asset asset) {
+  Either<Notification, Notification> _validateAssetToAdd(Asset asset) {
     if (asset == null || !asset.isValid || asset.company == null)
       return Left(Notification('AssetUseCase.addAsset', 'Nã é possível cadastrar um ativo inválido'));
     if (!_appData.hasWallet(asset.walletForeignKey))
@@ -86,7 +85,7 @@ class AssetsUseCase {
       return Left(Notification('AssetsUseCase.addAsset', 'A categoria informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(asset.walletForeignKey);
     if (!wallet.isValidAssetToAdd(asset)) return Left(wallet.notifications.first);
-    return Right('');
+    return Right(Notification('', ''));
   }
 
   Future<Either<Notification, String>> _saveOrGetSavedCompanyId(Company company) async {
@@ -96,7 +95,7 @@ class AssetsUseCase {
     if (result.length != 0 && result.first.objectId != null) return Right(result.first.objectId);
 
     final response2 = await _database.create(company);
-    return response2.fold((notification) => Left(notification), (objectId) => Right(objectId));
+    return response2.fold((notification) => Left(notification), (notification2) => Right(company.objectId));
   }
 
   Either<Notification, Notification> _validateAssetToUpdate(Asset asset) {

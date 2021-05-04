@@ -25,7 +25,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, String>> create(Object appObject) async {
+  Future<Either<Notification, Notification>> create(Object appObject) async {
     try {
       String tableName = getTableName(appObject.runtimeType);
       Map converted = convertToMap(appObject);

@@ -16,12 +16,12 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, String>> create(String table, Map map, {String ownerId}) async {
+  Future<Either<Notification, Notification>> create(String table, Map map, {String ownerId}) async {
     try {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.create(allowCustomObjectId: true);
-      if (response.success) return Right(parseObject.objectId);
+      if (response.success) return Right(Notification('ParseDatabaseService.create', 'Item salvo com sucesso'));
       return Left(_getError('create', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.create', erro.toString()));

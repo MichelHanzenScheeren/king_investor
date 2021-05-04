@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 abstract class DatabaseServiceAgreement {
-  Future<Either<Notification, String>> create(String table, Map map, {String ownerId});
+  Future<Either<Notification, Notification>> create(String table, Map map, {String ownerId});
 
   Future<Either<Notification, Notification>> update(String table, Map map);
 

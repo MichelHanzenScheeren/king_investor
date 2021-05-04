@@ -17,12 +17,12 @@ main() async {
   });
 
   group('Test ParseDatabaseService.create(table, map)', () {
-    test('should return Right(String) when success create response', () async {
+    test('should return Right(Notification) when success create response', () async {
       final expectedCreateResponse = await rootBundle.loadString(kParseCreateResponse);
       httpClientMock.defineResponse(response: expectedCreateResponse, statusCode: 200);
       final response = await database.create('any', {});
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(null), 'UgXo8hOD4d');
+      expect(response.getOrElse(null)?.message, 'Item salvo com sucesso');
     });
     test('should return Left(Notification) when error to create object', () async {
       httpClientMock.defineResponse(response: '{"code": 103}', statusCode: 103);

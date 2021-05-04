@@ -29,9 +29,9 @@ main() {
     expect(DatabaseRepository(ParseDatabaseService()).getTableName(User), 'User');
   });
 
-  test('Should return correct objectId when save in database', () async {
+  test('Should return Right(Notification) when save in database', () async {
     final response = await repository.create(Wallet.createMainWallet('1234'));
-    response.fold((l) => expect(isTrue, isFalse), (r) => expect(r, isInstanceOf<String>()));
+    expect(response.getOrElse(() => null)?.message, 'Item salvo com sucesso');
   });
 
   test('Should return correct Notification when update', () async {

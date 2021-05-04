@@ -34,24 +34,22 @@ class WalletsUseCase {
     final response = await _database.create(mainWallet);
     return response.fold(
       (notification) => Left(notification),
-      (id) {
-        mainWallet.setObjectId(id);
+      (notification2) {
         _appData.registerWallets([mainWallet]);
         return Right(_appData.wallets);
       },
     );
   }
 
-  Future<Either<Notification, String>> addWallet(Wallet newWallet) async {
+  Future<Either<Notification, Notification>> addWallet(Wallet newWallet) async {
     final validate = _validateWalletToAdd(newWallet);
     if (validate.isLeft()) return validate;
     final response = await _database.create(newWallet);
     return response.fold(
       (notification) => Left(notification),
-      (objectId) {
-        newWallet.setObjectId(objectId);
+      (notification2) {
         _appData.registerWallets([newWallet]);
-        return Right(objectId);
+        return Right(notification2);
       },
     );
   }
@@ -98,14 +96,14 @@ class WalletsUseCase {
     );
   }
 
-  Either<Notification, String> _validateWalletToAdd(Wallet wallet) {
+  Either<Notification, Notification> _validateWalletToAdd(Wallet wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.addWallet', 'Uma carteira inválida não pode ser salva'));
     if (_appData.hasWallet(wallet.objectId))
       return Left(Notification('WalletsUseCase.addWallet', 'Não é possível adicionar uma carteira duplicada'));
     if (_appData.duplicatedMainWallet(wallet))
       return Left(Notification('WalletsUseCase.addWallet', 'Não é possível registrar duas carteiras principais'));
-    return Right('');
+    return Right(Notification('', ''));
   }
 
   Either<Notification, Notification> _validateWalletToDelete(String walletId) {
