@@ -27,7 +27,7 @@ main() {
     walletsUseCase = WalletsUseCase(database, appData);
   });
 
-  group('Testes about WAlletUseCase.getAll', () {
+  group('Testes about WalletUseCase.getAll', () {
     /*test('should create a valid MainWallet when empty', () async {
       final response = await walletsUseCase.getWallets();
       expect(response.isRight(), isTrue);
@@ -36,7 +36,7 @@ main() {
     });*/
 
     test('should return a valid list of Wallets', () async {
-      final response = await walletsUseCase.getWallets();
+      final response = await walletsUseCase.getAllUserWallets();
       expect(response.isRight(), isTrue);
       expect(response.getOrElse(() => null), isInstanceOf<List<Wallet>>());
       expect(appData.wallets.isEmpty, isFalse);

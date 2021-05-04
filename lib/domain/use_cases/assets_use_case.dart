@@ -24,63 +24,63 @@ class AssetsUseCase {
 
     final toInclude = <Type>[Company, Category];
     final response = await _database.filterByRelation(Asset, [Wallet], [walletId], objectsToInclude: toInclude);
-    return response.fold((notification) => Left(notification), (list) {
-      List<Asset> assets = List<Asset>.from(list);
-      assets.forEach((asset) => wallet.addAsset(asset));
-      return Right(assets);
-    });
+    return response.fold(
+      (notification) => Left(notification),
+      (list) {
+        final List<Asset> assets = List<Asset>.from(list);
+        assets.forEach((asset) => wallet.isValidAssetToAdd(asset) ? wallet.addAsset(asset) : null);
+        return Right(wallet.assets);
+      },
+    );
   }
 
   Future<Either<Notification, String>> addAsset(Asset newAsset) async {
-    final validation = _validateAsset(newAsset, 'addAsset');
+    final validation = _validateAssetToAdd(newAsset);
     if (validation.isLeft()) return validation;
-    final Wallet wallet = _appData.getWalletById(newAsset.walletForeignKey)..addAsset(newAsset);
-    if (!wallet.isValid) return Left(wallet.notifications.first);
-    final checkResponse = await _saveOrGetSavedCompanyId(newAsset.company);
-    if (checkResponse.isLeft()) return checkResponse;
-    newAsset.company.setObjectId(checkResponse.getOrElse(null));
+
+    final saveCompanyResponse = await _saveOrGetSavedCompanyId(newAsset.company);
+    if (saveCompanyResponse.isLeft()) return saveCompanyResponse;
+    newAsset.company.setObjectId(saveCompanyResponse.getOrElse(() => ''));
     final response = await _database.create(newAsset);
-    return response.fold((notification) {
-      _appData.getWalletById(newAsset.walletForeignKey).removeAsset(newAsset.objectId);
-      return Left(notification);
-    }, (objectId) {
-      newAsset.setObjectId(objectId);
-      return Right(objectId);
-    });
+    return response.fold(
+      (notification) {
+        _appData.getWalletById(newAsset.walletForeignKey).removeAsset(newAsset.objectId);
+        return Left(notification);
+      },
+      (objectId) {
+        newAsset.setObjectId(objectId);
+        return Right(objectId);
+      },
+    );
   }
 
   Future<Either<Notification, Notification>> deleteAsset(String walletId, String assetId) async {
     if (!_appData.hasWallet(walletId))
       return Left(Notification('AssetsUseCase.deleteAsset', 'A carteira informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(walletId);
-    wallet.removeAsset(assetId);
-    if (!wallet.isValid) return Left(wallet.notifications.first);
+    if (!wallet.isValidAssetToManipulate(assetId)) return Left(wallet.notifications.first);
     return await _database.delete(assetId);
   }
 
   Future<Either<Notification, Notification>> updateAsset(Asset newAsset) async {
-    final validation = _validateAsset(newAsset, 'updateAsset');
-    if (validation.isLeft()) return validation.fold((notification) => Left(notification), (r) => null);
-    final Asset originalAsset = _appData.findAsset(newAsset.objectId);
-    if (originalAsset == null)
-      return Left(Notification('AssetUseCase.updateAsset', 'O ativo informado não foi encontrado'));
-    final Wallet originalWallet = _appData.getWalletById(originalAsset.walletForeignKey);
-    if (originalWallet.objectId != newAsset.walletForeignKey)
-      return Left(Notification('AssetUseCase.updateAsset', 'Não é possível alterar a carteira de um ativo'));
+    final validation = _validateAssetToUpdate(newAsset);
+    if (validation.isLeft()) return validation;
     final response = await _database.update(newAsset);
     return response.fold((notification) => Left(notification), (notification2) {
-      originalWallet.updateAsset(newAsset);
+      _localUpdateWallet(newAsset);
       return Right(notification2);
     });
   }
 
-  Either<Notification, String> _validateAsset(Asset newAsset, String method) {
-    if (newAsset == null || !newAsset.isValid || newAsset.company == null)
-      return Left(Notification('AssetUseCase.$method', 'Um ativo inválido não pode ser salvo'));
-    if (!_appData.hasWallet(newAsset.walletForeignKey))
-      return Left(Notification('AssetsUseCase.$method', 'A carteira informada não foi localizada'));
-    if (!_appData.hasCategory(newAsset?.category?.objectId))
-      return Left(Notification('AssetsUseCase.$method', 'A categoria informada não foi localizada'));
+  Either<Notification, String> _validateAssetToAdd(Asset asset) {
+    if (asset == null || !asset.isValid || asset.company == null)
+      return Left(Notification('AssetUseCase.addAsset', 'Nã é possível cadastrar um ativo inválido'));
+    if (!_appData.hasWallet(asset.walletForeignKey))
+      return Left(Notification('AssetsUseCase.addAsset', 'A carteira informada não foi localizada'));
+    if (!_appData.hasCategory(asset?.category?.objectId))
+      return Left(Notification('AssetsUseCase.addAsset', 'A categoria informada não foi localizada'));
+    final Wallet wallet = _appData.getWalletById(asset.walletForeignKey);
+    if (!wallet.isValidAssetToAdd(asset)) return Left(wallet.notifications.first);
     return Right('');
   }
 
@@ -88,9 +88,38 @@ class AssetsUseCase {
     final response = await _database.filterByProperties(Company, ['ticker'], [company.ticker]);
     if (response.isLeft()) return response.fold((notification) => Left(notification), (r) => null);
     final List<Company> result = List<Company>.from(response.getOrElse(() => []));
-    if (result.length != 0) return Right(result.first.objectId);
+    if (result.length != 0 && result.first.objectId != null) return Right(result.first.objectId);
 
     final response2 = await _database.create(company);
     return response2.fold((notification) => Left(notification), (objectId) => Right(objectId));
+  }
+
+  Either<Notification, Notification> _validateAssetToUpdate(Asset asset) {
+    if (asset == null || !asset.isValid || asset.company == null)
+      return Left(Notification('AssetUseCase.updateAsset', 'Nã é possível editar um ativo inválido'));
+    if (!_appData.hasWallet(asset.walletForeignKey))
+      return Left(Notification('AssetsUseCase.updateAsset', 'A carteira informada não foi localizada'));
+    if (!_appData.hasCategory(asset?.category?.objectId))
+      return Left(Notification('AssetsUseCase.updateAsset', 'A categoria informada não foi localizada'));
+    final Asset originalAsset = _appData.findAsset(asset.objectId);
+    if (originalAsset == null)
+      return Left(Notification('AssetUseCase.updateAsset', 'O ativo informado não foi encontrado'));
+    final Wallet newWallet = _appData.getWalletById(asset.walletForeignKey);
+    final Wallet originalWallet = _appData.getWalletById(originalAsset.walletForeignKey);
+    if (originalWallet.objectId != newWallet.objectId && !newWallet.isValidAssetToAdd(asset))
+      return Left(Notification('AssetUseCase.updateAsset', 'Não é possível adicionar o ativo a esta carteira'));
+    return Right(Notification('', ''));
+  }
+
+  void _localUpdateWallet(Asset asset) {
+    final Asset originalAsset = _appData.findAsset(asset.objectId);
+    final Wallet newWallet = _appData.getWalletById(asset.walletForeignKey);
+    final Wallet originalWallet = _appData.getWalletById(originalAsset.walletForeignKey);
+    if (originalWallet.objectId != newWallet.objectId) {
+      newWallet.addAsset(asset);
+      originalWallet.removeAsset(asset.objectId);
+    } else {
+      originalWallet.updateAsset(asset);
+    }
   }
 }

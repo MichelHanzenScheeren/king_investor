@@ -14,7 +14,7 @@ class WalletsUseCase {
     _appData = appData;
   }
 
-  Future<Either<Notification, List<Wallet>>> getWallets() async {
+  Future<Either<Notification, List<Wallet>>> getAllUserWallets() async {
     if (_appData.currentUserId.isEmpty) return Left(Notification('WalletsUseCase.getWallets', 'Usuário indisponível'));
     if (_appData.wallets.isNotEmpty) return Right(_appData.wallets);
     final response = await _database.filterByRelation(Wallet, [User], [_appData.currentUserId]);

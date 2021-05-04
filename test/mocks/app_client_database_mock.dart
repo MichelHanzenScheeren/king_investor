@@ -23,15 +23,15 @@ class AppClientDatabaseMock extends Mock implements ParseClient {
     ProgressCallback onReceiveProgress,
   }) async {
     String responseData = '';
-    if (path.contains(kWalletTable))
+    if (path.contains('classes/' + kWalletTable))
       responseData = kGetAllWallets;
-    else if (path.contains(kCategoryTable))
+    else if (path.contains('classes/' + kCategoryTable))
       responseData = kGetAllCategory;
-    else if (path.contains(kCompanyTable))
+    else if (path.contains('classes/' + kCompanyTable))
       responseData = kGetAllCompany;
-    else if (path.contains(kAssetTable))
+    else if (path.contains('classes/' + kAssetTable))
       responseData = kGetAllAsset;
-    else if (path.contains(kCategoryScoreTable)) responseData = kGetAllCategoryScore;
+    else if (path.contains('classes/' + kCategoryScoreTable)) responseData = kGetAllCategoryScore;
 
     if (responseData.isEmpty) return ParseNetworkResponse(data: '{}', statusCode: 400);
     return ParseNetworkResponse(data: responseData, statusCode: 200);
@@ -61,7 +61,7 @@ const kGetAllCompany =
     '{"results":[{"objectId":"Nentyg4662","symbol":"PSSA3","ticker":"pssa3:bz","currency":"BRL","region":"AMERICAS","name":"Porto Seguro SA","securityType":"Common Stock","exchange":"B3","country":"Brasil","createdAt":"2021-04-21T20:17:34.695Z","updatedAt":"2021-04-22T01:30:31.708Z","ACL":{"*":{"read":true}}},{"objectId":"KsLI2Ht7nc","symbol":"XPML11","ticker":"xpml11:bz","currency":"BRL","region":"AMERICAS","name":"XP MALLS FDO INV IMOB FII","securityType":"Closed-End Fund","exchange":"B3","country":"Brasil","createdAt":"2021-04-21T20:17:34.695Z","updatedAt":"2021-04-22T01:30:31.708Z","ACL":{"*":{"read":true}}}]}';
 
 const kGetAllAsset =
-    '{"results": [ { "objectId": "INBOMkNhQE", "company": {"__type": "Pointer", "className": "Company", "objectId": "Nentyg4662"}, "category": { "__type": "Pointer", "className": "Category", "objectId": "7jgnYX0BBi", "createdAt": "2018-10-31T14:16:13.616Z", "updatedAt": "2018-11-07T12:12:20.758Z", "name": "Ação", "order": 0, }, "averagePrice": 45.04, "score": 10, "quantity": 6, "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "MlZIPMNohV"}, "createdAt": "2021-04-22T01:15:24.425Z", "updatedAt": "2021-04-22T01:15:24.425Z" }, { "objectId": "2Idh2KIgrc", "company": {"__type": "Pointer", "className": "Company", "objectId": "KsLI2Ht7nc"}, "category": { "__type": "Pointer", "className": "Category", "objectId": "gd8djpy4lk", "createdAt": "2018-10-31T14:16:13.616Z", "updatedAt": "2018-11-07T12:12:20.758Z", "name": "Fii", "order": 1, }, "averagePrice": 80.26, "score": 10, "quantity": 7, "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "MlZIPMNohV"}, "createdAt": "2021-04-22T01:15:24.425Z", "updatedAt": "2021-04-22T01:15:24.425Z" } ] }';
+    '{"results":[{"objectId":"INBOMkNhQE","company":{"__type":"Pointer","className":"Company","objectId":"Nentyg4662","symbol":"PSSA3","ticker":"pssa3:bz","currency":"BRL","region":"AMERICAS","name":"Porto Seguro SA","securityType":"Common Stock","exchange":"B3","country":"Brasil","createdAt":"2021-04-21T20:17:34.695Z","updatedAt":"2021-04-22T01:30:31.708Z"},"category":{"__type":"Pointer","className":"Category","objectId":"7jgnYX0BBi","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Ação","order":0},"averagePrice":45.04,"score":10,"quantity":6,"wallet":{"__type":"Pointer","className":"Wallet","objectId":"MlZIPMNohV"},"createdAt":"2021-04-22T01:15:24.425Z","updatedAt":"2021-04-22T01:15:24.425Z"},{"objectId":"2Idh2KIgrc","company":{"__type":"Pointer","className":"Company","objectId":"KsLI2Ht7nc","symbol":"XPML11","ticker":"xpml11:bz","currency":"BRL","region":"AMERICAS","name":"XP MALLS FDO INV IMOB FII","securityType":"Closed-End Fund","exchange":"B3","country":"Brasil","createdAt":"2021-04-21T20:17:34.695Z","updatedAt":"2021-04-22T01:30:31.708Z"},"category":{"__type":"Pointer","className":"Category","objectId":"gd8djpy4lk","createdAt":"2018-10-31T14:16:13.616Z","updatedAt":"2018-11-07T12:12:20.758Z","name":"Fii","order":1},"averagePrice":80.26,"score":10,"quantity":7,"wallet":{"__type":"Pointer","className":"Wallet","objectId":"MlZIPMNohV"},"createdAt":"2021-04-22T01:15:24.425Z","updatedAt":"2021-04-22T01:15:24.425Z"}]}';
 
 const kGetAllCategoryScore =
     '{"results": [ { "objectId": "cxgmtUYfM4", "score": 10, "category": { "__type": "Pointer", "className": "Category", "objectId": "gd8djpy4lk", "createdAt": "2018-10-31T14:16:13.616Z", "updatedAt": "2018-11-07T12:12:20.758Z", "name": "Fii", "order": 1, }, "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "7jgnYX0BBi"}, "createdAt": "2021-04-22T01:30:10.315Z", "updatedAt": "2021-04-22T01:30:10.315Z" }, { "objectId": "cxgmtUYfM4", "score": 10, "category": { "__type": "Pointer", "className": "Category", "objectId": "zJxVP17mTi", "createdAt": "2018-10-31T14:16:13.616Z", "updatedAt": "2018-11-07T12:12:20.758Z", "name": "Ação", "order": 0, }, "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "7jgnYX0BBi"}, "createdAt": "2021-04-22T01:30:10.315Z", "updatedAt": "2021-04-22T01:30:10.315Z" } ] }';

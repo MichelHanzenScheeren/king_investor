@@ -129,7 +129,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
 
   String getObjectsToInclude(Type type) {
     if (type == Category) return kCategory;
-    if (type == Company) return kCategory;
+    if (type == Company) return kCompany;
     throw Exception('O tipo de dado não corresponde a uma inclusão válida de uma tabela');
   }
 
