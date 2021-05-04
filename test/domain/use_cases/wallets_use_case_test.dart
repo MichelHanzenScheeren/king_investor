@@ -18,66 +18,129 @@ main() {
   AppData appData;
   WalletsUseCase walletsUseCase;
 
-  group('Tests aboud WaletsUseCase', () {
-    setUpAll(() async {
-      await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
-      AppClientDatabaseMock client = AppClientDatabaseMock();
-      DatabaseServiceAgreement databaseService = ParseDatabaseService(client: client);
-      database = DatabaseRepository(databaseService);
-      appData = AppData()..updateCurrentUser(User(null, null, Name('Michel', 'Scheeren'), Email('michel@gmail.com')));
-      walletsUseCase = WalletsUseCase(database, appData);
-    });
+  setUpAll(() async {
+    await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
+    AppClientDatabaseMock client = AppClientDatabaseMock();
+    DatabaseServiceAgreement databaseService = ParseDatabaseService(client: client);
+    database = DatabaseRepository(databaseService);
+    appData = AppData()..updateCurrentUser(User(null, null, Name('Michel', 'Scheeren'), Email('michel@gmail.com')));
+    walletsUseCase = WalletsUseCase(database, appData);
+  });
 
-    // test('should create a valid MainWallet when empty', () async {
-    //   final response = await walletsUseCase.getWallets();
-    //   expect(response.isRight(), isTrue);
-    //   expect(response.getOrElse(() => null), isInstanceOf<List<Wallet>>());
-    //   expect(response.getOrElse(() => null).length, 1);
-    //   expect(response.getOrElse(() => null).first.name, 'Principal');
-    //   expect(response.getOrElse(() => null).first.isMainWallet, true);
-    // });
+  group('Testes about WAlletUseCase.getAll', () {
+    /*test('should create a valid MainWallet when empty', () async {
+      final response = await walletsUseCase.getWallets();
+      expect(response.isRight(), isTrue);
+      expect(response.getOrElse(() => null)?.length, 1);
+      expect(response.getOrElse(() => null)?.first?.isMainWallet, true);
+    });*/
 
     test('should return a valid list of Wallets', () async {
       final response = await walletsUseCase.getWallets();
       expect(response.isRight(), isTrue);
       expect(response.getOrElse(() => null), isInstanceOf<List<Wallet>>());
-      expect(response.getOrElse(() => null).length, 2);
-      expect(appData.wallets.length, 2);
+      expect(appData.wallets.isEmpty, isFalse);
     });
+  });
 
+  group('Tests aboud WaletsUseCase.addWallet', () {
     test('should return Left when try add null', () async {
       final response = await walletsUseCase.addWallet(null);
       expect(response.isLeft(), isTrue);
-      expect(appData.wallets.length, 2);
     });
 
     test('should return Left when try add invalid wallet', () async {
-      Wallet wallet = Wallet.createMainWallet('123456');
-      wallet.isValidAssetToAdd(null); // will invalidate the wallet
+      Wallet wallet = Wallet.createMainWallet('123456')..isValidAssetToAdd(null);
       final response = await walletsUseCase.addWallet(wallet);
       expect(response.isLeft(), isTrue);
-      expect(appData.wallets.length, 2);
     });
 
     test('should return Left when try add repeated wallet', () async {
       Wallet wallet = Wallet('7jgnYX0BBi', null, false, 'Teste', '123456');
       final response = await walletsUseCase.addWallet(wallet);
       expect(response.isLeft(), isTrue);
-      expect(appData.wallets.length, 2);
     });
 
     test('should return Left when try add repeated main wallet', () async {
       Wallet wallet = Wallet('abcy', null, true, 'Teste', '123456');
       final response = await walletsUseCase.addWallet(wallet);
       expect(response.isLeft(), isTrue);
-      expect(appData.wallets.length, 2);
     });
 
     test('should return Right(String) when add valid wallet', () async {
       Wallet wallet = Wallet('abcy', null, false, 'Teste', '123456');
+      final int previousQuantity = appData.wallets.length;
       final response = await walletsUseCase.addWallet(wallet);
       expect(response.isRight(), isTrue);
-      expect(appData.wallets.length, 3);
+      expect(appData.wallets.length, previousQuantity + 1);
+    });
+  });
+
+  group('Tests aboud WaletsUseCase.updateWallet', () {
+    test('should return Left when try update null', () async {
+      final response = await walletsUseCase.updateWallet(null);
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Left when try update invalid wallet', () async {
+      Wallet wallet = Wallet.createMainWallet('123456')..isValidAssetToAdd(null);
+      final response = await walletsUseCase.updateWallet(wallet);
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Left when try update property isMainWallet', () async {
+      final response = await walletsUseCase.updateWallet(Wallet('7jgnYX0BBi', null, false, 'A', '1234'));
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Right(Notification) when update valid wallet', () async {
+      Wallet wallet = Wallet('7jgnYX0BBi', null, true, 'Teste sucesso', '123456');
+      final response = await walletsUseCase.updateWallet(wallet);
+      expect(response.isRight(), isTrue);
+      expect(appData.wallets.first.name, 'Teste sucesso');
+    });
+  });
+
+  group('Tests aboud WaletsUseCase.deleteWallet', () {
+    test('should return Left when try to delete null wallet', () async {
+      final response = await walletsUseCase.deleteWallet(null);
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Left when try to delete null wallet', () async {
+      final response = await walletsUseCase.deleteWallet('ABCDE');
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Left when try to delete main wallet', () async {
+      final response = await walletsUseCase.deleteWallet('7jgnYX0BBi');
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Right when delete valid wallet', () async {
+      final int previousLegth = appData.wallets.length;
+      final response = await walletsUseCase.deleteWallet('sI92wSvh9l');
+      expect(response.isRight(), isTrue);
+      expect(appData.wallets.length, previousLegth - 1);
+    });
+  });
+
+  group('Tests aboud WaletsUseCase.changeMainWallet', () {
+    test('should return Left when try changeMainWallet whit wallet that does not exists', () async {
+      final response = await walletsUseCase.changeMainWallet('1097');
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Left when try changeMainWallet whit current mainWallet', () async {
+      final response = await walletsUseCase.changeMainWallet('7jgnYX0BBi');
+      expect(response.isLeft(), isTrue);
+    });
+
+    test('should return Right when try changeMainWallet whit valid new mainWallet', () async {
+      String auxWalletId = (await walletsUseCase.addWallet(Wallet(null, null, false, 'Olá', '2345'))).getOrElse(null);
+      final response = await walletsUseCase.changeMainWallet(auxWalletId);
+      expect(response.isRight(), isTrue);
+      expect(appData.getMainWallet().objectId, auxWalletId);
     });
   });
 }

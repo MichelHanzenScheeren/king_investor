@@ -94,7 +94,7 @@ class WalletsUseCase {
     final response2 = await _database.update(newMainWallet);
     return response2.fold(
       (notification1) => Left(notification1),
-      (notification2) => Left(notification2),
+      (notification2) => Right(notification2),
     );
   }
 
@@ -116,21 +116,21 @@ class WalletsUseCase {
     return Right(Notification('', ''));
   }
 
-  _validateWalletToUpdate(Wallet wallet) {
+  Either<Notification, Notification> _validateWalletToUpdate(Wallet wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.editWallet', 'Uma carteira inválida não pode ser editada'));
     if (!_appData.hasWallet(wallet.objectId))
       return Left(Notification('WalletsUseCase.editWallet', 'Carteira não encontrada'));
     final Wallet originalWallet = _appData.getWalletById(wallet.objectId);
     if (wallet.isMainWallet != originalWallet.isMainWallet)
-      return Left(Notification('WalletsUseCase.editWallet', 'Não é possível alterar a carteira aqui'));
+      return Left(Notification('WalletsUseCase.editWallet', 'Método inválido paa mudar a carteira principal'));
     return Right(Notification('', ''));
   }
 
   Either<Notification, Notification> _validateWalletsToChangeMainWallet(String newMainWalletId) {
     if (!_appData.hasWallet(newMainWalletId))
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Carteira não encontrada'));
-    if (_appData.getMainWallet()?.objectId != newMainWalletId)
+    if (_appData.getMainWallet()?.objectId == newMainWalletId)
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Esta já é a carteira principal'));
     return Right(Notification('', ''));
   }
