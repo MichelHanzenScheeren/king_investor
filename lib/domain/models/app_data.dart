@@ -78,4 +78,8 @@ class AppData extends Model {
     });
     return asset;
   }
+
+  void registerCategories(List<Category> categories) {
+    _categories.addAll(categories);
+  }
 }

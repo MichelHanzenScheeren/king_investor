@@ -43,12 +43,10 @@ class AssetsUseCase {
     newAsset.company.setObjectId(saveCompanyResponse.getOrElse(() => ''));
     final response = await _database.create(newAsset);
     return response.fold(
-      (notification) {
-        _appData.getWalletById(newAsset.walletForeignKey).removeAsset(newAsset.objectId);
-        return Left(notification);
-      },
+      (notification) => Left(notification),
       (objectId) {
         newAsset.setObjectId(objectId);
+        _appData.getWalletById(newAsset.walletForeignKey).addAsset(newAsset);
         return Right(objectId);
       },
     );
@@ -59,7 +57,14 @@ class AssetsUseCase {
       return Left(Notification('AssetsUseCase.deleteAsset', 'A carteira informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(walletId);
     if (!wallet.isValidAssetToManipulate(assetId)) return Left(wallet.notifications.first);
-    return await _database.delete(assetId);
+    final response = await _database.delete(wallet.getAsset(assetId));
+    return response.fold(
+      (notification) => Left(notification),
+      (notification2) {
+        wallet.removeAsset(assetId);
+        return Right(notification2);
+      },
+    );
   }
 
   Future<Either<Notification, Notification>> updateAsset(Asset newAsset) async {

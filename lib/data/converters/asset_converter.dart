@@ -26,9 +26,9 @@ class AssetConverter {
       kCreatedAt: asset.createdAt,
       kCompanyForeignKey: asset.company.objectId,
       kCategoryForeignKey: asset.category.objectId,
-      kAveragePrice: asset.averagePrice,
-      kScore: asset.score,
-      kQuantity: asset.quantity,
+      kAveragePrice: asset.averagePrice.value,
+      kScore: asset.score.value,
+      kQuantity: asset.quantity.value,
       kWalletForeignKey: asset.walletForeignKey,
     };
   }
