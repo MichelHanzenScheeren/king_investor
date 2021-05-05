@@ -5,7 +5,7 @@ import '../static/exchange_rate_response.dart';
 import '../static/prices_response.dart';
 import '../static/search_response.dart';
 
-class AppRequestServiceMock implements RequestAgreement {
+class AppRequestServiceSimulated implements RequestAgreement {
   @override
   void configureRequests({
     int conectTimeoutMiliseconds: 5000,

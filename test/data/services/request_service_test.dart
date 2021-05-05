@@ -20,7 +20,7 @@ main() async {
     dio = Dio();
     httpClientMock = HttpClientMock();
     dio.httpClientAdapter = httpClientMock;
-    requestService = RequestService(dio);
+    requestService = RequestService(dio: dio);
   });
 
   test('should return Right(map) when success request', () async {

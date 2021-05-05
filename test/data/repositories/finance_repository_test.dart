@@ -4,16 +4,16 @@ import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/domain/models/exchange_rate.dart';
 import 'package:king_investor/domain/models/price.dart';
-import '../../mocks/app_request_service_mock.dart';
+import '../../mocks/app_request_service_simulated.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  RequestAgreement requetMock;
+  RequestAgreement requestMock;
   FinanceRepository financeRepository;
 
   setUp(() {
-    requetMock = AppRequestServiceMock();
-    financeRepository = FinanceRepository(requetMock);
+    requestMock = AppRequestServiceSimulated();
+    financeRepository = FinanceRepository(requestMock);
   });
 
   test('Should return Right with valid list of Company when mock search()', () async {

@@ -7,8 +7,8 @@ import 'package:king_investor/shared/notifications/notification.dart';
 class RequestService implements RequestAgreement {
   Dio _dio;
 
-  RequestService(Dio dio) {
-    _dio = dio;
+  RequestService({Dio dio}) {
+    _dio = dio ?? Dio();
   }
 
   @override

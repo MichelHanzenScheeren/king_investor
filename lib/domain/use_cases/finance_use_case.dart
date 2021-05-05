@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:dartz/dartz.dart';
 import 'package:king_investor/domain/agreements/finance_agreement.dart';
 import 'package:king_investor/domain/models/app_data.dart';
@@ -18,14 +17,20 @@ class FinanceUseCase {
   }
 
   Future<Either<Notification, List<Company>>> search(String query) async {
-    if (query == null || query.isEmpty) return Right(<Company>[]);
-    return await _finance.search(query);
+    if (query == null || query.isEmpty) return Right(_appData.localSearch);
+    final response = await _finance.search(query);
+    return response.fold((notification) => Left(notification), (searchResult) {
+      _appData.registerLocalSearch(searchResult);
+      return Right(_appData.localSearch);
+    });
   }
 
   Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
     if (tickers == null || tickers.isEmpty)
       return Left(Notification('FinanceUseCase.getPrices', 'A lista de ativos não pode ser vazia'));
-    List<Price> localPrices = _getLocalPrices(tickers);
+    List<Price> localPrices = getLocalPrices(tickers);
+    if (tickers.isEmpty) return Right(_saveAndReturnPrices(localPrices, []));
+
     final result = await _finance.getPrices(tickers);
     return result.fold(
       (notification) => Left(notification),
@@ -47,14 +52,16 @@ class FinanceUseCase {
     });
   }
 
-  List<Price> _getLocalPrices(List<String> tickers) {
+  List<Price> getLocalPrices(List<String> tickers) {
     List<Price> localPrices = <Price>[];
+    List<String> toRemove = <String>[];
     for (int i = 0; i < tickers.length; i++) {
       if (_appData.containsPrice(tickers[i])) {
         localPrices.add(_appData.getPrice(tickers[i]));
-        tickers.remove(tickers[i]);
+        toRemove.add(tickers[i]);
       }
     }
+    toRemove.forEach((element) => tickers.remove(element));
     return localPrices;
   }
 
