@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mockito/mockito.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -5,8 +7,8 @@ class ParseHTTPClientMock extends Mock implements ParseClient {
   String _response;
   int _statusCode;
 
-  defineResponse({String response, int statusCode}) {
-    _response = response;
+  defineResponse({Map<String, dynamic> response, int statusCode}) {
+    _response = json.encode(response);
     _statusCode = statusCode;
   }
 

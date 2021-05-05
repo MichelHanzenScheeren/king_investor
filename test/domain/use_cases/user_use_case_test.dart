@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/repositories/authentication_repository.dart';
 import 'package:king_investor/data/services/parse_authentication_service.dart';
@@ -12,7 +11,7 @@ import 'package:king_investor/domain/value_objects/name.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../mocks/app_client_authentication_mock.dart';
-import '../../static/statics.dart';
+import '../../static/authentication_response.dart';
 
 main() {
   AuthenticationRepositoryAgreement authentication;
@@ -21,7 +20,7 @@ main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-    final String currentUser = await rootBundle.loadString(kParseLoginSuccessResponse);
+    final String currentUser = kLoginSucessResponseJSON;
     SharedPreferences.setMockInitialValues(<String, String>{'flutter_parse_sdk_user': currentUser});
     await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
     AppClientAuthenticationMock client = AppClientAuthenticationMock();

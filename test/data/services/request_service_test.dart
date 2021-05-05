@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/services/request_service.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:mockito/mockito.dart';
-import '../../mocks/http_client_mock.dart';
-import '../../static/statics.dart';
+import '../../static/search_response.dart';
+
+class HttpClientMock extends Mock implements HttpClientAdapter {}
 
 main() async {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  final responseData = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
+  final responseData = kSearchResponseMap;
 
   Dio dio;
   HttpClientMock httpClientMock;

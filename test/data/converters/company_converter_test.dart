@@ -1,15 +1,11 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
 import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/company.dart';
-import '../../static/statics.dart';
+import '../../static/search_response.dart';
 
 main() async {
-  TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  final responseData = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
-  Map<String, dynamic> map = responseData['quote'][0];
+  Map<String, dynamic> map = kSearchResponseMap['quote'][0];
 
   test('Should return valid Company when use fromMapToModel(map)', () {
     Company item = CompanyConverter().fromMapToModel(map);

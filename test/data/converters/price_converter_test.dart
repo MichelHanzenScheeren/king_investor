@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/price_converter.dart';
 import 'package:king_investor/domain/models/price.dart';
-import '../../static/statics.dart';
+import '../../static/prices_response.dart';
 
 main() async {
-  TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-  final responseData = Map.from(json.decode(await rootBundle.loadString(kGetPricesJsonPath)));
-  Map<String, dynamic> map = responseData['result']['PSSA3:BZ'];
+  Map<String, dynamic> map = kPricesResponseMap['result']['PSSA3:BZ'];
 
   test('Should return valid Price when use fromMapToModel(map)', () {
     Price item = PriceConverter().fromMapToModel(map);

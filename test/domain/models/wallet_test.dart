@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:king_investor/data/converters/company_converter.dart';
 import 'package:king_investor/domain/models/asset.dart';
@@ -9,11 +7,9 @@ import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/domain/value_objects/score.dart';
-import '../../static/statics.dart';
+import '../../static/search_response.dart';
 
 main() async {
-  TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
-
   test('should create a valid main Wallet when use Wallet.createMainWallet()', () {
     final wallet = Wallet.createMainWallet('1234');
     expect(wallet.isValid, isTrue);
@@ -62,7 +58,7 @@ main() async {
     Wallet wallet;
 
     setUpAll(() async {
-      companies = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
+      companies = kSearchResponseMap;
       company1 = CompanyConverter().fromMapToModel(companies['quote'][0]);
       company2 = CompanyConverter().fromMapToModel(companies['quote'][1]);
       category1 = Category(null, null, 'Itausa', 0);

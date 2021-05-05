@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/services.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
-import '../static/statics.dart';
+import '../static/exchange_rate_response.dart';
+import '../static/prices_response.dart';
+import '../static/search_response.dart';
 
 class AppRequestServiceMock implements RequestAgreement {
   @override
@@ -18,14 +18,11 @@ class AppRequestServiceMock implements RequestAgreement {
   @override
   Future<Either<Notification, Map>> request(String url) async {
     if (url.contains('auto-complete')) {
-      final responseData = Map.from(json.decode(await rootBundle.loadString(kSearchJsonPath)));
-      return Future.value(Right(responseData));
+      return Future.value(Right(kSearchResponseMap));
     } else if (url.contains('get-compact')) {
-      final responseData = Map.from(json.decode(await rootBundle.loadString(kGetPricesJsonPath)));
-      return Future.value(Right(responseData));
+      return Future.value(Right(kPricesResponseMap));
     } else if (url.contains('USD')) {
-      final responseData = Map.from(json.decode(await rootBundle.loadString(kGetExchangeRateJsonPath)));
-      return Future.value(Right(responseData));
+      return Future.value(Right(kExchangeRateResponseMap));
     } else {
       return Future.value(Left(Notification('request_service.unkown', 'Erro desconhecido')));
     }
