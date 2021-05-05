@@ -14,7 +14,6 @@ class Asset extends Model {
   final Score score; // "peso" do ativo na carteira
   final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
   String _walletForeignKey;
-  Price _price; // Valores do ativo (preço atual, variação diária, volume de negociações)
 
   Asset(
     String objectId,
@@ -35,8 +34,10 @@ class Asset extends Model {
   }
 
   Category get category => _category;
+
   String get walletForeignKey => _walletForeignKey;
-  Price get price => _price;
+
+  Price get falsePrice => Price.fromDefaultValues(company?.ticker);
 
   void setCategory(Category category) {
     clearNotifications();
@@ -48,11 +49,6 @@ class Asset extends Model {
     clearNotifications();
     _applyContracts(_category, walletForeignKey);
     if (isValid) _walletForeignKey = walletForeignKey;
-  }
-
-  void registerPrices(Price price) {
-    _price = price;
-    addNotifications(_price);
   }
 
   void _applyContracts(Category category, String walletForeignKey) {

@@ -3,8 +3,10 @@ import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/exchange_rate.dart';
+import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
+import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/shared/models/model.dart';
 
 class AppData extends Model {
@@ -12,8 +14,9 @@ class AppData extends Model {
   bool _wasUpdated = false;
   final List<Category> _categories = <Category>[];
   final List<CategoryScore> _categoryScores = <CategoryScore>[];
-  final List<ExchangeRate> _exchangeRates = <ExchangeRate>[];
   final List<Wallet> _wallets = <Wallet>[];
+  final Map<String, Price> _prices = <String, Price>{};
+  final Map<String, ExchangeRate> _exchangeRates = <String, ExchangeRate>{};
 
   /* CONSTRUCTOR */
   AppData() : super(null, null);
@@ -29,8 +32,6 @@ class AppData extends Model {
 
   UnmodifiableListView<CategoryScore> get categoryScores => UnmodifiableListView<CategoryScore>(_categoryScores);
 
-  UnmodifiableListView<ExchangeRate> get exchangeRates => UnmodifiableListView<ExchangeRate>(_exchangeRates);
-
   UnmodifiableListView<Wallet> get wallets => UnmodifiableListView<Wallet>(_wallets);
 
   bool hasWallet(String objectId) => _wallets.any((element) => element.objectId == objectId);
@@ -42,6 +43,17 @@ class AppData extends Model {
   Wallet getMainWallet() => _wallets.firstWhere((element) => element.isMainWallet, orElse: () => null);
 
   bool hasCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
+
+  bool containsPrice(String ticker) => _prices.containsKey(ticker);
+
+  Price getPrice(String ticker) => _prices[ticker];
+
+  bool containsExchangeRates(String origin, String destiny) => _exchangeRates.containsKey('$origin$destiny');
+
+  ExchangeRate getCopyOfExchangeRate(String origin, String destiny) {
+    final aux = _exchangeRates['$origin$destiny'];
+    return ExchangeRate(null, null, aux.origin, aux.destiny, Amount(aux.lastPrice.value));
+  }
 
   /* SETTERS */
   void registerUser(User newUser) => _currentUser = newUser;
@@ -81,5 +93,11 @@ class AppData extends Model {
 
   void registerCategories(List<Category> categories) {
     _categories.addAll(categories);
+  }
+
+  void registerPrice(String ticker, Price price) => _prices[ticker] = price;
+
+  void registerExchangeRate(String origin, String destiny, ExchangeRate value) {
+    _exchangeRates['$origin$destiny'] = value;
   }
 }

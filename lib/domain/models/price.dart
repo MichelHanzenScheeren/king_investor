@@ -35,6 +35,14 @@ class Price extends Model {
     _applyContracts(ticker, lastUpdate);
   }
 
+  factory Price.fromDefaultValues(String ticker) {
+    Amount aux = Amount(0);
+    int time = DateTime.fromMillisecondsSinceEpoch(0).microsecondsSinceEpoch;
+    Price price = Price(null, null, ticker ?? '', time, aux, aux, aux, aux, aux, aux, aux, aux, aux);
+    price.addNotification('Price.fromDefaultValues', 'Não foi possível obter os preços reais desse ativo');
+    return price;
+  }
+
   void _applyContracts(String ticker, int lastUpdate) {
     addNotifications(
       Contract()
