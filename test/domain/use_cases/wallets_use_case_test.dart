@@ -136,11 +136,12 @@ main() {
       expect(response.isLeft(), isTrue);
     });
 
-    // test('should return Right when try changeMainWallet whit valid new mainWallet', () async {
-    //   String auxWalletId = (await walletsUseCase.addWallet(Wallet(null, null, false, 'Olá', '2345'))).getOrElse(null);
-    //   final response = await walletsUseCase.changeMainWallet(auxWalletId);
-    //   expect(response.isRight(), isTrue);
-    //   expect(appData.getMainWallet().objectId, auxWalletId);
-    // });
+    test('should return Right when try changeMainWallet whit valid new mainWallet', () async {
+      final Wallet aux = Wallet(null, null, false, 'Olá', '2345');
+      await walletsUseCase.addWallet(aux);
+      final response = await walletsUseCase.changeMainWallet(aux.objectId);
+      expect(response.isRight(), isTrue);
+      expect(appData.getMainWallet().objectId, aux.objectId);
+    });
   });
 }

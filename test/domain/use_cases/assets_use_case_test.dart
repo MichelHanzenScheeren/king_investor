@@ -173,8 +173,6 @@ main() {
       asset3.setWalletForeignKey(wallet2.objectId);
     });
 
-    //
-
     test('should return Left when send asset with invalid category', () async {
       Category invalid = Category('1234567', null, 'Bitcoin', 1); // categoria inválida
       asset3.setCategory(invalid);
