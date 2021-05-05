@@ -99,7 +99,7 @@ class WalletsUseCase {
   Either<Notification, Notification> _validateWalletToAdd(Wallet wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.addWallet', 'Uma carteira inválida não pode ser salva'));
-    if (_appData.hasWallet(wallet.objectId))
+    if (_appData.containWallet(wallet.objectId))
       return Left(Notification('WalletsUseCase.addWallet', 'Não é possível adicionar uma carteira duplicada'));
     if (_appData.duplicatedMainWallet(wallet))
       return Left(Notification('WalletsUseCase.addWallet', 'Não é possível registrar duas carteiras principais'));
@@ -107,7 +107,7 @@ class WalletsUseCase {
   }
 
   Either<Notification, Notification> _validateWalletToDelete(String walletId) {
-    if (!_appData.hasWallet(walletId))
+    if (!_appData.containWallet(walletId))
       return Left(Notification('WalletsUseCase.deleteWallet', 'Carteira não encontrada'));
     if (_appData.getWalletById(walletId).isMainWallet)
       return Left(Notification('WalletsUseCase.deleteWallet', 'Não é possível apagar a carteira principal'));
@@ -117,7 +117,7 @@ class WalletsUseCase {
   Either<Notification, Notification> _validateWalletToUpdate(Wallet wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.editWallet', 'Uma carteira inválida não pode ser editada'));
-    if (!_appData.hasWallet(wallet.objectId))
+    if (!_appData.containWallet(wallet.objectId))
       return Left(Notification('WalletsUseCase.editWallet', 'Carteira não encontrada'));
     final Wallet originalWallet = _appData.getWalletById(wallet.objectId);
     if (wallet.isMainWallet != originalWallet.isMainWallet)
@@ -126,7 +126,7 @@ class WalletsUseCase {
   }
 
   Either<Notification, Notification> _validateWalletsToChangeMainWallet(String newMainWalletId) {
-    if (!_appData.hasWallet(newMainWalletId))
+    if (!_appData.containWallet(newMainWalletId))
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Carteira não encontrada'));
     if (_appData.getMainWallet()?.objectId == newMainWalletId)
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Esta já é a carteira principal'));

@@ -54,10 +54,10 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(String table, {List<String> objectsToInclude: const <String>[]}) async {
+  Future<Either<Notification, List>> getAll(String table, {List<String> include: const <String>[]}) async {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
-      myQuery.includeObject(objectsToInclude);
+      myQuery.includeObject(include);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(_getError('getAll', response.statusCode));
@@ -71,7 +71,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     String table,
     List<String> relations,
     List<String> keys, {
-    List<String> objectsToInclude: const <String>[],
+    List<String> include: const <String>[],
   }) async {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
@@ -83,7 +83,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
           parse = ParseObject(relations[i])..objectId = keys[i];
         myQuery.whereEqualTo(relations[i].toLowerCase(), parse);
       }
-      myQuery.includeObject(objectsToInclude);
+      myQuery.includeObject(include);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(_getError('filterByRelation', response.statusCode));
@@ -97,14 +97,14 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     String table,
     List<String> properties,
     List<String> values, {
-    List<String> objectsToInclude: const <String>[],
+    List<String> include: const <String>[],
   }) async {
     try {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       for (int i = 0; i < properties.length; i++) {
         myQuery.whereEqualTo(properties[i], values[i]);
       }
-      myQuery.includeObject(objectsToInclude);
+      myQuery.includeObject(include);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
       return Left(_getError('filterByProperties', response.statusCode));

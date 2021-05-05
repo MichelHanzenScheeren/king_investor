@@ -8,19 +8,19 @@ abstract class DatabaseRepositoryAgreement {
 
   Future<Either<Notification, Notification>> delete(Object appObject);
 
-  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> objectsToInclude});
+  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> include});
 
   Future<Either<Notification, List>> filterByRelation(
     Type appClass,
     List<Type> relations,
     List<String> keys, {
-    List<Type> objectsToInclude,
+    List<Type> include,
   });
 
   Future<Either<Notification, List>> filterByProperties(
     Type appClass,
     List<String> properties,
     List<String> values, {
-    List<Type> objectsToInclude,
+    List<Type> include,
   });
 }

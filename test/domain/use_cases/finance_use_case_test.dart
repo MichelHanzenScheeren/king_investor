@@ -94,7 +94,7 @@ main() {
       expect(response.isRight(), isTrue);
     });
     test('Should has local saves after success request', () async {
-      expect(appData.containsExchangeRates('USD', 'BRL'), isTrue);
+      expect(appData.containExchangeRates('USD', 'BRL'), isTrue);
     });
   });
 }

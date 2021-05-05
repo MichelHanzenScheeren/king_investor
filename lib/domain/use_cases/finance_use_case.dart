@@ -19,10 +19,13 @@ class FinanceUseCase {
   Future<Either<Notification, List<Company>>> search(String query) async {
     if (query == null || query.isEmpty) return Right(_appData.localSearch);
     final response = await _finance.search(query);
-    return response.fold((notification) => Left(notification), (searchResult) {
-      _appData.registerLocalSearch(searchResult);
-      return Right(_appData.localSearch);
-    });
+    return response.fold(
+      (notification) => Left(notification),
+      (searchResult) {
+        _appData.registerLocalSearch(searchResult);
+        return Right(_appData.localSearch);
+      },
+    );
   }
 
   Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
@@ -43,20 +46,23 @@ class FinanceUseCase {
       return Left(Notification('FinanceUseCase.getExchangeRate', 'Valor inválido para parâmetro "origem"'));
     if (destiny == null || destiny.isEmpty)
       return Left(Notification('FinanceUseCase.getExchangeRate', 'Valor inválido para parâmetro "destino"'));
-    if (_appData.containsExchangeRates(origin, destiny)) return Right(_appData.getCopyOfExchangeRate(origin, destiny));
+    if (_appData.containExchangeRates(origin, destiny)) return Right(_appData.getCopyOfExchangeRate(origin, destiny));
 
     final response = await _finance.getExchangeRate(origin, destiny);
-    return response.fold((notification) => Left(notification), (exchangeRate) {
-      _appData.registerExchangeRate(origin, destiny, exchangeRate);
-      return Right(_appData.getCopyOfExchangeRate(origin, destiny));
-    });
+    return response.fold(
+      (notification) => Left(notification),
+      (exchangeRate) {
+        _appData.registerExchangeRate(origin, destiny, exchangeRate);
+        return Right(_appData.getCopyOfExchangeRate(origin, destiny));
+      },
+    );
   }
 
   List<Price> getLocalPrices(List<String> tickers) {
     List<Price> localPrices = <Price>[];
     List<String> toRemove = <String>[];
     for (int i = 0; i < tickers.length; i++) {
-      if (_appData.containsPrice(tickers[i])) {
+      if (_appData.containPrice(tickers[i])) {
         localPrices.add(_appData.getPrice(tickers[i]));
         toRemove.add(tickers[i]);
       }

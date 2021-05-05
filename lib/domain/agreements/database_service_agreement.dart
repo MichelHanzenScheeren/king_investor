@@ -8,19 +8,19 @@ abstract class DatabaseServiceAgreement {
 
   Future<Either<Notification, Notification>> delete(String table, String objectId);
 
-  Future<Either<Notification, List>> getAll(String table, {List<String> objectsToInclude});
+  Future<Either<Notification, List>> getAll(String table, {List<String> include});
 
   Future<Either<Notification, List>> filterByRelation(
     String table,
     List<String> relations,
     List<String> keys, {
-    List<String> objectsToInclude,
+    List<String> include,
   });
 
   Future<Either<Notification, List>> filterByProperties(
     String table,
     List<String> properties,
     List<String> values, {
-    List<String> objectsToInclude,
+    List<String> include,
   });
 }

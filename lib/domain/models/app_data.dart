@@ -13,10 +13,10 @@ import 'package:king_investor/shared/models/model.dart';
 class AppData extends Model {
   User _currentUser;
   bool _wasUpdated = false;
-  final List<Category> _categories = <Category>[];
-  final List<CategoryScore> _categoryScores = <CategoryScore>[];
   final List<Wallet> _wallets = <Wallet>[];
   final List<Company> _localSearch = <Company>[];
+  final List<Category> _categories = <Category>[];
+  final Map<String, List<CategoryScore>> _categoryScores = <String, List<CategoryScore>>{};
   final Map<String, Price> _prices = <String, Price>{};
   final Map<String, ExchangeRate> _exchangeRates = <String, ExchangeRate>{};
 
@@ -30,36 +30,50 @@ class AppData extends Model {
 
   bool get wasUpdated => _wasUpdated;
 
-  UnmodifiableListView<Category> get categories => UnmodifiableListView<Category>(_categories);
-
-  UnmodifiableListView<CategoryScore> get categoryScores => UnmodifiableListView<CategoryScore>(_categoryScores);
-
   UnmodifiableListView<Wallet> get wallets => UnmodifiableListView<Wallet>(_wallets);
 
   UnmodifiableListView<Company> get localSearch => UnmodifiableListView<Company>(_localSearch);
 
+  UnmodifiableListView<Category> get categories => UnmodifiableListView<Category>(_categories);
+
+  bool containWallet(String objectId) => _wallets.any((element) => element.objectId == objectId);
+
+  bool containCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
+
+  bool containPrice(String ticker) => _prices.containsKey(ticker?.toLowerCase());
+
+  bool containExchangeRates(String origin, String destiny) {
+    return _exchangeRates.containsKey('$origin$destiny'.toLowerCase());
+  }
+
+  bool containCategoryScores(String walletId) => _categoryScores.containsKey(walletId);
+
   Wallet getMainWallet() => _wallets.firstWhere((element) => element.isMainWallet, orElse: () => null);
-
-  bool hasWallet(String objectId) => _wallets.any((element) => element.objectId == objectId);
-
-  bool duplicatedMainWallet(Wallet wallet) => _wallets.any((element) => element.isMainWallet && wallet.isMainWallet);
 
   Wallet getWalletById(String objectId) => _wallets.firstWhere((element) => element.objectId == objectId);
 
-  bool hasCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
-
-  bool containsPrice(String ticker) => _prices.containsKey(ticker?.toLowerCase());
-
   Price getPrice(String ticker) => _prices[ticker?.toLowerCase()];
-
-  bool containsExchangeRates(String origin, String destiny) {
-    return _exchangeRates.containsKey('$origin$destiny'.toLowerCase());
-  }
 
   ExchangeRate getCopyOfExchangeRate(String origin, String destiny) {
     final aux = _exchangeRates['$origin$destiny'.toLowerCase()];
     return ExchangeRate(null, null, aux.origin, aux.destiny, Amount(aux.lastPrice.value));
   }
+
+  UnmodifiableListView<CategoryScore> getCategoryScores(String walletId) {
+    return UnmodifiableListView<CategoryScore>(_categoryScores[walletId]);
+  }
+
+  CategoryScore getSpecificCategoryScore(String categoryScoreId) {
+    CategoryScore score;
+    _categoryScores.keys.forEach((key) {
+      final current = _categoryScores[key];
+      if (current != null && current.any((element) => element.objectId == categoryScoreId))
+        score = current.firstWhere((element) => element.objectId == categoryScoreId);
+    });
+    return score;
+  }
+
+  bool duplicatedMainWallet(Wallet wallet) => _wallets.any((element) => element.isMainWallet && wallet.isMainWallet);
 
   /* SETTERS */
   void registerUser(User newUser) => _currentUser = newUser;
@@ -73,6 +87,7 @@ class AppData extends Model {
     _wasUpdated = false;
     _categoryScores.clear();
     _wallets.clear();
+    _localSearch.clear();
     _currentUser = null;
   }
 
@@ -110,5 +125,9 @@ class AppData extends Model {
 
   void registerExchangeRate(String origin, String destiny, ExchangeRate value) {
     _exchangeRates['$origin$destiny'.toLowerCase()] = value;
+  }
+
+  void registerCategoryScores(String walletId, List<CategoryScore> list) {
+    _categoryScores[walletId] = list;
   }
 }

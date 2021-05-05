@@ -17,13 +17,13 @@ class AssetsUseCase {
   }
 
   Future<Either<Notification, List<Asset>>> getAssets(String walletId) async {
-    if (!_appData.hasWallet(walletId))
+    if (!_appData.containWallet(walletId))
       return Left(Notification('AssetsUseCase.getAssets', 'A carteira informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(walletId);
     if (wallet.assets.isNotEmpty) return Right(wallet.assets);
 
     final toInclude = <Type>[Company, Category];
-    final response = await _database.filterByRelation(Asset, [Wallet], [walletId], objectsToInclude: toInclude);
+    final response = await _database.filterByRelation(Asset, [Wallet], [walletId], include: toInclude);
     return response.fold(
       (notification) => Left(notification),
       (list) {
@@ -52,7 +52,7 @@ class AssetsUseCase {
   }
 
   Future<Either<Notification, Notification>> deleteAsset(String walletId, String assetId) async {
-    if (!_appData.hasWallet(walletId))
+    if (!_appData.containWallet(walletId))
       return Left(Notification('AssetsUseCase.deleteAsset', 'A carteira informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(walletId);
     if (!wallet.isValidAssetToManipulate(assetId)) return Left(wallet.notifications.first);
@@ -79,9 +79,9 @@ class AssetsUseCase {
   Either<Notification, Notification> _validateAssetToAdd(Asset asset) {
     if (asset == null || !asset.isValid || asset.company == null)
       return Left(Notification('AssetUseCase.addAsset', 'Nã é possível cadastrar um ativo inválido'));
-    if (!_appData.hasWallet(asset.walletForeignKey))
+    if (!_appData.containWallet(asset.walletForeignKey))
       return Left(Notification('AssetsUseCase.addAsset', 'A carteira informada não foi localizada'));
-    if (!_appData.hasCategory(asset?.category?.objectId))
+    if (!_appData.containCategory(asset?.category?.objectId))
       return Left(Notification('AssetsUseCase.addAsset', 'A categoria informada não foi localizada'));
     final Wallet wallet = _appData.getWalletById(asset.walletForeignKey);
     if (!wallet.isValidAssetToAdd(asset)) return Left(wallet.notifications.first);
@@ -101,9 +101,9 @@ class AssetsUseCase {
   Either<Notification, Notification> _validateAssetToUpdate(Asset asset) {
     if (asset == null || !asset.isValid || asset.company == null)
       return Left(Notification('AssetUseCase.updateAsset', 'Não é possível editar um ativo inválido'));
-    if (!_appData.hasWallet(asset.walletForeignKey))
+    if (!_appData.containWallet(asset.walletForeignKey))
       return Left(Notification('AssetsUseCase.updateAsset', 'A carteira informada não foi localizada'));
-    if (!_appData.hasCategory(asset?.category?.objectId))
+    if (!_appData.containCategory(asset?.category?.objectId))
       return Left(Notification('AssetsUseCase.updateAsset', 'A categoria informada não foi localizada'));
     final Asset originalAsset = _appData.findAsset(asset.objectId);
     if (originalAsset == null)

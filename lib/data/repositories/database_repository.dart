@@ -58,11 +58,11 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> objectsToInclude: const []}) async {
+  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> include: const []}) async {
     try {
       String tableName = getTableName(appClass);
-      final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
-      final response = await _database.getAll(tableName, objectsToInclude: toInclude);
+      final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
+      final response = await _database.getAll(tableName, include: toInclude);
       return response.fold(
         (notification) => Left(notification),
         (list) => Right(_convertList(list, appClass)),
@@ -77,13 +77,13 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     Type appClass,
     List<Type> relations,
     List<String> keys, {
-    List<Type> objectsToInclude: const [],
+    List<Type> include: const [],
   }) async {
     try {
       String table = getTableName(appClass);
       final relationsName = List<String>.generate(relations.length, (i) => getTableName(relations[i]));
-      final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
-      final response = await _database.filterByRelation(table, relationsName, keys, objectsToInclude: toInclude);
+      final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
+      final response = await _database.filterByRelation(table, relationsName, keys, include: toInclude);
       return response.fold(
         (notification) => Left(notification),
         (list) => Right(_convertList(list, appClass)),
@@ -98,11 +98,11 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     Type appClass,
     List<String> properties,
     List<String> values, {
-    List<Type> objectsToInclude: const [],
+    List<Type> include: const [],
   }) async {
     String table = getTableName(appClass);
-    final toInclude = List<String>.generate(objectsToInclude.length, (i) => getObjectsToInclude(objectsToInclude[i]));
-    final response = await _database.filterByProperties(table, properties, values, objectsToInclude: toInclude);
+    final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
+    final response = await _database.filterByProperties(table, properties, values, include: toInclude);
     return response.fold(
       (notification) => Left(notification),
       (list) => Right(_convertList(list, appClass)),
