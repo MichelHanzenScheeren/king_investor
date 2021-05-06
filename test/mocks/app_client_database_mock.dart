@@ -31,16 +31,15 @@ class AppClientDatabaseMock extends Mock implements ParseClient {
     ProgressCallback onReceiveProgress,
   }) async {
     String responseData = '';
-    if (path.contains('classes/' + kWalletTable))
+    if (path.contains('classes/' + kCategoryScoreTable))
+      responseData = json.encode(kGetAllCategoryScoresResponseMap);
+    else if (path.contains('classes/' + kWalletTable))
       responseData = json.encode(kGetAllWalletsResponseMap);
     else if (path.contains('classes/' + kCategoryTable))
       responseData = json.encode(kGetAllCategoriesResponseMap);
     else if (path.contains('classes/' + kCompanyTable))
       responseData = json.encode(kGetAllCompaniesResponseMap);
-    else if (path.contains('classes/' + kAssetTable))
-      responseData = json.encode(kGetAllAssetsResponseMap);
-    else if (path.contains('classes/' + kCategoryScoreTable))
-      responseData = json.encode(kGetAllCategoryScoresResponseMap);
+    else if (path.contains('classes/' + kAssetTable)) responseData = json.encode(kGetAllAssetsResponseMap);
 
     if (responseData.isEmpty) return ParseNetworkResponse(data: '{}', statusCode: 400);
     return ParseNetworkResponse(data: responseData, statusCode: 200);

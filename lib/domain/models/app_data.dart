@@ -63,14 +63,11 @@ class AppData extends Model {
     return UnmodifiableListView<CategoryScore>(_categoryScores[walletId]);
   }
 
-  CategoryScore getSpecificCategoryScore(String categoryScoreId) {
-    CategoryScore score;
-    _categoryScores.keys.forEach((key) {
-      final current = _categoryScores[key];
-      if (current != null && current.any((element) => element.objectId == categoryScoreId))
-        score = current.firstWhere((element) => element.objectId == categoryScoreId);
-    });
-    return score;
+  CategoryScore getSpecificCategoryScore(String walletId, String categoryId) {
+    if (!_categoryScores.containsKey(walletId)) return null;
+    if (_categoryScores[walletId].any((score) => score?.category?.objectId == categoryId))
+      return _categoryScores[walletId].firstWhere((score) => score?.category?.objectId == categoryId);
+    return null;
   }
 
   bool duplicatedMainWallet(Wallet wallet) => _wallets.any((element) => element.isMainWallet && wallet.isMainWallet);
@@ -129,5 +126,17 @@ class AppData extends Model {
 
   void registerCategoryScores(String walletId, List<CategoryScore> list) {
     _categoryScores[walletId] = list;
+  }
+
+  void replaceCategoryScore(CategoryScore score) {
+    final scores = _categoryScores[score.walletForeignKey];
+    if (scores != null) {
+      if (scores.any((element) => element.objectId == score.objectId)) {
+        int index = scores.indexWhere((element) => element.objectId == score.objectId);
+        scores[index] = score;
+      } else {
+        scores.add(score);
+      }
+    }
   }
 }

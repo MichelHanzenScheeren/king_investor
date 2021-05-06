@@ -46,17 +46,23 @@ class CategoriesUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> updateCategoryScores(String categoryScoreId, int newScoreValue) async {
-    Score newScore = Score(newScoreValue);
-    if (!newScore.isValid) return Left(Notification('CategoryUseCase.updateCategoryScores', 'Nota inválida'));
-    CategoryScore current = _appData.getSpecificCategoryScore(categoryScoreId);
-    if (current == null) return Left(Notification('CategoryUseCase.updateCategoryScores', 'Categoria inválida'));
-    current.score.setValue(newScore.value);
-    return await _database.update(current);
+  Future<Either<Notification, Notification>> updateCategoryScores(CategoryScore catScore) async {
+    final validation = _validateToUpdateScore(catScore);
+    if (validation.isLeft()) return validation;
+    final category = _appData.categories.firstWhere((element) => element.objectId == catScore.category.objectId);
+    final score = CategoryScore(catScore.objectId, null, catScore.score, category, catScore.walletForeignKey);
+    final response = await _database.update(score);
+    return response.fold(
+      (notification) => Left(notification),
+      (notification2) {
+        _appData.replaceCategoryScore(score);
+        return Right(notification2);
+      },
+    );
   }
 
   List<CategoryScore> _generateAllNecessaryScores(String walletId) {
-    List<CategoryScore> scores = _appData.getCategoryScores(walletId);
+    List<CategoryScore> scores = List<CategoryScore>.from(_appData.getCategoryScores(walletId));
     List<Category> categories = _appData.categories;
     categories.forEach((category) {
       if (!scores.any((score) => category.objectId == score.category.objectId)) {
@@ -65,5 +71,18 @@ class CategoriesUseCase {
       }
     });
     return scores;
+  }
+
+  Either<Notification, Notification> _validateToUpdateScore(CategoryScore catScore) {
+    if (catScore == null || !catScore.isValid || catScore.objectId.isEmpty)
+      return Left(Notification('CategoryUseCase.updateCategoryScores', 'Nota de categoria inválida'));
+    if (!_appData.containWallet(catScore.walletForeignKey))
+      return Left(Notification('CategoryUseCase.updateCategoryScores', 'Carteira não encontrada'));
+    if (!_appData.containCategory(catScore?.category?.objectId))
+      return Left(Notification('CategoryUseCase.updateCategoryScores', 'Categoria não encontrada'));
+    CategoryScore saved = _appData.getSpecificCategoryScore(catScore.walletForeignKey, catScore.category.objectId);
+    if (saved != null && saved.objectId != catScore.objectId)
+      return Left(Notification('CategoryUseCase.updateCategoryScores', 'Tentativa de edição inválida'));
+    return Right(Notification('', ''));
   }
 }
