@@ -8,7 +8,7 @@ import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/models/exchange_rate.dart';
 import 'package:king_investor/domain/models/company.dart';
-import 'package:king_investor/static/keys.dart';
+import 'package:king_investor/resources/keys.dart';
 
 class FinanceRepository implements FinanceAgreement {
   RequestAgreement _requestService;

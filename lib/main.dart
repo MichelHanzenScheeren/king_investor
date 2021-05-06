@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-// import 'package:king_investor/static/keys.dart';
-// import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:get/get.dart';
+import 'package:king_investor/dependencies_injection.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Parse().initialize(kAppId, kServerUrl, clientKey: kClientKey, autoSendSessionId: true, debug: true);
+  WidgetsFlutterBinding.ensureInitialized();
+  DependenciesInjection.init(Environments.development);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'King Investor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
     );
