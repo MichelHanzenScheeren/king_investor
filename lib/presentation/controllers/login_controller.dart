@@ -46,20 +46,14 @@ class LoginController extends GetxController {
       final response = await _userUseCase.login(_email, _password);
       response.fold(
         (notification) => _showMessage(notification.message),
-        (user) {
-          Get.offNamed(AppRoutes.home);
-          _showMessage('Bem vindo(a), ${user?.name?.firstName ?? "investidor(a)"}!', error: false);
-        },
+        (user) => Get.offNamed(AppRoutes.home),
       );
     }
     setLoading(false);
   }
 
-  _showMessage(String message, {bool error: true}) {
-    AppSnackbar.show(
-      message: message,
-      type: error ? AppSnackbarType.error : AppSnackbarType.success,
-    );
+  void _showMessage(String message, {bool error: true}) {
+    AppSnackbar.show(message: message, type: error ? AppSnackbarType.error : AppSnackbarType.success);
   }
 
   void goToSignUpPage() => Get.offNamed(AppRoutes.signUp);
