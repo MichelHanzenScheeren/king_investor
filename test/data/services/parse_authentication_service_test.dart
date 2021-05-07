@@ -63,10 +63,10 @@ main() async {
       expect(response.isRight(), isTrue);
       expect(response.getOrElse(null).message, 'Logout concluído');
     });
-    test('should return Left(Notification) when there is not user logged in', () async {
+    test('should return Right(null) when there is not user logged in', () async {
       final response = await authentication.currentUser();
-      expect(response.isLeft(), isTrue);
-      response.fold((not) => expect(not.message, 'Nenhum usuário encontrado'), null);
+      expect(response.isRight(), isTrue);
+      expect(response.fold((not) => '', (user) => user), null);
     });
     test('should return Left(Notification) when do logout and there is no user logged in', () async {
       httpClientMock.defineResponse(response: {"code": 101, "error": "A"}, statusCode: 404);

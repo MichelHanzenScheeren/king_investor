@@ -61,7 +61,7 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
   Either<Notification, User> _buildResponse(Either<Notification, dynamic> response) {
     return response.fold(
       (notification) => Left(notification),
-      (mapUser) => Right(UserConverter().fromMapToModel(mapUser)),
+      (mapUser) => Right(mapUser == null ? null : UserConverter().fromMapToModel(mapUser)),
     );
   }
 

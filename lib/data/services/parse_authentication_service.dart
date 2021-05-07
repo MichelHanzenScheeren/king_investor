@@ -55,8 +55,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   Future<Either<Notification, dynamic>> currentUser() async {
     try {
       final user = await ParseUser.currentUser();
-      if (user != null) return Right(user);
-      return Left(Notification('ParseAuthenticationService.currentUser', 'Nenhum usuário encontrado'));
+      return Right(user);
     } catch (erro) {
       return Left(_error('currentUser', erro.toString()));
     }

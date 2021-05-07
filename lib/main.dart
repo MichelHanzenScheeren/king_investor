@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/dependencies_injection.dart';
+import 'package:king_investor/presentation/pages/load/load_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DependenciesInjection.init(Environments.development);
+  await DependenciesInjection.init(Environments.development);
   runApp(MyApp());
 }
 
@@ -15,25 +16,11 @@ class MyApp extends StatelessWidget {
       title: 'King Investor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryColor: Colors.deepPurple,
+        accentColor: Colors.white,
       ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  void _test() async {}
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: _test,
-      ),
+      home: LoadPage(),
     );
   }
 }

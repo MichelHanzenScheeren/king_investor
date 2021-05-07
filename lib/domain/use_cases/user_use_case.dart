@@ -48,11 +48,15 @@ class UserUseCase {
   Future<Either<Notification, User>> currentUser() async {
     if (_appData.currentUser == null) {
       final response = await _authentication.currentUser();
-      return response.fold((notification) => Left(notification), (user) async {
-        _appData.registerUser(user);
-        if (!_appData.wasUpdated) return updateCurrentUser(user.sessionToken);
-        return Right(user);
-      });
+      return response.fold(
+        (notification) => Left(notification),
+        (user) async {
+          if (user == null) return Right(null);
+          _appData.registerUser(user);
+          if (!_appData.wasUpdated) return updateCurrentUser(user.sessionToken);
+          return Right(user);
+        },
+      );
     }
     return Future.value(Right(_appData.currentUser));
   }
