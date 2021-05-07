@@ -20,8 +20,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Color.fromRGBO(15, 15, 16, 1),
+        backgroundColor: Color.fromRGBO(15, 15, 16, 1),
+        dialogBackgroundColor: Color.fromRGBO(30, 30, 30, 1),
+        canvasColor: Colors.grey[800],
         primaryColor: Colors.deepPurple,
-        accentColor: Colors.white,
+        accentColor: Colors.deepPurple,
+        hintColor: Colors.white,
+        focusColor: Colors.grey[800],
+        errorColor: Colors.red[400],
       ),
       initialRoute: AppRoutes.splash,
       getPages: [

@@ -29,7 +29,7 @@ class SplashController extends GetxController {
     control.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         control.dispose();
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(milliseconds: 800));
         _goToNextPage(_nextPage.isNotEmpty);
       }
     });

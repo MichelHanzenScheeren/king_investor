@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoadIndicatorWidget extends StatelessWidget {
+  final Color color;
+  LoadIndicatorWidget({this.color});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -8,7 +11,7 @@ class LoadIndicatorWidget extends StatelessWidget {
         height: 50,
         width: 50,
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+          valueColor: AlwaysStoppedAnimation<Color>(color ?? Theme.of(context).accentColor),
           strokeWidth: 5,
         ),
       ),

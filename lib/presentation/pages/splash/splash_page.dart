@@ -23,13 +23,14 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double width = 0.5 * (size.width < size.height ? size.width : size.height);
+    final double width = 0.4 * (size.width < size.height ? size.width : size.height);
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: Container(
         child: AnimatedBuilder(
           animation: controller.control,
           builder: (context, child) {
+            final control = controller.control;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -37,17 +38,19 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                 Container(
                   alignment: Alignment.center,
                   child: Container(
-                    decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-                    width: width * controller.control.value,
+                    decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
+                    width: width * control.value,
                     child: Image(image: AssetImage(AppImages.transparentLogo), fit: BoxFit.fill),
                   ),
                 ),
                 Container(
-                  height: 25 * controller.control.value,
-                  child: Text('KING INVESTOR', style: TextStyle(color: Theme.of(context).accentColor, fontSize: 26)),
+                  height: 25 * control.value,
+                  child: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor, fontSize: 26)),
                 ),
                 SizedBox(height: 50),
-                Container(height: 50, child: controller.control.value != 1.0 ? Container() : LoadIndicatorWidget()),
+                Container(
+                    height: 50,
+                    child: control.value != 1.0 ? Container() : LoadIndicatorWidget(color: theme.hintColor)),
               ],
             );
           },
