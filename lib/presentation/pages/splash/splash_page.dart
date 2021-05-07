@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:king_investor/presentation/controllers/splash_controller.dart';
+import 'package:king_investor/presentation/static/app_images.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class SplashPage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   child: Container(
                     decoration: BoxDecoration(color: Theme.of(context).primaryColor),
                     width: width * controller.control.value,
-                    child: Image(image: AssetImage('assets/symbol_logo_transparent.png'), fit: BoxFit.fill),
+                    child: Image(image: AssetImage(AppImages.transparentLogo), fit: BoxFit.fill),
                   ),
                 ),
                 Container(
