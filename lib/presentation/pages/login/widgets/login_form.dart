@@ -44,7 +44,16 @@ class LoginForm extends StatelessWidget {
                   ),
                 );
               }),
-              SizedBox(height: size * 0.1),
+              Container(
+                margin: const EdgeInsets.only(top: 5, right: 5),
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Esqueceu a senha?',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Theme.of(context).hintColor.withAlpha(230)),
+                ),
+              ),
+              SizedBox(height: size * 0.08),
               Obx(() {
                 if (controller.loading) return Container(child: LoadIndicatorWidget());
                 return CustomButtonWidget(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/dependencies_injection.dart';
 import 'package:king_investor/presentation/pages/home/home_page.dart';
 import 'package:king_investor/presentation/pages/login/login_page.dart';
+import 'package:king_investor/presentation/pages/sign_up/sign_up_page.dart';
 import 'package:king_investor/presentation/pages/splash/splash_page.dart';
 import 'package:king_investor/presentation/static/app_routes.dart';
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: AppRoutes.splash, page: () => SplashPage()),
         GetPage(name: AppRoutes.home, page: () => HomePage()),
         GetPage(name: AppRoutes.login, page: () => LoginPage()),
+        GetPage(name: AppRoutes.signUp, page: () => SignUpPage()),
       ],
     );
   }

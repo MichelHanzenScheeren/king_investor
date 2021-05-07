@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
           alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: size * 0.08),
+              margin: EdgeInsets.symmetric(horizontal: size * 0.08, vertical: size * 0.15),
               child: Form(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -32,7 +32,36 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: size * 0.1),
                     LoginForm(controller: controller, size: size),
-                    SizedBox(height: size * 0.1),
+                    SizedBox(height: size * 0.15),
+                    GestureDetector(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Ainda não possui conta?',
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: Theme.of(context).hintColor, fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      onTap: controller.goToSignUpPage,
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 2),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Cadastre-se',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      onTap: controller.goToSignUpPage,
+                    ),
                   ],
                 ),
               ),

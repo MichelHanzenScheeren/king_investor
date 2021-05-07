@@ -61,4 +61,6 @@ class LoginController extends GetxController {
       type: error ? AppSnackbarType.error : AppSnackbarType.success,
     );
   }
+
+  void goToSignUpPage() => Get.toNamed(AppRoutes.signUp);
 }
