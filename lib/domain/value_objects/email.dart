@@ -21,7 +21,7 @@ class Email extends ValueObject {
     addNotifications(
       Contract()
           .requires()
-          .isNotNullOrEmpty(address, 'Email.address', 'O e-mail não pode ser nulo ou vazio')
+          .isNotNullOrEmpty(address, 'Email.address', 'O e-mail não pode ser vazio')
           .isValidEmail(address, 'Email.address', 'o e-mail informado não é válido'),
     );
   }

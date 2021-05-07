@@ -53,7 +53,7 @@ class UserUseCase {
         (user) async {
           if (user == null) return Right(null);
           _appData.registerUser(user);
-          if (!_appData.wasUpdated) return updateCurrentUser(user.sessionToken);
+          if (!_appData.wasUpdated) return await updateCurrentUser(user.sessionToken);
           return Right(user);
         },
       );

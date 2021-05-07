@@ -84,14 +84,15 @@ class CustomTextFieldWidget extends StatelessWidget {
             color: Colors.black.withAlpha(150),
             fontSize: 14,
           ),
+          errorStyle: TextStyle(color: Theme.of(context).errorColor, fontSize: 14),
           helperText: helperText,
           helperStyle: TextStyle(color: Colors.grey[400]),
           prefixText: prefixText,
           prefixStyle: TextStyle(color: Colors.black),
           enabledBorder: getBorder(Colors.transparent),
           focusedBorder: getBorder(Colors.transparent),
-          errorBorder: getBorder(Colors.red[400]),
-          focusedErrorBorder: getBorder(Colors.red[400]),
+          errorBorder: getBorder(Colors.red[600]),
+          focusedErrorBorder: getBorder(Colors.red[600]),
           filled: true,
           fillColor: Colors.grey[100],
         ),
@@ -102,7 +103,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   OutlineInputBorder getBorder(Color receivedColor) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(borderRadius),
-      borderSide: BorderSide(color: receivedColor, width: 2),
+      borderSide: BorderSide(color: receivedColor, width: 2.5),
     );
   }
 }
