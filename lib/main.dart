@@ -33,10 +33,18 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.splash,
       getPages: [
-        GetPage(name: AppRoutes.splash, page: () => SplashPage()),
-        GetPage(name: AppRoutes.home, page: () => HomePage()),
-        GetPage(name: AppRoutes.login, page: () => LoginPage()),
-        GetPage(name: AppRoutes.signUp, page: () => SignUpPage()),
+        GetPage(
+            name: AppRoutes.splash,
+            page: () => SplashPage(),
+            transition: Transition.zoom,
+            transitionDuration: Duration(milliseconds: 800)),
+        GetPage(
+            name: AppRoutes.home,
+            page: () => HomePage(),
+            transition: Transition.zoom,
+            transitionDuration: Duration(milliseconds: 800)),
+        GetPage(name: AppRoutes.login, page: () => LoginPage(), transition: Transition.rightToLeftWithFade),
+        GetPage(name: AppRoutes.signUp, page: () => SignUpPage(), transition: Transition.rightToLeftWithFade),
       ],
     );
   }

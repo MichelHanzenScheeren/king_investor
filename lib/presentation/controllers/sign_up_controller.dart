@@ -1,30 +1,49 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
+import 'package:king_investor/domain/value_objects/name.dart';
 import 'package:king_investor/domain/value_objects/password.dart';
 import 'package:king_investor/domain/value_objects/email.dart';
 import 'package:king_investor/presentation/static/app_routes.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
-class LoginController extends GetxController {
+class SignUpController extends GetxController {
   UserUseCase _userUseCase;
   RxBool _loading = false.obs;
   RxBool _showPassword = false.obs;
+  String _firstName = '';
+  String _lastName = '';
   String _email = '';
   String _password = '';
 
-  LoginController() {
+  SignUpController() {
     _userUseCase = Get.find();
   }
 
   bool get loading => _loading.value;
   bool get showPassword => _showPassword.value;
+  String get firstName => _firstName;
+  String get lastName => _lastName;
   String get email => _email;
   String get password => _password;
 
   void setLoading(bool value) => _loading.value = value ?? false;
   void setShowPassword() => _showPassword.value = !_showPassword.value;
+  void setFirstName(String value) => _firstName = value ?? '';
+  void setLastName(String value) => _lastName = value ?? '';
   void setEmail(String value) => _email = value ?? '';
   void setPassword(String value) => _password = value ?? '';
+
+  String firstNameValidator(String value) {
+    final Name name = Name(value, 'New User');
+    if (name.isValid) return null;
+    return name.notifications.first.message;
+  }
+
+  String lastNameNameValidator(String value) {
+    final Name name = Name('New User', value);
+    if (name.isValid) return null;
+    return name.notifications.first.message;
+  }
 
   String emailValidator(String value) {
     final Email email = Email(value);
@@ -38,9 +57,9 @@ class LoginController extends GetxController {
     return password.notifications.first.message;
   }
 
-  Future<void> doLogin() async {
+  Future<void> doSignUp() async {
     setLoading(true);
-    if (!Password(_password).isValid || !Email(_email).isValid) {
+    if (!Password(_password).isValid || !Email(_email).isValid || !Name(_firstName, _lastName).isValid) {
       _showMessage('Um ou mais campos do formulário não são válidos');
     } else {
       final response = await _userUseCase.login(_email, _password);
@@ -48,7 +67,7 @@ class LoginController extends GetxController {
         (notification) => _showMessage(notification.message),
         (user) {
           Get.offNamed(AppRoutes.home);
-          _showMessage('Bem vindo(a), ${user?.name?.firstName ?? "investidor(a)"}!', error: false);
+          _showMessage('Bem vindo(a), $_firstName!', error: false);
         },
       );
     }
@@ -62,5 +81,5 @@ class LoginController extends GetxController {
     );
   }
 
-  void goToSignUpPage() => Get.offNamed(AppRoutes.signUp);
+  void goToLoginPage() => Get.offNamed(AppRoutes.login);
 }

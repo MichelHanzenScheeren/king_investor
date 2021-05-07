@@ -28,7 +28,7 @@ class AppSnackbar {
         dismissDirection: SnackDismissDirection.VERTICAL,
         isDismissible: true,
         snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(5),
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
       );
     } catch (error) {
