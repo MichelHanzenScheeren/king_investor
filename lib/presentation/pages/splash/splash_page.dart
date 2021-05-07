@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:king_investor/presentation/controllers/load_controller.dart';
+import 'package:king_investor/presentation/controllers/splash_controller.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
-class LoadPage extends StatefulWidget {
+class SplashPage extends StatefulWidget {
   @override
-  _LoadPageState createState() => _LoadPageState();
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class _LoadPageState extends State<LoadPage> with SingleTickerProviderStateMixin {
-  final controller = LoadController();
+class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+  final controller = SplashController();
 
   @override
   void initState() {
