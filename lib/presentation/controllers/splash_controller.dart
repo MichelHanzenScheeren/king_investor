@@ -9,6 +9,11 @@ class SplashController extends GetxController {
   Animation<double> curve;
   UserUseCase userUseCase;
   String _nextPage = '';
+  RxString _error = ''.obs;
+
+  String get error => _error.value;
+
+  void setError(String value) => _error.value = value;
 
   void initialConfiguration() {
     _fixPortraitOrientation();
@@ -38,7 +43,14 @@ class SplashController extends GetxController {
   void _loadCurrentUser() async {
     final response = await userUseCase.currentUser();
     response.fold(
-      (notification) => print('${notification.key}: ${notification.message}'),
+      (notification) {
+        if (notification.message.contains('Session')) {
+          _nextPage = AppRoutes.login;
+          _goToNextPage(control.isCompleted);
+        } else {
+          setError(notification.message);
+        }
+      },
       (user) {
         _nextPage = user == null ? AppRoutes.login : AppRoutes.home;
         _goToNextPage(control.isCompleted);
