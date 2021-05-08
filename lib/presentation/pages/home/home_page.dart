@@ -2,26 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/home_controller.dart';
 import 'package:king_investor/presentation/static/app_images.dart';
-import 'package:king_investor/presentation/static/app_routes.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  HomeController controller;
-
-  HomeController _getController() {
-    if (controller == null) controller = HomeController(TabController(vsync: this, length: 3));
-    return controller;
-  }
+class HomePage extends StatelessWidget {
+  final HomeController globalHomeController = HomeController();
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      init: _getController(),
-      builder: (controller) {
+      init: globalHomeController,
+      builder: (homeController) {
         final theme = Theme.of(context);
         return Scaffold(
           appBar: AppBar(
@@ -35,30 +24,41 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             title: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor)),
             centerTitle: false,
             actions: [
-              IconButton(
-                icon: Icon(Icons.settings_outlined, color: theme.hintColor),
-                onPressed: () => Get.toNamed(AppRoutes.login),
-              ),
+              IconButton(icon: Icon(Icons.visibility, color: theme.hintColor), onPressed: () {}),
+              IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
             ],
-            bottom: TabBar(
-              controller: controller.tabController,
-              tabs: [
-                Tab(icon: Icon(Icons.perm_camera_mic_rounded)),
-                Tab(icon: Icon(Icons.person)),
-                Tab(icon: Icon(Icons.dashboard))
-              ],
-            ),
           ),
-          body: TabBarView(
-            controller: controller.tabController,
+          body: PageView(
+            controller: homeController.pageController,
+            onPageChanged: (value) => homeController.setCurrentPage(value),
             children: [
               Container(color: Colors.red),
               Container(color: Colors.green),
               Container(color: Colors.purple),
+              Container(color: Colors.yellow),
             ],
           ),
+          bottomNavigationBar: Obx(() {
+            return BottomNavigationBar(
+              currentIndex: homeController.currentPage,
+              onTap: (value) => homeController.jumpToPage(value),
+              backgroundColor: theme.primaryColor,
+              selectedItemColor: theme.hintColor,
+              unselectedItemColor: theme.hintColor.withAlpha(150),
+              items: [
+                _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
+                _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
+                _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
+                _getIcon("Rebalancear", Icons.account_balance, theme.primaryColor),
+              ],
+            );
+          }),
         );
       },
     );
+  }
+
+  BottomNavigationBarItem _getIcon(String label, IconData icon, Color color) {
+    return BottomNavigationBarItem(label: label, icon: Icon(icon), backgroundColor: color);
   }
 }
