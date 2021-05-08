@@ -17,6 +17,7 @@ import 'package:king_investor/domain/use_cases/categories_use_case.dart';
 import 'package:king_investor/domain/use_cases/finance_use_case.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
+import 'package:king_investor/presentation/controllers/load_data_controller.dart';
 import 'package:king_investor/resources/development/mocks/client_authentication_mock.dart';
 import 'package:king_investor/resources/development/mocks/client_database_mock.dart';
 import 'package:king_investor/resources/development/mocks/false_request_service.dart';
@@ -60,5 +61,8 @@ class DependenciesInjection {
     Get.lazyPut(() => AssetsUseCase(Get.find(), Get.find()), fenix: true);
     Get.lazyPut(() => CategoriesUseCase(Get.find(), Get.find()), fenix: true);
     Get.lazyPut(() => FinanceUseCase(Get.find(), Get.find()), fenix: true);
+
+    /* CONTROLLERS */
+    Get.put(LoadDataController(), permanent: true);
   }
 }
