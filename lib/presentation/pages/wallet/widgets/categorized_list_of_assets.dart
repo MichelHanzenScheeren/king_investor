@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/presentation/controllers/load_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/empty_assets.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/load_assets_failed.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
+import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class CategorizedListOfAssets extends StatelessWidget {
@@ -30,44 +30,37 @@ class CategorizedListOfAssets extends StatelessWidget {
         itemCount: validCategories.length,
         itemBuilder: (context, index) {
           final categoryAssets = walletController.getCategoryAssets(validCategories[index]);
-          return Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: theme.cardColor,
-            ),
-            child: Theme(
-              data: theme.copyWith(
-                unselectedWidgetColor: theme.primaryColorLight,
-                textTheme: TextTheme(subtitle1: TextStyle(fontSize: 20, color: theme.primaryColorLight)),
-                accentColor: theme.hintColor,
-              ),
-              child: ExpansionTile(
-                backgroundColor: Colors.transparent,
-                collapsedBackgroundColor: Colors.transparent,
-                title: Text(validCategories[index]?.name ?? '*****'),
-                childrenPadding: EdgeInsets.zero,
-                children: List<Widget>.generate(categoryAssets.length, (index) {
-                  final company = categoryAssets[index].company;
-                  return Column(
-                    children: <Widget>[
-                      Divider(color: theme.primaryColorLight, height: 8),
-                      ListTile(
-                        contentPadding: EdgeInsets.fromLTRB(12, 8, 12, 0),
-                        dense: true,
-                        isThreeLine: true,
-                        title: enterpryseName(company),
-                        subtitle: Text(company.name, style: TextStyle(fontSize: 14)),
-                        // trailing: enterprysePrice(item, theme),
-                        onTap: () {},
-                        onLongPress: () {},
+          return CustomExpansionTileWidget(
+            title: Text(validCategories[index]?.name ?? "?", style: TextStyle(fontSize: 22)),
+            children: List<Widget>.generate(categoryAssets.length, (index) {
+              final company = categoryAssets[index].company;
+              final normalStyle = TextStyle(color: theme.primaryColorLight, fontSize: 13);
+              final subtitleStyle = TextStyle(color: theme.primaryColorLight.withAlpha(220), fontSize: 14);
+              final titleStyle = TextStyle(color: theme.hintColor, fontSize: 18);
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(12, 8, 12, 10),
+                    visualDensity: VisualDensity(vertical: -1),
+                    dense: true,
+                    isThreeLine: true,
+                    title: Container(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: RichText(
+                        text: TextSpan(
+                          text: company.symbol + '   ',
+                          style: titleStyle,
+                          children: [TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)],
+                        ),
                       ),
-                    ],
-                  );
-                }),
-              ),
-            ),
+                    ),
+                    subtitle: Text(company.name, style: subtitleStyle),
+                    trailing: companyPrice(company, theme),
+                  ),
+                  Divider(color: theme.primaryColorLight, height: 10),
+                ],
+              );
+            }),
           );
         },
       );
@@ -87,18 +80,36 @@ class CategorizedListOfAssets extends StatelessWidget {
     );
   }
 
-  Widget enterpryseName(Company item) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: RichText(
-        text: TextSpan(
-          text: item.symbol,
-          style: TextStyle(fontSize: 18),
-          children: <TextSpan>[
-            TextSpan(text: "     ${item.exchange} - ${item.country}", style: TextStyle(fontSize: 12)),
-          ],
-        ),
-      ),
-    );
+  Widget companyPrice(Company company, ThemeData theme) {
+    return Obx(() {
+      if (loadController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+      final price = walletController.getPriceByTicker(company?.ticker);
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${price.lastPrice.toMonetary(company.currency)}',
+            style: theme.textTheme.headline1.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: theme.primaryColorLight,
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            price.variation.toPorcentage(),
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: price.variation.value > 0
+                  ? theme.hoverColor
+                  : (price.variation.value < 0 ? theme.errorColor : theme.primaryColorLight),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

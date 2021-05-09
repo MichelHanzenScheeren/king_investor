@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
+import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/use_cases/categories_use_case.dart';
+import 'package:king_investor/domain/use_cases/finance_use_case.dart';
 import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
 import 'package:king_investor/presentation/controllers/load_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
@@ -13,8 +15,10 @@ class WalletController extends GetxController {
   WalletsUseCase walletsUseCase;
   CategoriesUseCase categoriesUseCase;
   AssetsUseCase assetsUseCase;
+  FinanceUseCase financeUseCase;
   List<Category> categories = <Category>[];
   List<Asset> assets = <Asset>[];
+  List<Price> prices = <Price>[];
   bool isValidData = true;
   bool get isEmptyData => !(categories.isNotEmpty && assets.isNotEmpty);
 
@@ -23,6 +27,7 @@ class WalletController extends GetxController {
     walletsUseCase = Get.find();
     categoriesUseCase = Get.find();
     assetsUseCase = Get.find();
+    financeUseCase = Get.find();
     loadData();
   }
 
@@ -30,7 +35,8 @@ class WalletController extends GetxController {
     loadAllCategories();
     await loadAllWallets();
     if (loadcontroller.currentWallet == null) return;
-    loadAllAssets(loadcontroller.currentWallet.objectId);
+    await loadAllAssets(loadcontroller.currentWallet.objectId);
+    loadAllPrices();
   }
 
   Future<List<Wallet>> loadAllWallets() async {
@@ -81,6 +87,18 @@ class WalletController extends GetxController {
     return assets;
   }
 
+  Future<List<Price>> loadAllPrices() async {
+    loadcontroller.setPricesLoad(true);
+    final List<String> tickers = List<String>.generate(assets.length, (index) => assets[index]?.company?.ticker);
+    final response = await financeUseCase.getPrices(tickers);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (list) => prices = list,
+    );
+    loadcontroller.setPricesLoad(false);
+    return prices;
+  }
+
   List<Category> validCategories() {
     return categories
         .where((category) => assets.any((asset) => asset.category?.objectId == category.objectId))
@@ -89,5 +107,9 @@ class WalletController extends GetxController {
 
   List<Asset> getCategoryAssets(Category category) {
     return assets.where((asset) => asset.category?.objectId == category?.objectId).toList();
+  }
+
+  Price getPriceByTicker(String ticker) {
+    return prices.firstWhere((price) => price?.ticker == ticker, orElse: () => Price.fromDefaultValues(ticker));
   }
 }

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Colors.white.withAlpha(200),
         focusColor: Colors.grey[800],
         errorColor: Colors.red[400],
-        hoverColor: Colors.red,
+        hoverColor: Colors.green[400],
         iconTheme: IconThemeData(
           color: Colors.white.withAlpha(200),
         ),
