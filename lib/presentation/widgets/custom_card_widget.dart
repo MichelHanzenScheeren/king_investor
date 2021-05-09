@@ -11,9 +11,10 @@ class CustomCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: margin ?? const EdgeInsets.fromLTRB(8, 12, 8, 4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: margin ?? const EdgeInsets.all(8),
       child: Padding(
-        padding: padding ?? const EdgeInsets.all(14),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
         child: Flex(
           direction: direction ?? Axis.vertical,
           mainAxisAlignment: MainAxisAlignment.start,

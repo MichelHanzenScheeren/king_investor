@@ -21,7 +21,7 @@ class WalletsTopCard extends StatelessWidget {
           if (loadController.walletsLoad) return _awaiting();
           return Expanded(
             child: Text(
-              loadController.currentWallet?.name ?? "",
+              loadController.currentWallet?.name ?? "!",
               style: TextStyle(
                 color: theme.primaryColorLight,
                 fontSize: 20,
