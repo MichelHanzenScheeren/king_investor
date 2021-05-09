@@ -7,7 +7,6 @@ import 'package:king_investor/presentation/static/app_snackbar.dart';
 class WalletController extends GetxController {
   LoadDataController loadcontroller;
   WalletsUseCase walletsUseCase;
-  final List<Wallet> _wallets = <Wallet>[];
 
   WalletController() {
     loadcontroller = Get.find();
@@ -18,29 +17,15 @@ class WalletController extends GetxController {
   Future<void> loadWallets() async {
     loadcontroller.setWalletsLoad(true);
     final response = await walletsUseCase.getAllUserWallets();
-    loadcontroller.setWalletsLoad(false);
-    return response.fold(
+    response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (wallets) {
-        if (loadcontroller.currentWalletId.isEmpty) _defineCurrentWallet(wallets);
-        return _wallets.addAll(wallets);
-      },
+      (wallets) => loadcontroller.currentWallet == null ? _defineCurrentWallet(wallets) : null,
     );
-  }
-
-  Wallet getCurrentWallet() {
-    return _wallets.firstWhere((e) => e.objectId == loadcontroller.currentWalletId, orElse: () => null);
+    loadcontroller.setWalletsLoad(false);
   }
 
   void _defineCurrentWallet(List<Wallet> wallets) {
-    String id = wallets.firstWhere((e) => e.isMainWallet, orElse: () => null)?.objectId;
-    if (id == null)
-      loadcontroller.setCurrentWaletId(wallets?.first?.objectId ?? '');
-    else
-      loadcontroller.setCurrentWaletId(id);
-  }
-
-  void setCurrentWalletIndex(int index) {
-    loadcontroller.setCurrentWaletId(_wallets[index].objectId);
+    Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => null);
+    loadcontroller.setCurrentWalet(current);
   }
 }
