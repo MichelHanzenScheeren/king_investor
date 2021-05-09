@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/load_data_controller.dart';
+import 'package:king_investor/presentation/controllers/wallet_controller.dart';
+import 'package:king_investor/presentation/pages/wallet/widgets/wallets_options.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class WalletsTopCard extends StatelessWidget {
   final LoadDataController loadController;
+  final WalletController walletController;
 
-  WalletsTopCard({@required this.loadController});
+  WalletsTopCard({@required this.loadController, @required this.walletController});
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +30,14 @@ class WalletsTopCard extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
           );
         }),
         SizedBox(width: 15),
         GestureDetector(
           child: Icon(Icons.edit, size: 28),
-          onTap: () => showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            builder: (context) => Container(),
-          ),
+          onTap: () => Get.bottomSheet(WalletsOptions(walletController)),
         ),
       ],
     );

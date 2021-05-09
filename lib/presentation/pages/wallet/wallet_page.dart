@@ -14,7 +14,7 @@ class WalletPage extends StatelessWidget {
     return ListView(
       children: [
         SizedBox(height: 8),
-        WalletsTopCard(loadController: loadController),
+        WalletsTopCard(loadController: loadController, walletController: walletController),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           child: Divider(color: Theme.of(context).primaryColorLight),

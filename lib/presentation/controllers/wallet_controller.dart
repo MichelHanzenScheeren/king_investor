@@ -6,16 +6,19 @@ import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/use_cases/categories_use_case.dart';
 import 'package:king_investor/domain/use_cases/finance_use_case.dart';
+import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
 import 'package:king_investor/presentation/controllers/load_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class WalletController extends GetxController {
   LoadDataController loadcontroller;
+  UserUseCase userUseCase;
   WalletsUseCase walletsUseCase;
   CategoriesUseCase categoriesUseCase;
   AssetsUseCase assetsUseCase;
   FinanceUseCase financeUseCase;
+  List<Wallet> wallets = <Wallet>[];
   List<Category> categories = <Category>[];
   List<Asset> assets = <Asset>[];
   List<Price> prices = <Price>[];
@@ -24,6 +27,7 @@ class WalletController extends GetxController {
 
   WalletController() {
     loadcontroller = Get.find();
+    userUseCase = Get.find();
     walletsUseCase = Get.find();
     categoriesUseCase = Get.find();
     assetsUseCase = Get.find();
@@ -40,7 +44,6 @@ class WalletController extends GetxController {
   }
 
   Future<List<Wallet>> loadAllWallets() async {
-    List<Wallet> wallets = <Wallet>[];
     loadcontroller.setWalletsLoad(true);
     final response = await walletsUseCase.getAllUserWallets();
     response.fold(
@@ -48,7 +51,10 @@ class WalletController extends GetxController {
         isValidData = false;
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.error);
       },
-      (list) => loadcontroller.currentWallet == null ? _defineCurrentWallet(list) : (wallets = list),
+      (list) {
+        if (loadcontroller.currentWallet == null) _defineCurrentWallet(list);
+        wallets = list;
+      },
     );
     loadcontroller.setWalletsLoad(false);
     return wallets;
@@ -99,6 +105,8 @@ class WalletController extends GetxController {
     return prices;
   }
 
+  Wallet get currentWallet => loadcontroller.currentWallet;
+
   List<Category> validCategories() {
     return categories
         .where((category) => assets.any((asset) => asset.category?.objectId == category.objectId))
@@ -111,5 +119,61 @@ class WalletController extends GetxController {
 
   Price getPriceByTicker(String ticker) {
     return prices.firstWhere((price) => price?.ticker == ticker, orElse: () => Price.fromDefaultValues(ticker));
+  }
+
+  Future<void> changeCurrentWallet(Wallet wallet) async {
+    loadcontroller.setCurrentWalet(wallet);
+    AppSnackbar.show(message: 'Carteira atual alterada.', type: AppSnackbarType.success);
+    await loadAllAssets(wallet?.objectId);
+    loadAllPrices();
+  }
+
+  Future<void> changeMainWallet() async {
+    final response = await walletsUseCase.changeMainWallet(currentWallet?.objectId);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) {
+        final current = currentWallet;
+        current.setMainWallet(true);
+        loadcontroller.setCurrentWalet(current);
+        AppSnackbar.show(message: 'Carteira definida como principal.', type: AppSnackbarType.success);
+      },
+    );
+  }
+
+  Future<void> updateCurrentWalletName(String name) async {
+    final current = currentWallet;
+    if (name == current?.name) return;
+    current.setName(name);
+    if (current.name != name) {
+      AppSnackbar.show(message: 'Nome inválido.', type: AppSnackbarType.error);
+    } else {
+      final response = await walletsUseCase.updateWallet(current);
+      response.fold(
+        (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+        (notification) {
+          loadcontroller.setCurrentWalet(null);
+          loadcontroller.setCurrentWalet(current);
+          AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+        },
+      );
+    }
+  }
+
+  Future<void> createWallet(String name) async {
+    final userResponse = await userUseCase.currentUser();
+    if (userResponse.isLeft()) {
+      AppSnackbar.show(message: userResponse.fold((l) => l.message, (r) => null), type: AppSnackbarType.error);
+      return;
+    }
+    Wallet wallet = Wallet(null, null, false, name, userResponse.getOrElse(() => null)?.objectId);
+    final response = await walletsUseCase.addWallet(wallet);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) {
+        loadcontroller.setCurrentWalet(wallet);
+        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+      },
+    );
   }
 }

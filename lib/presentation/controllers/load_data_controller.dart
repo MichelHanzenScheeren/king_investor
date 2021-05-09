@@ -9,7 +9,7 @@ class LoadDataController extends GetxController {
   RxBool _assetsLoad = false.obs;
   RxBool _pricesLoad = false.obs;
 
-  Rx<Wallet> _currentWalletId = Rx<Wallet>(null);
+  Rx<Wallet> _currentWallet = Rx<Wallet>(null);
 
   bool get userLoad => _userLoad.value;
   bool get categoriesLoad => _categoriesLoad.value;
@@ -17,7 +17,7 @@ class LoadDataController extends GetxController {
   bool get walletsLoad => _walletsLoad.value;
   bool get assetsLoad => _assetsLoad.value;
   bool get pricesLoad => _pricesLoad.value;
-  Wallet get currentWallet => _currentWalletId.value;
+  Wallet get currentWallet => _currentWallet.value;
 
   void setUserLoad(bool value) => _userLoad.value = value;
   void setCategoriesLoad(bool value) => _categoriesLoad.value = value;
@@ -25,5 +25,5 @@ class LoadDataController extends GetxController {
   void setWalletsLoad(bool value) => _walletsLoad.value = value;
   void setAssetsLoad(bool value) => _assetsLoad.value = value;
   void setPricesLoad(bool value) => _pricesLoad.value = value;
-  void setCurrentWalet(Wallet value) => _currentWalletId.value = value;
+  void setCurrentWalet(Wallet value) => _currentWallet.value = value;
 }
