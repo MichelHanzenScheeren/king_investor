@@ -26,7 +26,7 @@ class SaveAssetForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final categories = searchController.getCategories();
+    final categories = searchController.categories;
     return Form(
       child: Builder(
         builder: (context) => CustomBottomSheetWidget(
@@ -96,7 +96,8 @@ class SaveAssetForm extends StatelessWidget {
                   textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                   onPressed: () {
                     if (!Form.of(context).validate()) return;
-                    // searchController.saveAsset(company, quantity, amount, score);
+                    Get.back();
+                    searchController.saveAsset(company, quantity, amount, score);
                   },
                 ),
               ],

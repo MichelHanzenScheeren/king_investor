@@ -42,17 +42,22 @@ class ListOfResults extends StatelessWidget {
                   style: TextStyle(color: theme.primaryColorLight, fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: searchController.save && company.objectId == searchController.saveId
-                    ? LoadIndicatorWidget()
-                    : IconButton(
-                        icon: Icon(Icons.add, color: theme.hintColor),
-                        onPressed: searchController.save ? null : () => _trySave(company),
-                      ),
-              )
+                trailing: _getTrailing(company, theme),
+              ),
             ],
           );
         });
       },
+    );
+  }
+
+  Widget _getTrailing(Company company, ThemeData theme) {
+    if (searchController.save && company.objectId == searchController.saveId) return LoadIndicatorWidget();
+    if (searchController.isSavedAsset(company?.ticker))
+      return IconButton(icon: Icon(Icons.check), disabledColor: theme.hintColor, onPressed: null);
+    return IconButton(
+      icon: Icon(Icons.add, color: theme.hintColor),
+      onPressed: searchController.save ? null : () => _trySave(company),
     );
   }
 

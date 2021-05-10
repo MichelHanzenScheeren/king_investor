@@ -1,8 +1,11 @@
 import 'package:get/get.dart';
+import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/company.dart';
+import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/use_cases/categories_use_case.dart';
 import 'package:king_investor/domain/use_cases/finance_use_case.dart';
+import 'package:king_investor/presentation/controllers/load_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class SearchController extends GetxController {
@@ -11,15 +14,19 @@ class SearchController extends GetxController {
   final RxString _saveId = ''.obs;
   final RxList<Company> _companies = RxList<Company>();
   final List<Category> categories = <Category>[];
+  final List<Asset> assets = <Asset>[];
   Rx<Category> _currentCategory = Rx<Category>(null);
   FinanceUseCase financeUseCase;
   CategoriesUseCase categoriesUseCase;
+  LoadDataController loadDataController;
+  AssetsUseCase assetsUseCase;
 
   SearchController() {
     financeUseCase = Get.find();
     categoriesUseCase = Get.find();
-    search('');
-    loadCategories();
+    loadDataController = Get.find();
+    assetsUseCase = Get.find();
+    _initialLoads();
   }
 
   bool get load => _load.value;
@@ -27,8 +34,7 @@ class SearchController extends GetxController {
   String get saveId => _saveId.value;
   List<Company> get companies => _companies;
   Category get currentCategory => _currentCategory.value;
-
-  List<Category> getCategories() => categories;
+  bool isSavedAsset(String ticker) => assets.any((e) => e?.company?.ticker == ticker);
 
   void setLoad(bool value) => _load.value = value;
   void setSave(bool value) => _save.value = value;
@@ -39,14 +45,22 @@ class SearchController extends GetxController {
     _companies.addAll(newCompanies);
   }
 
-  Future<void> search(String value) async {
+  void _initialLoads() async {
     setLoad(true);
+    await search('', needSetLoad: false);
+    await loadCategories();
+    await loadAllAssets();
+    setLoad(false);
+  }
+
+  Future<void> search(String value, {needSetLoad: true}) async {
+    if (needSetLoad) setLoad(true);
     final response = await financeUseCase.search(value);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (list) => setCompanies(list),
     );
-    setLoad(false);
+    if (needSetLoad) setLoad(false);
   }
 
   Future<void> loadCategories() async {
@@ -54,6 +68,14 @@ class SearchController extends GetxController {
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (list) => categories.addAll(list),
+    );
+  }
+
+  Future<void> loadAllAssets() async {
+    final response = await assetsUseCase.getAssets(loadDataController.currentWallet?.objectId);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (list) => assets.addAll(list),
     );
   }
 
@@ -77,5 +99,22 @@ class SearchController extends GetxController {
       return categories.where((e) => e.order == 5)?.first;
     }
     return categories.where((e) => e.order == 6)?.first;
+  }
+
+  Future<void> saveAsset(company, quantity, amount, score) async {
+    setSaveId(company?.objectId);
+    setSave(true);
+    final walletId = loadDataController.currentWallet?.objectId;
+    Asset asset = Asset(null, null, company, currentCategory, amount, score, quantity, walletId);
+    final response = await assetsUseCase.addAsset(asset);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) {
+        assets.add(asset);
+        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+      },
+    );
+    setSaveId('');
+    setSave(false);
   }
 }
