@@ -16,6 +16,7 @@ dependencies:
   dio: ^4.0.0
   get: ^4.1.4
   parse_server_sdk_flutter: ^3.0.0
+  flutter_speed_dial: ^3.0.5
   uuid: ^3.0.0
 
 dev_dependencies:
