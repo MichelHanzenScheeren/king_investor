@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/domain/value_objects/name.dart';
 import 'package:king_investor/domain/value_objects/password.dart';
@@ -62,7 +63,8 @@ class SignUpController extends GetxController {
     if (!Password(_password).isValid || !Email(_email).isValid || !Name(_firstName, _lastName).isValid) {
       _showMessage('Um ou mais campos do formulário não são válidos');
     } else {
-      final response = await _userUseCase.login(_email, _password);
+      final User user = User(null, null, Name(_firstName, _lastName), Email(_email));
+      final response = await _userUseCase.signUp(user, _password);
       response.fold(
         (notification) => _showMessage(notification.message),
         (user) => Get.offNamed(AppRoutes.home),

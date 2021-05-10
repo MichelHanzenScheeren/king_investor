@@ -20,7 +20,7 @@ class FinanceRepository implements FinanceAgreement {
 
   void _configureRequestService() {
     _requestService.configureRequests(
-      headers: {
+      headers: <String, dynamic>{
         'x-rapidapi-host': 'bloomberg-market-and-financial-news.p.rapidapi.com',
         'x-rapidapi-key': kBloombergKey,
       },

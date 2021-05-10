@@ -94,6 +94,7 @@ class WalletController extends GetxController {
   }
 
   Future<List<Price>> loadAllPrices() async {
+    if (assets.isEmpty) return <Price>[];
     loadcontroller.setPricesLoad(true);
     final List<String> tickers = List<String>.generate(assets.length, (index) => assets[index]?.company?.ticker);
     final response = await financeUseCase.getPrices(tickers);
@@ -170,9 +171,10 @@ class WalletController extends GetxController {
     final response = await walletsUseCase.addWallet(wallet);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (notification) {
+      (notification) async {
         loadcontroller.setCurrentWalet(wallet);
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+        await loadAllAssets(wallet?.objectId);
       },
     );
   }
