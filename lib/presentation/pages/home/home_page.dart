@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/home_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/wallet_page.dart';
 import 'package:king_investor/presentation/static/app_images.dart';
+import 'package:king_investor/presentation/static/app_routes.dart';
 
 class HomePage extends StatelessWidget {
   final HomeController globalHomeController = HomeController();
@@ -63,7 +64,7 @@ class HomePage extends StatelessWidget {
             overlayOpacity: 0.4,
             overlayColor: Colors.black,
             children: [
-              _getFloatButton('Novo ativo', Icons.store, theme),
+              _getFloatButton('Novo ativo', Icons.store, theme, onTap: () => Get.toNamed(AppRoutes.search)),
               _getFloatButton('Dividendo/JCP', Icons.attach_money, theme),
               _getFloatButton('Compra', Icons.exposure_plus_1, theme),
               _getFloatButton('Venda', Icons.exposure_minus_1_outlined, theme),
@@ -78,13 +79,14 @@ class HomePage extends StatelessWidget {
     return BottomNavigationBarItem(label: label, icon: Icon(icon), backgroundColor: color);
   }
 
-  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme) {
+  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap}) {
     return SpeedDialChild(
       child: Icon(icon, color: theme.hintColor),
       label: label,
       backgroundColor: theme.primaryColor,
       labelBackgroundColor: theme.primaryColor,
       labelStyle: TextStyle(color: theme.hintColor),
+      onTap: onTap,
     );
   }
 }
