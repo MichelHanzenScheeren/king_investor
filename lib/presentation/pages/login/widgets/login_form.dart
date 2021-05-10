@@ -61,10 +61,7 @@ class LoginForm extends StatelessWidget {
                   textStyle: TextStyle(fontSize: 18, color: Theme.of(context).hintColor, fontWeight: FontWeight.bold),
                   backGroundColor: Theme.of(context).accentColor,
                   onPressed: () {
-                    if (!Form.of(context).validate()) {
-                      print('INVÁLIDO!');
-                      return;
-                    }
+                    if (!Form.of(context).validate()) return;
                     FocusScope.of(context).requestFocus(new FocusNode());
                     controller.doLogin();
                   },

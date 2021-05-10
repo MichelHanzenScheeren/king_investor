@@ -17,7 +17,7 @@ class CustomButtonWidget extends StatelessWidget {
     this.onPressed,
     this.heigth,
     this.width: double.infinity,
-    this.borderRadius: 15,
+    this.borderRadius: 10,
   });
 
   @override
@@ -27,14 +27,14 @@ class CustomButtonWidget extends StatelessWidget {
       height: heigth,
       width: width,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 16),
-          elevation: 1,
-          primary: backGroundColor ?? theme.primaryColor,
-          shape: RoundedRectangleBorder(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 16)),
+          elevation: MaterialStateProperty.all(1),
+          backgroundColor: MaterialStateProperty.all((backGroundColor ?? theme.primaryColor)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
             side: BorderSide(color: borderColor ?? theme.primaryColor),
-          ),
+          )),
         ),
         child: Text(
           buttonText,

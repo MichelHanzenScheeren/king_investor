@@ -23,6 +23,12 @@ class Amount extends ValueObject {
     if (isValid) _value = value;
   }
 
+  void setValueFromString(String value) {
+    clearNotifications();
+    _applyStringContracts(value);
+    if (isValid) _value = double.parse(value);
+  }
+
   void _applyDoubleContracts(double value) {
     addNotifications(Contract().requires().isNotNull(value, 'Amount.value', 'O número não pode ser nulo'));
   }

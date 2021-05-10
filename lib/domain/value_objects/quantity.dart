@@ -17,12 +17,28 @@ class Quantity extends ValueObject {
     if (isValid) _value = value;
   }
 
+  void setValueFromString(String value) {
+    clearNotifications();
+    _applyStringContracts(value);
+    if (isValid) _value = int.parse(value);
+  }
+
   void _applyContracts(int value) {
     addNotifications(
       Contract()
           .requires()
           .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
           .isGreatherOrEqualTo(value, 0, 'Quantity.value', 'A quantidade precisa ser um número maior ou igual a zero'),
+    );
+  }
+
+  void _applyStringContracts(String value) {
+    addNotifications(
+      Contract()
+          .requires()
+          .isNotNull(value, 'Quantity.value', 'O número não pode ser nulo')
+          .canBeConvertedToInt(value, 'Quantity.value', 'A quantidade deve ser um número inteiro')
+          .isGreatherOrEqualTo(int.tryParse(value), 0, 'Quantity.value', 'A quantidade deve ser maior ou igual a zero'),
     );
   }
 }

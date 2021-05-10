@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/presentation/controllers/search_controller.dart';
+import 'package:king_investor/presentation/pages/search/widgets/save_asset_form.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
@@ -12,16 +14,14 @@ class ListOfResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Obx(() {
-      if (searchController.load) return _load();
-      if (searchController.companies.isEmpty) return _empty(theme);
-      final companies = searchController.companies;
-      final title = TextStyle(fontSize: 18, color: theme.hintColor, fontWeight: FontWeight.bold);
-      final normal = TextStyle(fontSize: 14, color: theme.primaryColorLight);
-      return ListView.builder(
-        itemCount: companies.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
+    final companies = searchController.companies;
+    final title = TextStyle(fontSize: 18, color: theme.hintColor, fontWeight: FontWeight.bold);
+    final normal = TextStyle(fontSize: 14, color: theme.primaryColorLight);
+    return ListView.builder(
+      itemCount: companies.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Obx(() {
           final company = companies[index];
           return CustomCardWidget(
             padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
@@ -38,49 +38,29 @@ class ListOfResults extends StatelessWidget {
                   ),
                 ),
                 subtitle: Text(
-                  companies[index]?.name ?? '?',
+                  company?.name ?? '?',
                   style: TextStyle(color: theme.primaryColorLight, fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: IconButton(
-                  icon: Icon(Icons.add, color: theme.hintColor),
-                  onPressed: () {},
-                ),
+                trailing: searchController.save && company.objectId == searchController.saveId
+                    ? LoadIndicatorWidget()
+                    : IconButton(
+                        icon: Icon(Icons.add, color: theme.hintColor),
+                        onPressed: searchController.save ? null : () => _trySave(company),
+                      ),
               )
             ],
           );
-        },
-      );
-    });
-  }
-
-  Widget _load() {
-    return Container(
-      width: double.maxFinite,
-      child: CustomCardWidget(
-        padding: const EdgeInsets.symmetric(vertical: 50),
-        children: [
-          LoadIndicatorWidget(size: 120, usePrimaryColor: false),
-        ],
-      ),
+        });
+      },
     );
   }
 
-  Widget _empty(ThemeData theme) {
-    return Container(
-      width: double.maxFinite,
-      child: CustomCardWidget(
-        children: [
-          Icon(Icons.search, size: 120, color: theme.hintColor),
-          SizedBox(height: 20),
-          Text(
-            'Por enquanto tudo calmo por aqui...',
-            style: TextStyle(color: theme.hintColor, fontSize: 20, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 15),
-        ],
-      ),
+  void _trySave(Company company) {
+    Get.bottomSheet(
+      SaveAssetForm(company: company, searchController: searchController),
+      isDismissible: false,
+      isScrollControlled: true,
     );
   }
 }

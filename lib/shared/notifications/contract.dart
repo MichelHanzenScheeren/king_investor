@@ -56,4 +56,10 @@ class Contract extends Notifiable {
     if (double.tryParse(value) == null) addNotification(property, message);
     return this;
   }
+
+  Contract canBeConvertedToInt(String value, String property, String message) {
+    if (value == null) return this;
+    if (int.tryParse(value) == null) addNotification(property, message);
+    return this;
+  }
 }
