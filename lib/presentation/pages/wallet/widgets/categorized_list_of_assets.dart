@@ -7,8 +7,8 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/empty_assets.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/load_assets_failed.dart';
-import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.dart';
+import 'package:king_investor/presentation/widgets/load_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class CategorizedListOfAssets extends StatelessWidget {
@@ -21,7 +21,7 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (appDataController.categoriesLoad || appDataController.assetsLoad) return _awaiting(context);
+      if (appDataController.categoriesLoad || appDataController.assetsLoad) return LoadCardWidget();
       if (!walletController.isValidData) return LoadAssetsFailed();
       if (walletController.isEmptyData) return EmptyAssets();
       final validCategories = walletController.validCategories();
@@ -31,7 +31,7 @@ class CategorizedListOfAssets extends StatelessWidget {
         itemBuilder: (context, index) {
           final categoryAssets = walletController.getCategoryAssets(validCategories[index]);
           return CustomExpansionTileWidget(
-            title: Text(validCategories[index]?.name ?? "?", style: TextStyle(fontSize: 22)),
+            title: Text(validCategories[index]?.name ?? "?", style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
               final company = categoryAssets[index].company;
               final normalStyle = TextStyle(color: theme.primaryColorLight, fontSize: 13);
@@ -40,12 +40,11 @@ class CategorizedListOfAssets extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(12, 8, 12, 10),
+                    contentPadding: EdgeInsets.fromLTRB(12, 4, 12, 4),
                     visualDensity: VisualDensity(vertical: -1),
                     dense: true,
-                    isThreeLine: true,
                     title: Container(
-                      padding: const EdgeInsets.only(bottom: 4),
+                      padding: const EdgeInsets.only(bottom: 3),
                       child: RichText(
                         text: TextSpan(
                           text: company.symbol + '   ',
@@ -57,7 +56,7 @@ class CategorizedListOfAssets extends StatelessWidget {
                     subtitle: Text(company.name, style: subtitleStyle),
                     trailing: companyPrice(company, theme),
                   ),
-                  Divider(color: theme.primaryColorLight, height: 10),
+                  Divider(color: theme.primaryColorLight, height: 2),
                 ],
               );
             }),
@@ -65,19 +64,6 @@ class CategorizedListOfAssets extends StatelessWidget {
         },
       );
     });
-  }
-
-  Widget _awaiting(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return CustomCardWidget(
-      children: [
-        Container(
-          height: size.width * 0.9,
-          alignment: Alignment.center,
-          child: LoadIndicatorWidget(usePrimaryColor: false, size: 120),
-        ),
-      ],
-    );
   }
 
   Widget companyPrice(Company company, ThemeData theme) {

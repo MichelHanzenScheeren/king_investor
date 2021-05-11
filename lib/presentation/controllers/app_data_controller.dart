@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
+import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
@@ -32,6 +33,7 @@ class AppDataController extends GetxController {
   RxList<Category> categories = RxList<Category>([]);
   RxList<Asset> assets = RxList<Asset>([]);
   RxList<Price> prices = RxList<Price>([]);
+  RxList<CategoryScore> categoryScores = RxList<CategoryScore>([]);
 
   /* CONSTRUCTOR */
   AppDataController() {
@@ -89,16 +91,14 @@ class AppDataController extends GetxController {
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (list) {
-        if (replaceCurrentWallet) _defineCurrentWallet(list);
         setList(wallets, list);
+        if (replaceCurrentWallet) {
+          Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => null);
+          setCurrentWalet(current);
+        }
       },
     );
     setWalletsLoad(false);
-  }
-
-  void _defineCurrentWallet(List<Wallet> wallets) {
-    Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => null);
-    setCurrentWalet(current);
   }
 
   Future<void> loadAllAssets() async {
@@ -121,5 +121,15 @@ class AppDataController extends GetxController {
       (list) => setList(prices, list),
     );
     setPricesLoad(false);
+  }
+
+  Future<void> loadAllCategoryScores() async {
+    setCategoryScoresLoad(true);
+    final response = await categoriesUseCase.getCategoryScores(currentWallet?.objectId);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (list) => setList(categoryScores, list),
+    );
+    setCategoryScoresLoad(false);
   }
 }

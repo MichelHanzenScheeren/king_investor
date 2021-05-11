@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/home_controller.dart';
+import 'package:king_investor/presentation/pages/rebalance/rebalance_page.dart';
 import 'package:king_investor/presentation/pages/wallet/wallet_page.dart';
 import 'package:king_investor/presentation/static/app_images.dart';
 import 'package:king_investor/presentation/static/app_routes.dart';
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
               WalletPage(),
               Container(color: Colors.green),
               Container(color: Colors.purple),
-              Container(color: Colors.yellow),
+              RebalancePage(),
             ],
           ),
           bottomNavigationBar: Obx(() {
