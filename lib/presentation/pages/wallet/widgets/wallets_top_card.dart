@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:king_investor/presentation/controllers/load_data_controller.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/wallets_options.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class WalletsTopCard extends StatelessWidget {
-  final LoadDataController loadController;
+  final AppDataController appDataController;
   final WalletController walletController;
 
-  WalletsTopCard({@required this.loadController, @required this.walletController});
+  WalletsTopCard({@required this.appDataController, @required this.walletController});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class WalletsTopCard extends StatelessWidget {
         Icon(Icons.account_balance_wallet),
         SizedBox(width: 15),
         Obx(() {
-          if (loadController.walletsLoad) return _awaiting();
+          if (appDataController.walletsLoad) return _awaiting();
           return Expanded(
             child: Text(
-              loadController.currentWallet?.name ?? "!",
+              appDataController.currentWallet?.name ?? "!",
               style: TextStyle(
                 color: theme.primaryColorLight,
                 fontSize: 20,
@@ -37,7 +37,9 @@ class WalletsTopCard extends StatelessWidget {
         SizedBox(width: 15),
         GestureDetector(
           child: Icon(Icons.edit, size: 28),
-          onTap: () => Get.bottomSheet(WalletsOptions(walletController)),
+          onTap: () => Get.bottomSheet(
+            WalletsOptions(walletController: walletController, appDataController: appDataController),
+          ),
         ),
       ],
     );

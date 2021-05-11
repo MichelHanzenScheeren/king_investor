@@ -5,6 +5,7 @@ import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/domain/value_objects/score.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/search_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_bottom_sheet_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
@@ -26,7 +27,7 @@ class SaveAssetForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final categories = searchController.categories;
+    final categories = Get.find<AppDataController>().categories;
     return Form(
       child: Builder(
         builder: (context) => CustomBottomSheetWidget(

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/company.dart';
-import 'package:king_investor/presentation/controllers/load_data_controller.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/empty_assets.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/load_assets_failed.dart';
@@ -12,16 +12,16 @@ import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class CategorizedListOfAssets extends StatelessWidget {
-  final LoadDataController loadController;
+  final AppDataController appDataController;
   final WalletController walletController;
 
-  CategorizedListOfAssets({this.loadController, this.walletController});
+  CategorizedListOfAssets({this.appDataController, this.walletController});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (loadController.categoriesLoad || loadController.assetsLoad) return _awaiting(context);
+      if (appDataController.categoriesLoad || appDataController.assetsLoad) return _awaiting(context);
       if (!walletController.isValidData) return LoadAssetsFailed();
       if (walletController.isEmptyData) return EmptyAssets();
       final validCategories = walletController.validCategories();
@@ -82,7 +82,7 @@ class CategorizedListOfAssets extends StatelessWidget {
 
   Widget companyPrice(Company company, ThemeData theme) {
     return Obx(() {
-      if (loadController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+      if (appDataController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
       final price = walletController.getPriceByTicker(company?.ticker);
       return Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_bottom_sheet_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart';
 
 class WalletsOptions extends StatelessWidget {
   final WalletController walletController;
-  WalletsOptions(this.walletController);
+  final AppDataController appDataController;
+
+  WalletsOptions({@required this.walletController, @required this.appDataController});
+
   @override
   Widget build(BuildContext context) {
     return CustomBottomSheetWidget(
@@ -14,13 +18,13 @@ class WalletsOptions extends StatelessWidget {
         CustomBottomSheetOption(
           text: 'Trocar de carteira',
           icon: Icons.account_balance_wallet_rounded,
-          show: walletController.wallets.length > 1,
+          show: appDataController.wallets.length > 1,
           onTap: _changeWallet,
         ),
         CustomBottomSheetOption(
           icon: Icons.library_add_check,
           text: "Definir como carteira principal",
-          show: !walletController.currentWallet.isMainWallet,
+          show: !appDataController.currentWallet.isMainWallet,
           onTap: _defineMainWallet,
         ),
         CustomBottomSheetOption(
@@ -39,8 +43,8 @@ class WalletsOptions extends StatelessWidget {
 
   void _changeWallet() {
     Get.back();
-    final current = walletController.currentWallet;
-    final wallets = walletController.wallets.where((e) => e.objectId != current.objectId).toList();
+    final current = appDataController.currentWallet;
+    final wallets = appDataController.wallets.where((e) => e.objectId != current.objectId).toList();
     Get.bottomSheet(CustomBottomSheetWidget(
       options: List<CustomBottomSheetOption>.generate(
         wallets.length,
@@ -76,7 +80,7 @@ class WalletsOptions extends StatelessWidget {
           CustomTextFieldWidget(
             autoFocus: true,
             placeHolder: "Nome",
-            initialValue: walletController.currentWallet?.name,
+            initialValue: appDataController.currentWallet?.name,
             onSubmit: (name) {
               Get.back();
               walletController.updateCurrentWalletName(name);
