@@ -1,11 +1,21 @@
+import 'package:king_investor/data/utils/parse_properties.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category_score.dart';
 import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
-import 'package:king_investor/shared/models/model.dart';
+import 'package:king_investor/domain/value_objects/rebalance_result.dart';
+import 'package:king_investor/shared/value_objects/value_object.dart';
 
-class Rebalance extends Model {
+const String kRebalanceQtd = 'quantity';
+const String kRebalanceTotal = 'total';
+
+class Rebalance extends ValueObject {
+  /* PUBLIC  */
+  Map<String, Map<String, dynamic>> _assetsToBuy;
+  List<String> _boughtCategories;
+
+  /* PRIVATE  */
   bool _walletData = false;
   bool _rebalanceData = false;
   List<Asset> _assets;
@@ -14,8 +24,6 @@ class Rebalance extends Model {
   Amount _aportValue;
   Quantity _assetsMaxNumber;
   Quantity _categoriesMaxNumber;
-
-  Rebalance() : super(null, null);
 
   void registerWalletValues(List<Asset> assets, List<CategoryScore> scores, List<Price> prices) {
     _applyWalletContracts(assets, scores, prices);
@@ -68,17 +76,19 @@ class Rebalance extends Model {
       addNotification('Rebalance.start', 'Uma ou mais configurações de balanceamento são inválidas');
   }
 
-  void start() {
+  Future<RebalanceResult> start() async {
+    await Future.delayed(Duration(milliseconds: 300));
     if (!isValid) throw Exception('Tentativa de rebalanceamento com dados inválidos!');
     if (!_walletData) throw Exception('Tentativa de rebalanceamento sem registrar os dados da carteira');
     if (!_rebalanceData) throw Exception('Tentativa de rebalanceamento sem registrar os dados do rebalanceamento');
-    _doRebalance();
+    await _doRebalance();
+    return RebalanceResult(_assetsToBuy, _assets, _prices);
   }
 
-  void _doRebalance() {
+  Future<void> _doRebalance() async {
     _removeInutilizedCategoryScores();
-    final assetsToBuy = <String, Map<String, dynamic>>{}; // {tycker: quantity}
-    final boughtCategories = <String>[];
+    _assetsToBuy = <String, Map<String, dynamic>>{}; // {tycker: {quantity, total}}
+    _boughtCategories = <String>[]; // [idCategory1, idCategory2]
 
     while (true) {
       final individualAssetsTotalValue = _calculeIndividualAssetsTotalValue();
@@ -87,29 +97,27 @@ class Rebalance extends Model {
       final individualCategoriesIdealValue = _calculeIndividualCategoriesIdealValue(totalValue);
       final individualAssetsIdealValue = _calculeIndividualAssetsIdealValue(individualCategoriesIdealValue);
 
-      _filterValidCategoriesToBuy(individualCategoriesTotalValue, boughtCategories);
+      _filterValidCategoriesToBuy(individualCategoriesTotalValue, _boughtCategories);
       String categoryToBuyId = _getCategoryToBuy(individualCategoriesTotalValue, individualCategoriesIdealValue);
-      _filterValidAssetsToBuy(individualAssetsTotalValue, assetsToBuy);
+      _filterValidAssetsToBuy(individualAssetsTotalValue, _assetsToBuy);
       String assetToBuyTicker = _getAssetToBuy(categoryToBuyId, individualAssetsTotalValue, individualAssetsIdealValue);
       double priceOfToBuyAsset = _prices.firstWhere((element) => element.ticker == assetToBuyTicker).lastPrice.value;
 
       if (_aportValue.value - priceOfToBuyAsset < 0) break;
-      if (assetsToBuy.containsKey(assetToBuyTicker)) {
-        assetsToBuy[assetToBuyTicker]['quantity'] += 1;
-        assetsToBuy[assetToBuyTicker]['total'] += priceOfToBuyAsset;
+      if (_assetsToBuy.containsKey(assetToBuyTicker)) {
+        _assetsToBuy[assetToBuyTicker][kRebalanceQtd] += 1;
+        _assetsToBuy[assetToBuyTicker][kRebalanceTotal] += priceOfToBuyAsset;
       } else {
-        assetsToBuy[assetToBuyTicker] = <String, dynamic>{};
-        assetsToBuy[assetToBuyTicker]['quantity'] = 1;
-        assetsToBuy[assetToBuyTicker]['total'] = priceOfToBuyAsset;
+        _assetsToBuy[assetToBuyTicker] = <String, dynamic>{};
+        _assetsToBuy[assetToBuyTicker][kRebalanceQtd] = 1;
+        _assetsToBuy[assetToBuyTicker][kRebalanceTotal] = priceOfToBuyAsset;
         _assetsMaxNumber.setValue(_assetsMaxNumber.value - 1);
-        if (!boughtCategories.any((e) => e == categoryToBuyId)) {
-          boughtCategories.add(categoryToBuyId);
+        if (!_boughtCategories.any((e) => e == categoryToBuyId)) {
+          _boughtCategories.add(categoryToBuyId);
           _categoriesMaxNumber.setValue(_categoriesMaxNumber.value - 1);
         }
       }
       _aportValue.setValue(_aportValue.value - priceOfToBuyAsset);
-      final auxAsset = _assets.firstWhere((e) => e.company.ticker == assetToBuyTicker);
-      auxAsset.quantity.setValue(auxAsset.quantity.value + 1);
     }
   }
 
@@ -121,7 +129,8 @@ class Rebalance extends Model {
     final total = <String, double>{};
     _assets.forEach((asset) {
       final price = _prices.firstWhere((price) => price.ticker == asset.company.ticker);
-      total[price.ticker] = (asset.quantity.value * price.lastPrice.value);
+      int quantity = _assetsToBuy.containsKey(price.ticker) ? _assetsToBuy[price.ticker][kQuantity] : 0;
+      total[price.ticker] = ((asset.quantity.value + quantity) * price.lastPrice.value);
     });
     return total;
   }
@@ -164,9 +173,9 @@ class Rebalance extends Model {
     return map;
   }
 
-  void _filterValidCategoriesToBuy(Map<String, double> map, List<String> boughtCategories) {
+  void _filterValidCategoriesToBuy(Map<String, double> map, List<String> _boughtCategories) {
     if (_categoriesMaxNumber.value == 0)
-      map.removeWhere((key, value) => !boughtCategories.any((element) => element == key));
+      map.removeWhere((key, value) => !_boughtCategories.any((element) => element == key));
   }
 
   String _getCategoryToBuy(Map<String, double> total, Map<String, double> ideal) {

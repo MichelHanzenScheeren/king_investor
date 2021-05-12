@@ -15,8 +15,8 @@ class RebalanceForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final aportValue = rebalanceController.aportValue;
-    final assetsMaxNumber = rebalanceController.assetsMaxNumber;
-    final categoriesMaxNumber = rebalanceController.categoriesMaxNumber;
+    final maxAssets = rebalanceController.assetsMaxNumber;
+    final maxCategories = rebalanceController.categoriesMaxNumber;
     return Form(child: Builder(
       builder: (context) {
         return CustomCardWidget(
@@ -38,7 +38,7 @@ class RebalanceForm extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
               onChanged: (value) => aportValue.setValueFromString(value),
-              validator: (value) => aportValue.isValid ? null : aportValue.notifications.first.message,
+              validator: (value) => aportValue.isValid ? _minValue(value) : aportValue.firstNotification,
             ),
             SizedBox(height: 16),
             Container(
@@ -52,11 +52,11 @@ class RebalanceForm extends StatelessWidget {
             ),
             SizedBox(height: 6),
             CustomTextFieldWidget(
-              initialValue: '${assetsMaxNumber.value}',
+              initialValue: '${maxAssets.value}',
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
-              onChanged: (value) => assetsMaxNumber.setValueFromString(value),
-              validator: (value) => assetsMaxNumber.isValid ? null : assetsMaxNumber.notifications.first.message,
+              onChanged: (value) => maxAssets.setValueFromString(value),
+              validator: (value) => maxAssets.isValid ? _minValue(value) : maxAssets.firstNotification,
             ),
             SizedBox(height: 16),
             Container(
@@ -70,12 +70,11 @@ class RebalanceForm extends StatelessWidget {
             ),
             SizedBox(height: 6),
             CustomTextFieldWidget(
-              initialValue: '${categoriesMaxNumber.value}',
+              initialValue: '${maxCategories.value}',
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
-              onChanged: (value) => categoriesMaxNumber.setValueFromString(value),
-              validator: (value) =>
-                  categoriesMaxNumber.isValid ? null : categoriesMaxNumber.notifications.first.message,
+              onChanged: (value) => maxCategories.setValueFromString(value),
+              validator: (value) => maxCategories.isValid ? _minValue(value) : maxCategories.firstNotification,
             ),
             SizedBox(height: 26),
             Obx(() {
@@ -83,7 +82,10 @@ class RebalanceForm extends StatelessWidget {
               return CustomButtonWidget(
                 buttonText: 'REBALANCEAR CARTEIRA',
                 textStyle: TextStyle(color: theme.hintColor, fontSize: 15, fontWeight: FontWeight.bold),
-                onPressed: rebalanceController.doRebalance,
+                onPressed: () {
+                  if (!Form.of(context).validate()) return;
+                  rebalanceController.doRebalance();
+                },
               );
             }),
             SizedBox(height: 6),
@@ -91,5 +93,10 @@ class RebalanceForm extends StatelessWidget {
         );
       },
     ));
+  }
+
+  String _minValue(value) {
+    if (double.parse(value) <= 0) return 'O valor fornecido deve ser maior do que zero';
+    return null;
   }
 }

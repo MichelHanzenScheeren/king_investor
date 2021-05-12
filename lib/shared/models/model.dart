@@ -12,6 +12,7 @@ abstract class Model extends Notifiable {
 
   String get objectId => _objectId;
   DateTime get createdAt => _createdAt;
+  String get firstNotification => notifications?.first?.message ?? '';
 
   void setObjectId(String objectId) {
     if (objectId != null) _objectId = objectId;
