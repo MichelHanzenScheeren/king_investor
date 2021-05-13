@@ -51,6 +51,7 @@ class AppDataController extends GetxController {
   bool get walletsLoad => _walletsLoad.value;
   bool get assetsLoad => _assetsLoad.value;
   bool get pricesLoad => _pricesLoad.value;
+  bool get isLoadingSomething => _categoriesLoad.value || _walletsLoad.value || _assetsLoad.value || _pricesLoad.value;
   Wallet get currentWallet => _currentWallet.value;
 
   /* SETTERS */
