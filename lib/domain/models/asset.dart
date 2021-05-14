@@ -58,4 +58,17 @@ class Asset extends Model {
         .isNotNull(category, 'Asset.category', 'A categoria não pode ser nula')
         .isNotNullOrEmpty(walletForeignKey, 'Asset.walletForeignKey', 'Valor inválido para relação com carteira'));
   }
+
+  void registerBuy(Quantity quantity, Amount amount) {
+    clearNotifications();
+    if (quantity == null || !quantity.isValid)
+      addNotification('Asset.registerBuy', 'Tentativa de operação com quantidade inválida');
+    if (amount == null || !amount.isValid)
+      addNotification('Asset.registerBuy', 'Tentativa de operação com preço inválido');
+    if (isValid) {
+      double totalValue = (this.quantity.value * this.averagePrice.value) + (quantity.value * amount.value);
+      this.averagePrice.setValue(totalValue / (this.quantity.value + quantity.value));
+      this.quantity.setValue(this.quantity.value + quantity.value);
+    }
+  }
 }
