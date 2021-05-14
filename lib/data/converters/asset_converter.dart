@@ -17,6 +17,8 @@ class AssetConverter {
       Score(map[kScore]),
       Quantity(map[kQuantity]),
       map[kWallet][kObjectId],
+      sales: Amount(map[kSales]),
+      incomes: Amount(map[kIncomes]),
     );
   }
 
@@ -30,6 +32,8 @@ class AssetConverter {
       kScore: asset.score.value,
       kQuantity: asset.quantity.value,
       kWalletForeignKey: asset.walletForeignKey,
+      kSales: asset.sales.value,
+      kIncomes: asset.incomes.value,
     };
   }
 }

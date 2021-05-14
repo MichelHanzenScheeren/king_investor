@@ -29,6 +29,8 @@ const kGetAllAssetsResponseMap = {
       "averagePrice": 45.04,
       "score": 10,
       "quantity": 6,
+      "sales": 0.0,
+      "incomes": 0.0,
       "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "MlZIPMNohV"},
       "createdAt": "2021-04-22T01:15:24.425Z",
       "updatedAt": "2021-04-22T01:15:24.425Z"
@@ -62,6 +64,8 @@ const kGetAllAssetsResponseMap = {
       "averagePrice": 80.26,
       "score": 10,
       "quantity": 7,
+      "sales": 0.0,
+      "incomes": 0.0,
       "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "MlZIPMNohV"},
       "createdAt": "2021-04-22T01:15:24.425Z",
       "updatedAt": "2021-04-22T01:15:24.425Z"

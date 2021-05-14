@@ -20,6 +20,7 @@ main() {
 
     final map = ParseObject(kAssetTable)..set(kObjectId, 'INBOMkNhQE')..set(kAveragePrice, 45.04)..set(kScore, 10);
     map..set(kQuantity, 5)..set(kCompany, company)..set(kCategory, category)..set(kWallet, wallet);
+    // map..set(kSales, Amount(0.0))..set(kIncomes, Amount())
 
     Asset item = AssetConverter().fromMapToModel(map);
     expect(item.isValid, true);

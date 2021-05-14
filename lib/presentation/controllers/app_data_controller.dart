@@ -84,9 +84,16 @@ class AppDataController extends GetxController {
     final response = await categoriesUseCase.getCategories();
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (list) => setList(categories, list),
+      (list) {
+        setList(categories, list);
+        sortCategories();
+      },
     );
     setCategoriesLoad(false);
+  }
+
+  void sortCategories() {
+    categories.sort((cat1, cat2) => cat1.order.compareTo(cat2.order));
   }
 
   Future<void> loadAllWallets({bool replaceCurrentWallet: false}) async {
@@ -120,11 +127,16 @@ class AppDataController extends GetxController {
     setPricesLoad(true);
     final List<String> tickers = List<String>.generate(assets.length, (index) => assets[index]?.company?.ticker);
     final response = await financeUseCase.getPrices(tickers);
-    response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (list) => setList(prices, list),
-    );
+    response.fold((notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+        (list) {
+      setList(prices, list);
+      sortAssets();
+    });
     setPricesLoad(false);
+  }
+
+  void sortAssets() {
+    assets.sort((asset1, asset2) => asset1?.company?.ticker?.compareTo(asset2?.company?.ticker));
   }
 
   Future<void> loadAllCategoryScores() async {

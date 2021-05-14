@@ -3,10 +3,12 @@ import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Quantity extends ValueObject {
   int _value;
+  bool _mustBeGreaterThanZero;
 
-  Quantity(int value) {
+  Quantity(int value, {mustBeGreaterThanZero: false}) {
+    _mustBeGreaterThanZero = mustBeGreaterThanZero ?? false;
     _applyContracts(value);
-    _value = isValid ? value : 1;
+    _value = isValid ? value : (mustBeGreaterThanZero ? 1 : 0);
   }
 
   int get value => _value;
@@ -24,12 +26,19 @@ class Quantity extends ValueObject {
   }
 
   void _applyContracts(int value) {
-    addNotifications(
-      Contract()
-          .requires()
-          .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
-          .isGreatherThan(value, 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
-    );
+    if (_mustBeGreaterThanZero) {
+      addNotifications(
+        Contract()
+            .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
+            .isGreatherThan(value, 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
+      );
+    } else {
+      addNotifications(
+        Contract()
+            .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
+            .isGreatherOrEqualTo(value, 0, 'Quantity.value', 'A quantidade precisa ser maior ou igual a zero'),
+      );
+    }
   }
 
   void _applyStringContracts(String value) {

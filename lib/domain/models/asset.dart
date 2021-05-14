@@ -14,6 +14,8 @@ class Asset extends Model {
   final Score score; // "peso" do ativo na carteira
   final Quantity quantity; // Quantidade deste ativo na carteira (1, 2, 3...)
   String _walletForeignKey;
+  Amount _sales; // Lucro/prejuízo com vendas
+  Amount _incomes; // Rendimentos/provendos (dividendos, jcp)
 
   Asset(
     String objectId,
@@ -23,14 +25,22 @@ class Asset extends Model {
     this.averagePrice,
     this.score,
     this.quantity,
-    String walletForeignKey,
-  ) : super(objectId, createdAt) {
+    String walletForeignKey, {
+    Amount sales,
+    Amount incomes,
+  }) : super(objectId, createdAt) {
     _category = category;
     _walletForeignKey = walletForeignKey;
+    _sales = (sales == null ? Amount(0.0) : sales
+      ..clearNotifications());
+    _incomes = (incomes == null ? Amount(0.0) : incomes
+      ..clearNotifications());
     _applyContracts(category, walletForeignKey);
     addNotifications(quantity);
     addNotifications(averagePrice);
     addNotifications(score);
+    addNotifications(_sales);
+    addNotifications(_incomes);
   }
 
   Category get category => _category;
@@ -38,6 +48,10 @@ class Asset extends Model {
   String get walletForeignKey => _walletForeignKey;
 
   Price get falsePrice => Price.fromDefaultValues(company?.ticker);
+
+  Amount get sales => _sales;
+
+  Amount get incomes => _incomes;
 
   void setCategory(Category category) {
     clearNotifications();
@@ -70,5 +84,27 @@ class Asset extends Model {
       this.averagePrice.setValue(totalValue / (this.quantity.value + quantity.value));
       this.quantity.setValue(this.quantity.value + quantity.value);
     }
+  }
+
+  void registerSale(Quantity quantity, Amount amount) {
+    clearNotifications();
+    if (quantity == null || !quantity.isValid)
+      addNotification('Asset.registerSale', 'Tentativa de operação com quantidade inválida');
+    if (amount == null || !amount.isValid)
+      addNotification('Asset.registerSale', 'Tentativa de operação com preço inválido');
+    if (quantity.value > this.quantity.value)
+      addNotification('Asset.registerSale', 'Não é possível vender mais itens do que a quantidade registrada');
+    if (isValid) {
+      double saleResult = (quantity.value * amount.value) - (quantity.value * this.averagePrice.value);
+      _sales.setValue(_sales.value + saleResult);
+      this.quantity.setValue(this.quantity.value - quantity.value);
+    }
+  }
+
+  void registerIncome(Amount amount) {
+    clearNotifications();
+    if (amount == null || !amount.isValid || amount.value <= 0)
+      addNotification('Asset.registerIncome', 'Tentativa de operação com preço inválido');
+    if (isValid) _incomes.setValue(_incomes.value + amount.value);
   }
 }

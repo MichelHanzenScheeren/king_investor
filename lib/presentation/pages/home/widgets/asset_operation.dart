@@ -14,12 +14,13 @@ import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart
 
 class AssetOperation extends StatelessWidget {
   final AppDataController appDataController = Get.find();
-  final Quantity quantity = Quantity(1);
+  final Quantity quantity = Quantity(1, mustBeGreaterThanZero: true);
   final Amount amount = Amount(50.0, mustBeGreaterThanZero: true);
   final String dividerOperation;
   final Function(Quantity, Amount) onSave;
+  final bool isIncomeOperation;
 
-  AssetOperation({@required this.dividerOperation, @required this.onSave});
+  AssetOperation({@required this.dividerOperation, @required this.onSave, this.isIncomeOperation: false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +29,10 @@ class AssetOperation extends StatelessWidget {
       child: Builder(
         builder: (context) => CustomBottomSheetWidget(
           children: [
-            CustomDividerWidget(text: 'Nova $dividerOperation de Ativo'),
+            CustomDividerWidget(text: 'Nova $dividerOperation de ativo'),
             SizedBox(height: 8),
             GetX<HomeController>(
-              didChangeDependencies: (state) => state.controller.clearSelecteds(),
+              // didChangeDependencies: (state) => state.controller.clearSelecteds(),
               builder: (homeController) {
                 return CustomDropdownWidget<Category>(
                   initialValue: homeController.selectedCategory,
@@ -49,6 +50,7 @@ class AssetOperation extends StatelessWidget {
             GetX<HomeController>(
               builder: (homeController) {
                 return CustomDropdownWidget<Asset>(
+                  initialValue: homeController.selectedAsset,
                   onChanged: homeController.setSelectedAsset,
                   values: homeController.assetsDropDown.map((asset) {
                     return DropdownMenuItem<Asset>(
@@ -56,22 +58,23 @@ class AssetOperation extends StatelessWidget {
                       child: Text(asset?.company?.symbol ?? '', style: TextStyle(color: Colors.black, fontSize: 16)),
                     );
                   }).toList(),
-                  initialValue: homeController.selectedAsset,
                 );
               },
             ),
+            isIncomeOperation ? Container() : SizedBox(height: 14),
+            isIncomeOperation
+                ? Container()
+                : CustomTextFieldWidget(
+                    prefixText: 'Quantidade:  ',
+                    initialValue: '${quantity.value}',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                    textInputType: TextInputType.number,
+                    onChanged: (value) => quantity.setValueFromString(value),
+                    validator: (value) => quantity.isValid ? null : quantity.notifications.first.message,
+                  ),
             SizedBox(height: 14),
             CustomTextFieldWidget(
-              prefixText: 'Quantidade:  ',
-              initialValue: '${quantity.value}',
-              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-              textInputType: TextInputType.number,
-              onChanged: (value) => quantity.setValueFromString(value),
-              validator: (value) => quantity.isValid ? null : quantity.notifications.first.message,
-            ),
-            SizedBox(height: 14),
-            CustomTextFieldWidget(
-              prefixText: 'Custo (un.):  R\$ ',
+              prefixText: '${isIncomeOperation ? "Valor total" : "Preço"}:  R\$ ',
               initialValue: '${amount.value}',
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
@@ -98,8 +101,8 @@ class AssetOperation extends StatelessWidget {
                   textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                   onPressed: () {
                     if (!Form.of(context).validate()) return;
-                    onSave(quantity, amount);
                     Get.back();
+                    onSave(quantity, amount);
                   },
                 ),
               ],

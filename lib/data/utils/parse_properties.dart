@@ -49,6 +49,8 @@ const kScore = 'score';
 // ASSET
 const kAveragePrice = 'averagePrice';
 const kQuantity = 'quantity';
+const kSales = 'sales';
+const kIncomes = 'incomes';
 
 // USER
 const kFirstName = 'firstName';

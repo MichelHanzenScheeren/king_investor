@@ -25,7 +25,13 @@ class AssetsOptions extends StatelessWidget {
           overlayColor: Colors.black,
           children: [
             _getFloatButton('Novo ativo', Icons.store, theme, onTap: () => Get.toNamed(AppRoutes.search)),
-            _getFloatButton('Dividendo/JCP', Icons.attach_money, theme, show: showOption),
+            _getFloatButton(
+              'Dividendo/JCP',
+              Icons.attach_money,
+              theme,
+              show: showOption,
+              onTap: () => _incomeOperation(homeController),
+            ),
             _getFloatButton(
               'Compra',
               Icons.exposure_plus_1,
@@ -33,7 +39,13 @@ class AssetsOptions extends StatelessWidget {
               show: showOption,
               onTap: () => _buyOperation(homeController),
             ),
-            _getFloatButton('Venda', Icons.exposure_minus_1_outlined, theme, show: showOption),
+            _getFloatButton(
+              'Venda',
+              Icons.exposure_minus_1_outlined,
+              theme,
+              show: showOption,
+              onTap: () => _saleOperation(homeController),
+            ),
           ],
         );
       },
@@ -53,6 +65,24 @@ class AssetsOptions extends StatelessWidget {
   }
 
   void _buyOperation(HomeController homeController) {
-    Get.bottomSheet(AssetOperation(dividerOperation: 'compra', onSave: homeController.saveAssetBuy));
+    Get.bottomSheet(
+      AssetOperation(dividerOperation: 'compra', onSave: homeController.saveAssetBuy),
+      isDismissible: false,
+    );
+  }
+
+  void _saleOperation(HomeController homeController) {
+    Get.bottomSheet(
+      AssetOperation(dividerOperation: 'venda', onSave: homeController.saveAssetSale),
+      isDismissible: false,
+    );
+  }
+
+  void _incomeOperation(HomeController homeController) {
+    Get.bottomSheet(AssetOperation(
+      dividerOperation: 'receita',
+      onSave: homeController.saveAssetIncome,
+      isIncomeOperation: true,
+    ));
   }
 }

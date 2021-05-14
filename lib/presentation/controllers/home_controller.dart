@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   final Category _allCategory = Category('-1', null, 'Todas as categorias', -1);
   final List<Category> _categoriesDropdown = <Category>[];
   final Rx<Category> _selectedCategory = Rx<Category>(null);
+  List<Asset> _assetsDropDown = <Asset>[];
   final Rx<Asset> _selectedAsset = Rx<Asset>(null);
 
   HomeController() {
@@ -50,37 +51,43 @@ class HomeController extends GetxController {
     return _selectedCategory.value;
   }
 
-  Asset get selectedAsset {
-    if (_selectedAsset.value == null) _selectedAsset.value = _appDataController.assets.first;
-    return _selectedAsset.value;
-  }
-
   List<Category> get categoriesDropdown {
-    if (_categoriesDropdown.isEmpty)
-      _categoriesDropdown
-        ..add(_allCategory)
-        ..addAll(_appDataController.usedCategories);
+    if (_categoriesDropdown.isEmpty) {
+      _categoriesDropdown.add(_allCategory);
+      _categoriesDropdown.addAll(_appDataController.usedCategories);
+    }
     return _categoriesDropdown;
   }
 
+  Asset get selectedAsset {
+    if (_selectedAsset.value == null) _selectedAsset.value = assetsDropDown.first;
+    return _selectedAsset.value;
+  }
+
   List<Asset> get assetsDropDown {
-    List<Asset> result;
-    if (selectedCategory.objectId == '-1') {
-      result = _appDataController.assets;
-    } else {
-      result = _appDataController.assets.where((e) => e?.category?.objectId == selectedCategory.objectId).toList();
+    if (_assetsDropDown.isEmpty) {
+      if (selectedCategory.objectId == '-1') {
+        _assetsDropDown.addAll(_appDataController.assets);
+      } else {
+        final assets = _appDataController.assets;
+        _assetsDropDown.addAll(assets.where((e) => e?.category?.objectId == selectedCategory.objectId).toList());
+      }
     }
-    setSelectedAsset(result.first);
-    return result;
+    return _assetsDropDown;
   }
 
   void clearSelecteds() {
     _categoriesDropdown.clear();
+    _assetsDropDown.clear();
     _selectedCategory.value = null;
     _selectedAsset.value = null;
   }
 
-  void setSelectedCategory(Category category) => _selectedCategory.value = category;
+  void setSelectedCategory(Category category) {
+    _selectedCategory.value = category;
+    _assetsDropDown.clear();
+    _selectedAsset.value = null;
+  }
 
   void setSelectedAsset(Asset asset) => _selectedAsset.value = asset;
 
@@ -92,15 +99,39 @@ class HomeController extends GetxController {
   }
 
   Future<void> saveAssetBuy(Quantity quantity, Amount amount) async {
-    final Asset asset = _selectedAsset.value;
-    if (asset == null || !asset.isValid)
-      return AppSnackbar.show(message: 'Ativo inválido', type: AppSnackbarType.error);
-
+    final Asset asset = _getAndValidateSelectedAsset();
+    if (asset == null) return;
     asset.registerBuy(quantity, amount);
-    if (!asset.isValid) {
-      AppSnackbar.show(message: 'Um ou mais dos valores fornecidos são inválidos', type: AppSnackbarType.error);
-      return;
-    }
+    if (_validOperation(asset)) await _updateAsset(asset);
+  }
+
+  Future<void> saveAssetSale(Quantity quantity, Amount amount) async {
+    final Asset asset = _getAndValidateSelectedAsset();
+    if (asset == null) return;
+    asset.registerSale(quantity, amount);
+    if (_validOperation(asset)) await _updateAsset(asset);
+  }
+
+  Future<void> saveAssetIncome(Quantity quantity, Amount amount) async {
+    final Asset asset = _getAndValidateSelectedAsset();
+    if (asset == null) return;
+    asset.registerIncome(amount);
+    if (_validOperation(asset)) await _updateAsset(asset);
+  }
+
+  Asset _getAndValidateSelectedAsset() {
+    final Asset asset = _selectedAsset.value;
+    if (asset == null || !asset.isValid) AppSnackbar.show(message: 'Ativo inválido', type: AppSnackbarType.error);
+    return asset;
+  }
+
+  bool _validOperation(Asset asset) {
+    if (asset.isValid) return true;
+    AppSnackbar.show(message: asset.firstNotification, type: AppSnackbarType.error);
+    return false;
+  }
+
+  Future<void> _updateAsset(Asset asset) async {
     final response = await _assetsUseCase.updateAsset(asset);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
