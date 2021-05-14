@@ -17,9 +17,9 @@ class AssetOperation extends StatelessWidget {
   final Quantity quantity = Quantity(1);
   final Amount amount = Amount(50.0);
   final String dividerOperation;
-  final Function(Quantity, Amount, String) onSave;
+  final Function(Quantity, Amount) onSave;
 
-  AssetOperation({this.dividerOperation, this.onSave});
+  AssetOperation({@required this.dividerOperation, @required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,7 @@ class AssetOperation extends StatelessWidget {
             CustomDividerWidget(text: 'Nova $dividerOperation de Ativo'),
             SizedBox(height: 8),
             GetX<HomeController>(
+              didChangeDependencies: (state) => state.controller.clearSelecteds(),
               builder: (homeController) {
                 return CustomDropdownWidget<Category>(
                   initialValue: homeController.selectedCategory,
@@ -48,7 +49,6 @@ class AssetOperation extends StatelessWidget {
             GetX<HomeController>(
               builder: (homeController) {
                 return CustomDropdownWidget<Asset>(
-                  initialValue: homeController.selectedAsset,
                   onChanged: homeController.setSelectedAsset,
                   values: homeController.assetsDropDown.map((asset) {
                     return DropdownMenuItem<Asset>(
@@ -56,6 +56,7 @@ class AssetOperation extends StatelessWidget {
                       child: Text(asset?.company?.symbol ?? '', style: TextStyle(color: Colors.black, fontSize: 16)),
                     );
                   }).toList(),
+                  initialValue: homeController.selectedAsset,
                 );
               },
             ),
@@ -66,7 +67,7 @@ class AssetOperation extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
               onChanged: (value) => quantity.setValueFromString(value),
-              validator: (value) => quantity.isValid ? null : quantity.notifications.first.message,
+              validator: (value) => quantity.isValid ? _minValue(value) : quantity.notifications.first.message,
             ),
             SizedBox(height: 14),
             CustomTextFieldWidget(
@@ -75,7 +76,7 @@ class AssetOperation extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
               onChanged: (value) => amount.setValueFromString(value),
-              validator: (value) => amount.isValid ? null : amount.notifications.first.message,
+              validator: (value) => amount.isValid ? _minValue(value) : amount.notifications.first.message,
             ),
             SizedBox(height: 14),
             Row(
@@ -97,6 +98,7 @@ class AssetOperation extends StatelessWidget {
                   textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                   onPressed: () {
                     if (!Form.of(context).validate()) return;
+                    onSave(quantity, amount);
                     Get.back();
                   },
                 ),
@@ -106,5 +108,10 @@ class AssetOperation extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _minValue(value) {
+    if (double.parse(value) <= 0) return 'O valor fornecido deve ser maior do que zero';
+    return null;
   }
 }

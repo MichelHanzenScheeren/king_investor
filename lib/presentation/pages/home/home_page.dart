@@ -11,54 +11,50 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(
-      init: homeController,
-      builder: (homeController) {
-        final theme = Theme.of(context);
-        return Scaffold(
-          appBar: AppBar(
-            leading: Container(
-              padding: const EdgeInsets.fromLTRB(4, 2, 0, 2),
-              child: Image(
-                image: AssetImage(AppImages.transparentLogo),
-                fit: BoxFit.fill,
-              ),
-            ),
-            title: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor)),
-            centerTitle: false,
-            actions: [
-              IconButton(icon: Icon(Icons.visibility, color: theme.hintColor), onPressed: () {}),
-              IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
-            ],
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        leading: Container(
+          padding: const EdgeInsets.fromLTRB(4, 2, 0, 2),
+          child: Image(
+            image: AssetImage(AppImages.transparentLogo),
+            fit: BoxFit.fill,
           ),
-          body: PageView(
-            controller: homeController.pageController,
-            onPageChanged: (value) => homeController.setCurrentPage(value),
-            children: [
-              WalletPage(),
-              Container(color: Colors.green),
-              Container(color: Colors.purple),
-              RebalancePage(),
-            ],
-          ),
-          bottomNavigationBar: Obx(() {
-            return BottomNavigationBar(
-              currentIndex: homeController.currentPage,
-              onTap: (value) => homeController.jumpToPage(value),
-              backgroundColor: theme.primaryColor,
-              selectedItemColor: theme.hintColor,
-              unselectedItemColor: theme.hintColor.withAlpha(150),
-              items: [
-                _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
-                _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
-                _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
-                _getIcon("Rebalancear", Icons.account_balance, theme.primaryColor),
-              ],
-            );
-          }),
-          floatingActionButton: AssetsOptions(),
-        );
-      },
+        ),
+        title: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor)),
+        centerTitle: false,
+        actions: [
+          IconButton(icon: Icon(Icons.visibility, color: theme.hintColor), onPressed: () {}),
+          IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
+        ],
+      ),
+      body: PageView(
+        controller: homeController.pageController,
+        onPageChanged: (value) => homeController.setCurrentPage(value),
+        children: [
+          WalletPage(),
+          Container(color: Colors.green),
+          Container(color: Colors.purple),
+          RebalancePage(),
+        ],
+      ),
+      bottomNavigationBar: GetX<HomeController>(
+        init: homeController,
+        builder: (homeController) => BottomNavigationBar(
+          currentIndex: homeController.currentPage,
+          onTap: (value) => homeController.jumpToPage(value),
+          backgroundColor: theme.primaryColor,
+          selectedItemColor: theme.hintColor,
+          unselectedItemColor: theme.hintColor.withAlpha(150),
+          items: [
+            _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
+            _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
+            _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
+            _getIcon("Rebalancear", Icons.account_balance, theme.primaryColor),
+          ],
+        ),
+      ),
+      floatingActionButton: AssetsOptions(),
     );
   }
 

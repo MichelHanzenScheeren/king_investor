@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
+import 'package:king_investor/domain/value_objects/amount%20.dart';
+import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
@@ -12,6 +14,8 @@ class HomeController extends GetxController {
   bool _showModal = true;
   PageController pageController;
   RxInt _currentPage = 0.obs;
+  final Category _allCategory = Category('-1', null, 'Todas as categorias', -1);
+  final List<Category> _categoriesDropdown = <Category>[];
   final Rx<Category> _selectedCategory = Rx<Category>(null);
   final Rx<Asset> _selectedAsset = Rx<Asset>(null);
 
@@ -39,7 +43,7 @@ class HomeController extends GetxController {
   int get currentPage => _currentPage.value;
 
   Category get selectedCategory {
-    if (_selectedCategory.value == null) _selectedCategory.value = Category('-1', null, 'Todos', -1);
+    if (_selectedCategory.value == null) _selectedCategory.value = _allCategory;
     return _selectedCategory.value;
   }
 
@@ -49,12 +53,28 @@ class HomeController extends GetxController {
   }
 
   List<Category> get categoriesDropdown {
-    return <Category>[..._appDataController.categories]..add(Category('-1', null, 'Todos', -1));
+    if (_categoriesDropdown.isEmpty)
+      _categoriesDropdown
+        ..add(_allCategory)
+        ..addAll(_appDataController.usedCategories);
+    return _categoriesDropdown;
   }
 
   List<Asset> get assetsDropDown {
-    if (selectedCategory.objectId == '-1') return _appDataController.assets;
-    return _appDataController.assets.where((e) => e?.category?.objectId == selectedCategory.objectId);
+    List<Asset> result;
+    if (selectedCategory.objectId == '-1') {
+      result = _appDataController.assets;
+    } else {
+      result = _appDataController.assets.where((e) => e?.category?.objectId == selectedCategory.objectId).toList();
+    }
+    setSelectedAsset(result.first);
+    return result;
+  }
+
+  void clearSelecteds() {
+    _categoriesDropdown.clear();
+    _selectedCategory.value = null;
+    _selectedAsset.value = null;
   }
 
   void setSelectedCategory(Category category) => _selectedCategory.value = category;
@@ -67,6 +87,8 @@ class HomeController extends GetxController {
     if (page != currentPage)
       pageController.animateToPage(page, duration: Duration(milliseconds: 200), curve: Curves.easeInOutCirc);
   }
+
+  void saveAssetBuy(Quantity quantity, Amount amount) async {}
 
   @override
   void onClose() {

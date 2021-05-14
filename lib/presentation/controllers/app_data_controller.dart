@@ -53,6 +53,9 @@ class AppDataController extends GetxController {
   bool get pricesLoad => _pricesLoad.value;
   bool get isLoadingSomething => _categoriesLoad.value || _walletsLoad.value || _assetsLoad.value || _pricesLoad.value;
   Wallet get currentWallet => _currentWallet.value;
+  List<Category> get usedCategories {
+    return categories.where((cat) => assets.any((item) => item?.category?.objectId == cat?.objectId)).toList();
+  }
 
   /* SETTERS */
   void setUserLoad(bool value) => _userLoad.value = value;
