@@ -5,19 +5,19 @@ main() {
   test('Should be invalid when value is null', () {
     Quantity quantity = Quantity(null);
     expect(quantity.isValid, isFalse);
-    expect(quantity.value, 0);
+    expect(quantity.value, 1);
   });
 
-  test('Should be invalid when value is lower than 0', () {
-    Quantity quantity = Quantity(-1);
+  test('Should be invalid when value is lower than 1', () {
+    Quantity quantity = Quantity(0);
     expect(quantity.isValid, isFalse);
-    expect(quantity.value, 0);
+    expect(quantity.value, 1);
   });
 
   test('Should be valid when value is a valid int', () {
-    Quantity quantity = Quantity(0);
+    Quantity quantity = Quantity(1);
     expect(quantity.isValid, isTrue);
-    expect(quantity.value, 0);
+    expect(quantity.value, 1);
   });
 
   test('Should be invalid when try set with invalid int', () {

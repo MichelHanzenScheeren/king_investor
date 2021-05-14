@@ -12,7 +12,7 @@ class RebalanceController extends GetxController {
   AppDataController appDataController;
   CategoriesUseCase categoriesUseCase;
   RxBool _isRebalancing = false.obs;
-  final Amount aportValue = Amount(300.0);
+  final Amount aportValue = Amount(300.0, mustBeGreaterThanZero: true);
   final Quantity assetsMaxNumber = Quantity(3);
   final Quantity categoriesMaxNumber = Quantity(2);
   Rx<RebalanceResult> _rebalanceResult = Rx<RebalanceResult>(null);

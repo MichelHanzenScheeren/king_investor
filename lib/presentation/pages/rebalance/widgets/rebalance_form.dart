@@ -38,7 +38,7 @@ class RebalanceForm extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
               onChanged: (value) => aportValue.setValueFromString(value),
-              validator: (value) => aportValue.isValid ? _minValue(value) : aportValue.firstNotification,
+              validator: (value) => aportValue.isValid ? null : aportValue.firstNotification,
             ),
             SizedBox(height: 16),
             Container(
@@ -56,7 +56,7 @@ class RebalanceForm extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
               onChanged: (value) => maxAssets.setValueFromString(value),
-              validator: (value) => maxAssets.isValid ? _minValue(value) : maxAssets.firstNotification,
+              validator: (value) => maxAssets.isValid ? null : maxAssets.firstNotification,
             ),
             SizedBox(height: 16),
             Container(
@@ -74,7 +74,7 @@ class RebalanceForm extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               textInputType: TextInputType.number,
               onChanged: (value) => maxCategories.setValueFromString(value),
-              validator: (value) => maxCategories.isValid ? _minValue(value) : maxCategories.firstNotification,
+              validator: (value) => maxCategories.isValid ? null : maxCategories.firstNotification,
             ),
             SizedBox(height: 26),
             Obx(() {
@@ -93,10 +93,5 @@ class RebalanceForm extends StatelessWidget {
         );
       },
     ));
-  }
-
-  String _minValue(value) {
-    if (double.parse(value) <= 0) return 'O valor fornecido deve ser maior do que zero';
-    return null;
   }
 }

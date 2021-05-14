@@ -16,8 +16,8 @@ import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart
 class SaveAssetForm extends StatelessWidget {
   final Company company;
   final SearchController searchController;
-  final Quantity quantity = Quantity(10);
-  final Amount amount = Amount(50.0);
+  final Quantity quantity = Quantity(1);
+  final Amount amount = Amount(50.0, mustBeGreaterThanZero: true);
   final Score score = Score(10);
 
   SaveAssetForm({@required this.company, @required this.searchController}) {

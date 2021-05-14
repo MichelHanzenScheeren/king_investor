@@ -51,6 +51,12 @@ class Contract extends Notifiable {
     return this;
   }
 
+  Contract isGreatherThan(var value1, var value2, String property, String message) {
+    if (value1 == null || value2 == null) return this;
+    if (value1 <= value2) addNotification(property, message);
+    return this;
+  }
+
   Contract canBeConvertedToDouble(String value, String property, String message) {
     if (value == null) return this;
     if (double.tryParse(value) == null) addNotification(property, message);

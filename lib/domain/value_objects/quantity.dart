@@ -6,7 +6,7 @@ class Quantity extends ValueObject {
 
   Quantity(int value) {
     _applyContracts(value);
-    _value = isValid ? value : 0;
+    _value = isValid ? value : 1;
   }
 
   int get value => _value;
@@ -28,7 +28,7 @@ class Quantity extends ValueObject {
       Contract()
           .requires()
           .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
-          .isGreatherOrEqualTo(value, 0, 'Quantity.value', 'A quantidade precisa ser um número maior ou igual a zero'),
+          .isGreatherThan(value, 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
     );
   }
 
@@ -37,8 +37,8 @@ class Quantity extends ValueObject {
       Contract()
           .requires()
           .isNotNull(value, 'Quantity.value', 'O número não pode ser nulo')
-          .canBeConvertedToInt(value, 'Quantity.value', 'A quantidade deve ser um número inteiro')
-          .isGreatherOrEqualTo(int.tryParse(value), 0, 'Quantity.value', 'A quantidade deve ser maior ou igual a zero'),
+          .canBeConvertedToInt(value, 'Quantity.value', 'A quantidade precisa ser um número inteiro')
+          .isGreatherThan(int.tryParse(value), 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
     );
   }
 }

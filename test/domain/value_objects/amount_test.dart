@@ -65,4 +65,20 @@ main() {
     expect(amount.toMonetary('EUR'), 'EUR 2,50');
     expect(amount.toPorcentage(), '2,50%');
   });
+
+  test('Should be invalid when set _mustBeGreaterThanZero true and send 0', () {
+    Amount amount = Amount(0.0, mustBeGreaterThanZero: true);
+    expect(amount.isValid, isFalse);
+    expect(amount.value, 1.0);
+  });
+
+  test('Should be invalid when set _mustBeGreaterThanZero true and send negative value', () {
+    Amount amount = Amount(-1, mustBeGreaterThanZero: true);
+    expect(amount.isValid, isFalse);
+  });
+
+  test('Should be valid when set _mustBeGreaterThanZero true and send positive value', () {
+    Amount amount = Amount(1, mustBeGreaterThanZero: true);
+    expect(amount.isValid, isTrue);
+  });
 }

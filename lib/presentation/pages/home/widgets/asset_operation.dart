@@ -15,7 +15,7 @@ import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart
 class AssetOperation extends StatelessWidget {
   final AppDataController appDataController = Get.find();
   final Quantity quantity = Quantity(1);
-  final Amount amount = Amount(50.0);
+  final Amount amount = Amount(50.0, mustBeGreaterThanZero: true);
   final String dividerOperation;
   final Function(Quantity, Amount) onSave;
 
@@ -67,7 +67,7 @@ class AssetOperation extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
               onChanged: (value) => quantity.setValueFromString(value),
-              validator: (value) => quantity.isValid ? _minValue(value) : quantity.notifications.first.message,
+              validator: (value) => quantity.isValid ? null : quantity.notifications.first.message,
             ),
             SizedBox(height: 14),
             CustomTextFieldWidget(
@@ -76,7 +76,7 @@ class AssetOperation extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
               onChanged: (value) => amount.setValueFromString(value),
-              validator: (value) => amount.isValid ? _minValue(value) : amount.notifications.first.message,
+              validator: (value) => amount.isValid ? null : amount.notifications.first.message,
             ),
             SizedBox(height: 14),
             Row(
@@ -108,10 +108,5 @@ class AssetOperation extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _minValue(value) {
-    if (double.parse(value) <= 0) return 'O valor fornecido deve ser maior do que zero';
-    return null;
   }
 }
