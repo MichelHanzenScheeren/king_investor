@@ -15,7 +15,7 @@ class AssetsOptions extends StatelessWidget {
     return GetX<HomeController>(
       builder: (homeController) {
         if (appDataController.isLoadingSomething) return Container();
-        bool showOption = appDataController.assets.length > 0;
+        bool activedOption = appDataController.assets.length > 0;
         return SpeedDial(
           backgroundColor: theme.primaryColor,
           icon: Icons.add,
@@ -28,49 +28,51 @@ class AssetsOptions extends StatelessWidget {
               'Novo ativo',
               Icons.store,
               theme,
-              onTap: () async {
-                await Get.toNamed(AppRoutes.search);
-                appDataController.loadAllPrices();
-              },
+              onTap: () => _newAssetPage(),
             ),
             _getFloatButton(
               'Dividendo/JCP',
               Icons.attach_money,
               theme,
-              show: showOption,
+              actived: activedOption,
               onTap: () => _incomeOperation(homeController),
             ),
             _getFloatButton(
               'Compra',
               Icons.exposure_plus_1,
               theme,
-              show: showOption,
+              actived: activedOption,
               onTap: () => _buyOperation(homeController),
             ),
             _getFloatButton(
               'Venda',
               Icons.exposure_minus_1_outlined,
               theme,
-              show: showOption,
+              actived: activedOption,
               onTap: () => _saleOperation(homeController),
             ),
           ],
-          // TODO
         );
       },
     );
   }
 
-  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap, bool show: true}) {
-    if (!show) return SpeedDialChild(backgroundColor: Colors.transparent, elevation: 0, onTap: null);
+  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap, bool actived: true}) {
     return SpeedDialChild(
       child: Icon(icon, color: theme.hintColor),
       label: label,
-      backgroundColor: theme.primaryColor,
-      labelBackgroundColor: theme.primaryColor,
+      backgroundColor: actived ? theme.primaryColor : Colors.grey[900],
+      labelBackgroundColor: actived ? theme.primaryColor : Colors.grey[900],
+      foregroundColor: Colors.transparent,
+      elevation: 0,
       labelStyle: TextStyle(color: theme.hintColor),
-      onTap: onTap,
+      onTap: actived ? onTap : null,
     );
+  }
+
+  void _newAssetPage() async {
+    await Get.toNamed(AppRoutes.search);
+    appDataController.loadAllPrices();
   }
 
   void _buyOperation(HomeController homeController) {

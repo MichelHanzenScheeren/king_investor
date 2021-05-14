@@ -32,16 +32,13 @@ class AssetOperation extends StatelessWidget {
             CustomDividerWidget(text: 'Nova $dividerOperation de ativo'),
             SizedBox(height: 8),
             GetX<HomeController>(
-              // didChangeDependencies: (state) => state.controller.clearSelecteds(),
+              didChangeDependencies: (state) => state.controller.clearSelecteds(),
               builder: (homeController) {
                 return CustomDropdownWidget<Category>(
                   initialValue: homeController.selectedCategory,
                   onChanged: homeController.setSelectedCategory,
                   values: homeController.categoriesDropdown.map((category) {
-                    return DropdownMenuItem<Category>(
-                      value: category,
-                      child: Text(category?.name ?? '', style: TextStyle(color: Colors.black, fontSize: 16)),
-                    );
+                    return CustomDropdownItems<Category>(category, category?.name ?? '');
                   }).toList(),
                 );
               },
@@ -53,10 +50,7 @@ class AssetOperation extends StatelessWidget {
                   initialValue: homeController.selectedAsset,
                   onChanged: homeController.setSelectedAsset,
                   values: homeController.assetsDropDown.map((asset) {
-                    return DropdownMenuItem<Asset>(
-                      value: asset,
-                      child: Text(asset?.company?.symbol ?? '', style: TextStyle(color: Colors.black, fontSize: 16)),
-                    );
+                    return CustomDropdownItems<Asset>(asset, asset?.company?.symbol ?? '');
                   }).toList(),
                 );
               },

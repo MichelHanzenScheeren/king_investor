@@ -25,7 +25,7 @@ class AppSnackbar {
         backgroundColor: type == AppSnackbarType.success ? Colors.green[400] : Colors.red[400],
         colorText: Colors.white,
         borderRadius: 15,
-        dismissDirection: SnackDismissDirection.VERTICAL,
+        dismissDirection: SnackDismissDirection.HORIZONTAL,
         isDismissible: true,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/home_controller.dart';
+import 'package:king_investor/presentation/pages/evolution/evolution_page.dart';
 import 'package:king_investor/presentation/pages/home/widgets/asset_options.dart';
 import 'package:king_investor/presentation/pages/rebalance/rebalance_page.dart';
 import 'package:king_investor/presentation/pages/wallet/wallet_page.dart';
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
         onPageChanged: (value) => homeController.setCurrentPage(value),
         children: [
           WalletPage(),
-          Container(color: Colors.green),
+          EvolutionPage(),
           Container(color: Colors.purple),
           RebalancePage(),
         ],

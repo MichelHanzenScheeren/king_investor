@@ -43,10 +43,7 @@ class SaveAssetForm extends StatelessWidget {
                 initialValue: searchController.currentCategory,
                 onChanged: (category) => searchController.setCurrentCategory(category: category),
                 values: categories.map((category) {
-                  return DropdownMenuItem<Category>(
-                    value: category,
-                    child: Text(category?.name ?? '', style: TextStyle(color: Colors.black, fontSize: 16)),
-                  );
+                  return CustomDropdownItems<Category>(category, category?.name ?? '');
                 }).toList(),
               );
             }),
