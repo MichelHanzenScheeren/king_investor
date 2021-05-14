@@ -77,7 +77,6 @@ class Rebalance extends ValueObject {
   }
 
   Future<RebalanceResult> start() async {
-    await Future.delayed(Duration(milliseconds: 300));
     if (!isValid) throw Exception('Tentativa de rebalanceamento com dados inválidos!');
     if (!_walletData) throw Exception('Tentativa de rebalanceamento sem registrar os dados da carteira');
     if (!_rebalanceData) throw Exception('Tentativa de rebalanceamento sem registrar os dados do rebalanceamento');

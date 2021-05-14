@@ -6,6 +6,7 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/controllers/rebalance_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
+import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class RebalanceResultsCard extends StatelessWidget {
   final RebalanceController rebalanceController;
@@ -47,28 +48,31 @@ class RebalanceResultsCard extends StatelessWidget {
               alignment: Alignment.centerLeft,
             ),
             SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomButtonWidget(
-                  width: MediaQuery.of(context).size.width * (rebalanceResult.items.isEmpty ? 0.8 : 0.4),
-                  backGroundColor: Colors.transparent,
-                  buttonText: 'VOLTAR',
-                  textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: theme.primaryColor),
-                  onPressed: () => rebalanceController.clearResults(),
-                ),
-                rebalanceResult.items.isEmpty ? Container() : Expanded(child: Text('')),
-                rebalanceResult.items.isEmpty
-                    ? Container()
-                    : CustomButtonWidget(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        backGroundColor: theme.primaryColor,
-                        buttonText: 'APLICAR',
-                        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: theme.hintColor),
-                        onPressed: rebalanceResult.items.isEmpty ? null : () {},
-                      ),
-              ],
-            ),
+            Obx(() {
+              if (rebalanceController.savingRebalanceResults) return LoadIndicatorWidget();
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButtonWidget(
+                    width: MediaQuery.of(context).size.width * (rebalanceResult.items.isEmpty ? 0.8 : 0.4),
+                    backGroundColor: Colors.transparent,
+                    buttonText: 'VOLTAR',
+                    textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: theme.primaryColor),
+                    onPressed: () => rebalanceController.clearResults(),
+                  ),
+                  rebalanceResult.items.isEmpty ? Container() : Expanded(child: Text('')),
+                  rebalanceResult.items.isEmpty
+                      ? Container()
+                      : CustomButtonWidget(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          backGroundColor: theme.primaryColor,
+                          buttonText: 'APLICAR',
+                          textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: theme.hintColor),
+                          onPressed: rebalanceResult.items.isEmpty ? null : () => rebalanceController.saveRebalance(),
+                        ),
+                ],
+              );
+            }),
           ],
         ),
       ],

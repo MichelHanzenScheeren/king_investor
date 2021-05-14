@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category_score.dart';
+import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/value_objects/rebalance.dart';
 import 'package:king_investor/domain/use_cases/categories_use_case.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
@@ -11,15 +13,18 @@ import 'package:king_investor/presentation/static/app_snackbar.dart';
 class RebalanceController extends GetxController {
   AppDataController appDataController;
   CategoriesUseCase categoriesUseCase;
+  AssetsUseCase assetsUseCase;
   RxBool _isRebalancing = false.obs;
   final Amount aportValue = Amount(300.0, mustBeGreaterThanZero: true);
   final Quantity assetsMaxNumber = Quantity(3, mustBeGreaterThanZero: true);
   final Quantity categoriesMaxNumber = Quantity(2, mustBeGreaterThanZero: true);
   Rx<RebalanceResult> _rebalanceResult = Rx<RebalanceResult>(null);
+  RxBool _savingRebalanceResults = false.obs;
 
   RebalanceController() {
     appDataController = Get.find();
     categoriesUseCase = Get.find();
+    assetsUseCase = Get.find();
   }
 
   @override
@@ -35,6 +40,10 @@ class RebalanceController extends GetxController {
   bool get containsRebalanceResults => _rebalanceResult.value != null;
 
   RebalanceResult get rebalanceResult => _rebalanceResult.value;
+
+  bool get savingRebalanceResults => _savingRebalanceResults.value;
+
+  void setSavingRebalanceResults(bool value) => _savingRebalanceResults.value = value ?? false;
 
   Future<void> updateCategoryScore(CategoryScore categoryScore) async {
     final response = await categoriesUseCase.updateCategoryScores(categoryScore);
@@ -79,6 +88,32 @@ class RebalanceController extends GetxController {
       }
     }
     setRebalancing(false);
+  }
+
+  Future<void> saveRebalance() async {
+    if (!containsRebalanceResults)
+      return AppSnackbar.show(message: 'Nenhum dado de rebalanceamento disponível', type: AppSnackbarType.error);
+    if (rebalanceResult.items.isEmpty)
+      return AppSnackbar.show(message: 'O rebalanceamento não possui itens', type: AppSnackbarType.error);
+    setSavingRebalanceResults(true);
+    bool success = true;
+    rebalanceResult.items.forEach((element) async {
+      Asset asset = appDataController.assets.where((asset) => asset?.company?.ticker == element?.ticker)?.first;
+      if (asset == null) {
+        success = false;
+      } else {
+        asset.registerBuy(element.quantity, element.price);
+        final result = await assetsUseCase.updateAsset(asset);
+        if (result.isLeft()) success = false;
+      }
+    });
+    if (success) {
+      AppSnackbar.show(message: 'Alterações salvas', type: AppSnackbarType.success);
+      clearResults();
+    } else {
+      AppSnackbar.show(message: 'Um ou mais ativos não puderam ser atualizados', type: AppSnackbarType.error);
+    }
+    setSavingRebalanceResults(false);
   }
 
   void clearResults() {
