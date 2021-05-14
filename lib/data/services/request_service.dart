@@ -32,6 +32,7 @@ class RequestService implements RequestAgreement {
   Future<Either<Notification, Map>> request(String url) async {
     try {
       final Response response = await _dio.get(url);
+      print('*** REQUEST *** $url');
       return _validateResponse(response);
     } catch (error) {
       return Left(_onError(error));

@@ -21,7 +21,8 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (appDataController.categoriesLoad || appDataController.assetsLoad) return LoadCardWidget();
+      if (appDataController.walletsLoad || appDataController.categoriesLoad || appDataController.assetsLoad)
+        return LoadCardWidget();
       if (!walletController.isValidData) return LoadAssetsFailed();
       if (walletController.isEmptyData) return EmptyAssets();
       final validCategories = walletController.validCategories();

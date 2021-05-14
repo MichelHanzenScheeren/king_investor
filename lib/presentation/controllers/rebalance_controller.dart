@@ -97,7 +97,8 @@ class RebalanceController extends GetxController {
       return AppSnackbar.show(message: 'O rebalanceamento não possui itens', type: AppSnackbarType.error);
     setSavingRebalanceResults(true);
     bool success = true;
-    rebalanceResult.items.forEach((element) async {
+    for (int index = 0; index < rebalanceResult.items.length; index++) {
+      final element = rebalanceResult.items[index];
       Asset asset = appDataController.assets.where((asset) => asset?.company?.ticker == element?.ticker)?.first;
       if (asset == null) {
         success = false;
@@ -106,7 +107,7 @@ class RebalanceController extends GetxController {
         final result = await assetsUseCase.updateAsset(asset);
         if (result.isLeft()) success = false;
       }
-    });
+    }
     if (success) {
       AppSnackbar.show(message: 'Alterações salvas', type: AppSnackbarType.success);
       clearResults();

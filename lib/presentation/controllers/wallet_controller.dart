@@ -12,8 +12,8 @@ class WalletController extends GetxController {
   AppDataController loadcontroller;
   UserUseCase userUseCase;
   WalletsUseCase walletsUseCase;
-  bool get isEmptyData => !(loadcontroller.categories.isNotEmpty && loadcontroller.assets.isNotEmpty);
-  bool get isValidData => loadcontroller.wallets.isNotEmpty && loadcontroller.assets.isNotEmpty;
+  bool get isValidData => loadcontroller.wallets.isNotEmpty && loadcontroller.categories.isNotEmpty;
+  bool get isEmptyData => loadcontroller.assets.isEmpty;
 
   WalletController() {
     loadcontroller = Get.find();

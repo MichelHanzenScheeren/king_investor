@@ -51,7 +51,11 @@ class CategoriesUseCase {
     if (validation.isLeft()) return validation;
     final category = _appData.categories.firstWhere((element) => element.objectId == catScore.category.objectId);
     final score = CategoryScore(catScore.objectId, null, catScore.score, category, catScore.walletForeignKey);
-    final response = await _database.update(score);
+    Either<Notification, Notification> response;
+    if (_appData.getSpecificCategoryScore(catScore.walletForeignKey, catScore.category.objectId) == null)
+      response = await _database.create(score);
+    else
+      response = await _database.update(score);
     return response.fold(
       (notification) => Left(notification),
       (notification2) {

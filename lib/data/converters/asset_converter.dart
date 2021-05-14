@@ -13,12 +13,12 @@ class AssetConverter {
       map[kCreatedAt],
       CompanyConverter().fromMapToModel(map[kCompany]),
       CategoryConverter().fromMapToModel(map[kCategory]),
-      Amount(map[kAveragePrice]),
+      Amount((map[kAveragePrice] ?? 0.0) + 0.0),
       Score(map[kScore]),
       Quantity(map[kQuantity]),
       map[kWallet][kObjectId],
-      sales: Amount(map[kSales]),
-      incomes: Amount(map[kIncomes]),
+      sales: Amount((map[kSales] ?? 0.0) + 0.0),
+      incomes: Amount((map[kIncomes] ?? 0.0) + 0.0),
     );
   }
 

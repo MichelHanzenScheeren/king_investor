@@ -24,7 +24,15 @@ class AssetsOptions extends StatelessWidget {
           overlayOpacity: 0.4,
           overlayColor: Colors.black,
           children: [
-            _getFloatButton('Novo ativo', Icons.store, theme, onTap: () => Get.toNamed(AppRoutes.search)),
+            _getFloatButton(
+              'Novo ativo',
+              Icons.store,
+              theme,
+              onTap: () async {
+                await Get.toNamed(AppRoutes.search);
+                appDataController.loadAllPrices();
+              },
+            ),
             _getFloatButton(
               'Dividendo/JCP',
               Icons.attach_money,
@@ -47,13 +55,14 @@ class AssetsOptions extends StatelessWidget {
               onTap: () => _saleOperation(homeController),
             ),
           ],
+          // TODO
         );
       },
     );
   }
 
   SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap, bool show: true}) {
-    if (!show) return SpeedDialChild();
+    if (!show) return SpeedDialChild(backgroundColor: Colors.transparent, elevation: 0, onTap: null);
     return SpeedDialChild(
       child: Icon(icon, color: theme.hintColor),
       label: label,

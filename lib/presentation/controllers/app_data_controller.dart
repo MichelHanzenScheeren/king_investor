@@ -104,7 +104,7 @@ class AppDataController extends GetxController {
       (list) {
         setList(wallets, list);
         if (replaceCurrentWallet) {
-          Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => null);
+          Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => wallets.first);
           setCurrentWalet(current);
         }
       },
