@@ -13,7 +13,7 @@ class EvolutionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final commonStyle = TextStyle(color: theme.hintColor, fontSize: 16 * factor, fontWeight: FontWeight.w600);
-    final greaterStyle = TextStyle(color: theme.hintColor, fontSize: 18 * factor, fontWeight: FontWeight.w800);
+    final greaterStyle = TextStyle(color: theme.hintColor, fontSize: 19 * factor, fontWeight: FontWeight.w800);
     return Column(
       children: [
         Row(
@@ -28,7 +28,7 @@ class EvolutionRow extends StatelessWidget {
                         text: value,
                         style: _coloredStyle(greaterStyle),
                         children: [
-                          TextSpan(text: ' ($complement)', style: _coloredStyle(greaterStyle.copyWith(fontSize: 13))),
+                          TextSpan(text: ' ($complement)', style: _coloredStyle(greaterStyle.copyWith(fontSize: 14))),
                         ],
                       ),
                     ),
