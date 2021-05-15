@@ -4,6 +4,7 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/controllers/evolution_controller.dart';
 import 'package:king_investor/presentation/controllers/filter_controller.dart';
 import 'package:king_investor/presentation/pages/evolution/widgets/empty_evolution_card.dart';
+import 'package:king_investor/presentation/pages/evolution/widgets/evolution_card.dart';
 import 'package:king_investor/presentation/pages/evolution/widgets/evolution_row.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_dropdown_widget.dart';
@@ -46,6 +47,7 @@ class EvolutionPage extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
             children: [
               CustomDropdownWidget<SelectedFilter>(
+                prefixText: 'Filtrar por',
                 initialValue: evolutionController.selectedFilter,
                 onChanged: evolutionController.setSelectedFilter,
                 values: SelectedFilter.values.map(
@@ -56,6 +58,7 @@ class EvolutionPage extends StatelessWidget {
               ),
               SizedBox(height: 12),
               CustomDropdownWidget<SelectedOrder>(
+                prefixText: 'Ordem',
                 initialValue: evolutionController.selectedOrder,
                 onChanged: evolutionController.setSelectedOrder,
                 values: SelectedOrder.values.map(
@@ -68,30 +71,22 @@ class EvolutionPage extends StatelessWidget {
           );
         }),
         Obx(() {
-          if (appDataController.isLoadingSomething) return LoadCardWidget();
-          return Column(
-            children: appDataController.usedCategories.map((cat) {
-              final style = TextStyle(color: Theme.of(context).hintColor, fontSize: 20, fontWeight: FontWeight.bold);
-              final result = evolutionController.getCategoryPerformance(cat);
-              final totalPorcentage = result.totalResultPorcentage.toPorcentage();
-              final totalValue = result.totalResultValue.toMonetary("BRL");
-              return CustomExpansionTileWidget(
-                margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-                childrenPadding: EdgeInsets.fromLTRB(20, 0, 20, 8),
-                title: Text(cat.name, style: style),
-                children: [
-                  Text('Desempenho', style: style.copyWith(fontSize: 18)),
-                  SizedBox(height: 12),
-                  EvolutionRow('Total na carteira', result.totalInWallet.toMonetary("BRL"), factor: 0.9),
-                  EvolutionRow('Total Investido', result.totalInvested.toMonetary("BRL"), factor: 0.9),
-                  EvolutionRow('Proventos', result.totalIncomes.toMonetary("BRL"), color: true, factor: 0.9),
-                  EvolutionRow('Vendas', result.totalSales.toMonetary("BRL"), color: true, factor: 0.9),
-                  EvolutionRow('Valorização', result.assetsValorization.toMonetary("BRL"), color: true, factor: 0.9),
-                  EvolutionRow('Resultado', totalValue, complement: totalPorcentage, factor: 0.9),
-                ],
-              );
-            }).toList(),
-          );
+          if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();
+          if (evolutionController.selectedFilter == SelectedFilter.categories) {
+            return Column(
+              children: appDataController.usedCategories.map((cat) {
+                final result = evolutionController.getCategoryPerformance(cat);
+                return EvolutionCard(resultTitle: cat.name, result: result);
+              }).toList(),
+            );
+          } else {
+            return Column(
+              children: appDataController.assets.map((asset) {
+                final result = evolutionController.getAssetPerformance(asset);
+                return EvolutionCard(resultTitle: asset.company.symbol, result: result);
+              }).toList(),
+            );
+          }
         }),
         SizedBox(height: 4),
       ],

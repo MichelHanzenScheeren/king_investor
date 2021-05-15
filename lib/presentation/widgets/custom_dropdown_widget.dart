@@ -9,6 +9,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
   final bool isDense;
   final bool hasUnderline;
   final bool isFilled;
+  final String prefixText;
 
   CustomDropdownWidget({
     @required this.initialValue,
@@ -18,6 +19,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
     this.isDense: true,
     this.hasUnderline: false,
     this.isFilled: true,
+    this.prefixText: '',
   });
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButton<T>(
-          dropdownColor: isFilled ? Colors.grey[200] : theme.dialogBackgroundColor,
+          dropdownColor: isFilled ? Colors.grey[100] : theme.dialogBackgroundColor,
           icon: Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
             child: Icon(icon, color: isFilled ? Colors.black : theme.hintColor),
@@ -38,14 +40,23 @@ class CustomDropdownWidget<T> extends StatelessWidget {
           value: initialValue,
           isExpanded: true,
           style: TextStyle(color: Colors.white),
-          underline: hasUnderline
-              ? Container(
-                  height: 2,
-                  color: Colors.grey[700],
-                  margin: EdgeInsets.only(top: 40),
-                )
-              : Container(),
           onChanged: onChanged,
+          underline: Container(),
+          selectedItemBuilder: (context) {
+            return values.map((item) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.fromLTRB(20, 14, 10, 10),
+                child: Text(
+                  (prefixText.isNotEmpty ? '$prefixText:  ' : '') + item.text,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              );
+            }).toList();
+          },
           items: values.map((item) {
             return DropdownMenuItem<T>(
               value: item.value,

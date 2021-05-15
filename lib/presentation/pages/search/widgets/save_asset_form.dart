@@ -40,6 +40,7 @@ class SaveAssetForm extends StatelessWidget {
             SizedBox(height: 4),
             Obx(() {
               return CustomDropdownWidget<Category>(
+                prefixText: 'Categoria',
                 initialValue: searchController.currentCategory,
                 onChanged: (category) => searchController.setCurrentCategory(category: category),
                 values: categories.map((category) {

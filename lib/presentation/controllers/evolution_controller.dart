@@ -32,6 +32,15 @@ class EvolutionController extends GetxController {
     return performance;
   }
 
+  Performance getAssetPerformance(Asset asset) {
+    final performance = Performance(
+      [asset],
+      appDataController.prices,
+    );
+    if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
+    return performance;
+  }
+
   Future<void> _showGeneralErrorSnackBar(String message) async {
     await Future.delayed(Duration(milliseconds: 500));
     AppSnackbar.show(message: message, type: AppSnackbarType.error);
@@ -46,17 +55,17 @@ class EvolutionController extends GetxController {
   SelectedOrder get selectedOrder => _selectedOrder.value;
 
   String filterDescription(SelectedFilter filter) {
-    if (filter == SelectedFilter.categories) return 'FIltrar por:  Categorias';
-    return 'Filtrar por:  Ativos';
+    if (filter == SelectedFilter.categories) return 'Categorias';
+    return 'Ativos';
   }
 
   String orderDescription(SelectedOrder order) {
-    if (order == SelectedOrder.alphabetic) return 'Ordem:  Alfabética';
-    if (order == SelectedOrder.bestResult) return 'Ordem:  Melhor resultado';
-    if (order == SelectedOrder.hasMoreMoney) return 'Ordem:  Mais dinheiro hoje';
-    if (order == SelectedOrder.moreInvested) return 'Ordem:  Mais dinheiro investido';
-    if (order == SelectedOrder.moreSales) return 'Ordem:  Mais lucro com venda';
-    return 'Ordem:  Mais proventos';
+    if (order == SelectedOrder.alphabetic) return 'Alfabética';
+    if (order == SelectedOrder.bestResult) return 'Melhor resultado';
+    if (order == SelectedOrder.hasMoreMoney) return 'Mais dinheiro hoje';
+    if (order == SelectedOrder.moreInvested) return 'Mais dinheiro investido';
+    if (order == SelectedOrder.moreSales) return 'Mais lucro com venda';
+    return 'Mais proventos';
   }
 
   void setSelectedFilter(SelectedFilter newSelected) => _selectedFilter.value = newSelected;

@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:king_investor/domain/value_objects/performance.dart';
+import 'package:king_investor/presentation/pages/evolution/widgets/evolution_row.dart';
+import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.dart';
+
+class EvolutionCard extends StatelessWidget {
+  final Performance result;
+  final String resultTitle;
+
+  EvolutionCard({@required this.result, @required this.resultTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    final totalPorcentage = result.totalResultPorcentage.toPorcentage();
+    final totalValue = result.totalResultValue.toMonetary("BRL");
+    final style = TextStyle(color: Theme.of(context).hintColor, fontSize: 20, fontWeight: FontWeight.bold);
+    return CustomExpansionTileWidget(
+      margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+      childrenPadding: EdgeInsets.fromLTRB(20, 0, 20, 8),
+      title: Text(resultTitle ?? '?', style: style),
+      children: [
+        Text('Desempenho', style: style.copyWith(fontSize: 18)),
+        SizedBox(height: 12),
+        EvolutionRow('Total na carteira', result.totalInWallet.toMonetary("BRL"), factor: 0.9),
+        EvolutionRow('Total Investido', result.totalInvested.toMonetary("BRL"), factor: 0.9),
+        EvolutionRow('Proventos', result.totalIncomes.toMonetary("BRL"), color: true, factor: 0.9),
+        EvolutionRow('Vendas', result.totalSales.toMonetary("BRL"), color: true, factor: 0.9),
+        EvolutionRow('Valorização', result.assetsValorization.toMonetary("BRL"), color: true, factor: 0.9),
+        EvolutionRow('Resultado', totalValue, complement: totalPorcentage, factor: 0.9),
+      ],
+    );
+  }
+}

@@ -20,6 +20,7 @@ class CustomFilterCardWidget extends StatelessWidget {
         return Column(
           children: [
             CustomDropdownWidget<Category>(
+              prefixText: 'Filtrar por',
               initialValue: filterController.selectedCategory,
               onChanged: filterController.setSelectedCategory,
               values: filterController.categoriesDropdown.map((category) {
