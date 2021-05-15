@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdownWidget<T> extends StatelessWidget {
-  final dynamic initialValue;
+  final T initialValue;
   final Function(T) onChanged;
   final List<CustomDropdownItems<T>> values;
 

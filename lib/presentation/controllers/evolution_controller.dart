@@ -1,12 +1,17 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
-import 'package:king_investor/domain/models/price.dart';
+import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/value_objects/performance.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
+enum SelectedFilter { categories, assets }
+enum SelectedOrder { alphabetic, bestResult, moreInvested, hasMoreMoney, moreSales, moreIncomes }
+
 class EvolutionController extends GetxController {
   AppDataController appDataController;
+  Rx<SelectedFilter> _selectedFilter = Rx<SelectedFilter>(SelectedFilter.categories);
+  Rx<SelectedOrder> _selectedOrder = Rx<SelectedOrder>(SelectedOrder.alphabetic);
 
   EvolutionController() {
     appDataController = Get.find();
@@ -18,8 +23,43 @@ class EvolutionController extends GetxController {
     return performance;
   }
 
+  Performance getCategoryPerformance(Category category) {
+    final performance = Performance(
+      appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList(),
+      appDataController.prices,
+    );
+    if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
+    return performance;
+  }
+
   Future<void> _showGeneralErrorSnackBar(String message) async {
     await Future.delayed(Duration(milliseconds: 500));
     AppSnackbar.show(message: message, type: AppSnackbarType.error);
   }
+
+  List<Asset> filteredByCategory(Category category) {
+    return appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList();
+  }
+
+  SelectedFilter get selectedFilter => _selectedFilter.value;
+
+  SelectedOrder get selectedOrder => _selectedOrder.value;
+
+  String filterDescription(SelectedFilter filter) {
+    if (filter == SelectedFilter.categories) return 'FIltrar por:  Categorias';
+    return 'Filtrar por:  Ativos';
+  }
+
+  String orderDescription(SelectedOrder order) {
+    if (order == SelectedOrder.alphabetic) return 'Ordem:  Alfabética';
+    if (order == SelectedOrder.bestResult) return 'Ordem:  Melhor resultado';
+    if (order == SelectedOrder.hasMoreMoney) return 'Ordem:  Mais dinheiro hoje';
+    if (order == SelectedOrder.moreInvested) return 'Ordem:  Mais dinheiro investido';
+    if (order == SelectedOrder.moreSales) return 'Ordem:  Mais lucro com venda';
+    return 'Ordem:  Mais proventos';
+  }
+
+  void setSelectedFilter(SelectedFilter newSelected) => _selectedFilter.value = newSelected;
+
+  void setSelectedOrder(SelectedOrder newSelected) => _selectedOrder.value = newSelected;
 }

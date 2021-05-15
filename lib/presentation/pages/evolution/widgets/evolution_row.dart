@@ -5,13 +5,15 @@ class EvolutionRow extends StatelessWidget {
   final String value;
   final bool color;
   final String complement;
+  final double factor;
 
-  EvolutionRow(this.title, this.value, {this.color: false, this.complement: ''});
+  EvolutionRow(this.title, this.value, {this.color: false, this.complement: '', this.factor: 1.0});
 
   @override
   Widget build(BuildContext context) {
-    final commonStyle = TextStyle(color: Theme.of(context).hintColor, fontSize: 16, fontWeight: FontWeight.w600);
-    final greaterStyle = TextStyle(color: Theme.of(context).hintColor, fontSize: 18, fontWeight: FontWeight.w800);
+    final theme = Theme.of(context);
+    final commonStyle = TextStyle(color: theme.hintColor, fontSize: 16 * factor, fontWeight: FontWeight.w600);
+    final greaterStyle = TextStyle(color: theme.hintColor, fontSize: 18 * factor, fontWeight: FontWeight.w800);
     return Column(
       children: [
         Row(
@@ -33,7 +35,7 @@ class EvolutionRow extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6),
       ],
     );
   }

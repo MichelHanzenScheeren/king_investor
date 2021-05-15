@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 class CustomExpansionTileWidget extends StatelessWidget {
   final Widget title;
   final List<Widget> children;
+  final EdgeInsets margin;
+  final EdgeInsets childrenPadding;
 
-  CustomExpansionTileWidget({this.title, this.children});
+  CustomExpansionTileWidget({this.title, this.children, this.margin, this.childrenPadding});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      margin: margin ?? const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         color: theme.cardColor,
@@ -23,9 +24,10 @@ class CustomExpansionTileWidget extends StatelessWidget {
           accentColor: theme.hintColor,
         ),
         child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
-          childrenPadding: EdgeInsets.zero,
+          childrenPadding: childrenPadding ?? EdgeInsets.zero,
           title: title ?? Text(''),
           children: children ?? [Container()],
         ),
