@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
-import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
-import 'package:king_investor/presentation/controllers/home_controller.dart';
+import 'package:king_investor/presentation/controllers/filter_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_bottom_sheet_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_divider_widget.dart';
-import 'package:king_investor/presentation/widgets/custom_dropdown_widget.dart';
+import 'package:king_investor/presentation/widgets/custom_filter_card_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart';
 
 class AssetOperation extends StatelessWidget {
@@ -17,8 +16,9 @@ class AssetOperation extends StatelessWidget {
   final Quantity quantity = Quantity(1, mustBeGreaterThanZero: true);
   final Amount amount = Amount(50.0, mustBeGreaterThanZero: true);
   final String dividerOperation;
-  final Function(Quantity, Amount) onSave;
+  final Function(Quantity, Amount, Asset) onSave;
   final bool isIncomeOperation;
+  final filterController = FilterController();
 
   AssetOperation({@required this.dividerOperation, @required this.onSave, this.isIncomeOperation: false});
 
@@ -31,30 +31,7 @@ class AssetOperation extends StatelessWidget {
           children: [
             CustomDividerWidget(text: 'Nova $dividerOperation de ativo'),
             SizedBox(height: 8),
-            GetX<HomeController>(
-              didChangeDependencies: (state) => state.controller.clearSelecteds(),
-              builder: (homeController) {
-                return CustomDropdownWidget<Category>(
-                  initialValue: homeController.selectedCategory,
-                  onChanged: homeController.setSelectedCategory,
-                  values: homeController.categoriesDropdown.map((category) {
-                    return CustomDropdownItems<Category>(category, category?.name ?? '');
-                  }).toList(),
-                );
-              },
-            ),
-            SizedBox(height: 14),
-            GetX<HomeController>(
-              builder: (homeController) {
-                return CustomDropdownWidget<Asset>(
-                  initialValue: homeController.selectedAsset,
-                  onChanged: homeController.setSelectedAsset,
-                  values: homeController.assetsDropDown.map((asset) {
-                    return CustomDropdownItems<Asset>(asset, asset?.company?.symbol ?? '');
-                  }).toList(),
-                );
-              },
-            ),
+            CustomFilterCardWidget(filterController),
             isIncomeOperation ? Container() : SizedBox(height: 14),
             isIncomeOperation
                 ? Container()
@@ -96,7 +73,7 @@ class AssetOperation extends StatelessWidget {
                   onPressed: () {
                     if (!Form.of(context).validate()) return;
                     Get.back();
-                    onSave(quantity, amount);
+                    onSave(quantity, amount, filterController.selectedAsset);
                   },
                 ),
               ],

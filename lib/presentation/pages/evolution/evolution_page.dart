@@ -22,7 +22,11 @@ class EvolutionPage extends StatelessWidget {
             Text('Desempenho Geral', style: TextStyle(color: theme.hintColor, fontSize: 18)),
           ],
         ),
-        CustomFilterCardWidget(filterController),
+        CustomCardWidget(
+          children: [
+            CustomFilterCardWidget(filterController),
+          ],
+        )
       ],
     );
   }
