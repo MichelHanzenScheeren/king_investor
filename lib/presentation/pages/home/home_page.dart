@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: GetX<HomeController>(
+        autoRemove: false,
         init: homeController,
         builder: (homeController) => BottomNavigationBar(
           currentIndex: homeController.currentPage,

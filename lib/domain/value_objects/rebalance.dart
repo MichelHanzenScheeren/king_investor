@@ -85,6 +85,7 @@ class Rebalance extends ValueObject {
   }
 
   Future<void> _doRebalance() async {
+    await Future.delayed(Duration(milliseconds: 50));
     _removeInutilizedCategoryScores();
     _assetsToBuy = <String, Map<String, dynamic>>{}; // {tycker: {quantity, total}}
     _boughtCategories = <String>[]; // [idCategory1, idCategory2]

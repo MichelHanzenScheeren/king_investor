@@ -5,9 +5,11 @@ import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class HomeController extends GetxController {
+  AppDataController appDataController;
   UserUseCase _userUseCase;
   AssetsUseCase _assetsUseCase;
   bool _showModal = true;
@@ -16,6 +18,7 @@ class HomeController extends GetxController {
 
   HomeController() {
     this.pageController = PageController(initialPage: _currentPage.value);
+    appDataController = Get.find();
     _userUseCase = Get.find();
     _assetsUseCase = Get.find();
   }
@@ -80,7 +83,10 @@ class HomeController extends GetxController {
     final response = await _assetsUseCase.updateAsset(asset);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.success),
+      (notification) {
+        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+        appDataController.loadAllAssets();
+      },
     );
   }
 

@@ -9,7 +9,7 @@ class PriceConverter {
       map[kCreatedAt],
       map[kTicker],
       map[kLastUpdate],
-      Amount(map[kVolume]),
+      Amount((map[kVolume] ?? 0.0) + 0.0),
       Amount.fromString(map[kVariation]),
       Amount.fromString(map[kMonthVariation]),
       Amount.fromString(map[kYearVariation]),

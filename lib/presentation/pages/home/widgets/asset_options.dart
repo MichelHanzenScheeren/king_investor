@@ -31,7 +31,7 @@ class AssetsOptions extends StatelessWidget {
               onTap: () => _newAssetPage(),
             ),
             _getFloatButton(
-              'Dividendo/JCP',
+              'Provento',
               Icons.attach_money,
               theme,
               actived: activedOption,
