@@ -4,6 +4,7 @@ import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Performance extends ValueObject {
+  final String identifier;
   final totalInWallet = Amount(0.0);
   final totalInvested = Amount(0.0);
   final totalIncomes = Amount(0.0);
@@ -15,7 +16,7 @@ class Performance extends ValueObject {
   List<Asset> _assets;
   List<Price> _prices;
 
-  Performance(List<Asset> assets, List<Price> prices) {
+  Performance(this.identifier, {List<Asset> assets, List<Price> prices}) {
     _applyWalletContracts(assets, prices);
     if (isValid) {
       _assets = List.from(assets);

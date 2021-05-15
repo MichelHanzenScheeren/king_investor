@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:king_investor/domain/value_objects/performance.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/evolution_controller.dart';
 import 'package:king_investor/presentation/controllers/filter_controller.dart';
@@ -72,21 +73,17 @@ class EvolutionPage extends StatelessWidget {
         }),
         Obx(() {
           if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();
+          final List<Performance> results = <Performance>[];
           if (evolutionController.selectedFilter == SelectedFilter.categories) {
-            return Column(
-              children: appDataController.usedCategories.map((cat) {
-                final result = evolutionController.getCategoryPerformance(cat);
-                return EvolutionCard(resultTitle: cat.name, result: result);
-              }).toList(),
-            );
+            final categories = appDataController.usedCategories;
+            categories.forEach((cat) => results.add(evolutionController.categoryPerformance(cat)));
           } else {
-            return Column(
-              children: appDataController.assets.map((asset) {
-                final result = evolutionController.getAssetPerformance(asset);
-                return EvolutionCard(resultTitle: asset.company.symbol, result: result);
-              }).toList(),
-            );
+            appDataController.assets.forEach((asset) => results.add(evolutionController.assetPerformance(asset)));
           }
+          evolutionController.applySort(results, evolutionController.selectedOrder);
+          return Column(
+            children: results.map((e) => EvolutionCard(resultTitle: e.identifier, result: e)).toList(),
+          );
         }),
         SizedBox(height: 4),
       ],

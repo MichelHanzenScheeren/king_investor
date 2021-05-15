@@ -18,24 +18,26 @@ class EvolutionController extends GetxController {
   }
 
   Performance getGeneralPerformance() {
-    final performance = Performance(appDataController.assets, appDataController.prices);
+    final performance = Performance('general', assets: appDataController.assets, prices: appDataController.prices);
     if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
     return performance;
   }
 
-  Performance getCategoryPerformance(Category category) {
+  Performance categoryPerformance(Category category) {
     final performance = Performance(
-      appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList(),
-      appDataController.prices,
+      category.name,
+      assets: appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList(),
+      prices: appDataController.prices,
     );
     if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
     return performance;
   }
 
-  Performance getAssetPerformance(Asset asset) {
+  Performance assetPerformance(Asset asset) {
     final performance = Performance(
-      [asset],
-      appDataController.prices,
+      asset?.company?.symbol,
+      assets: [asset],
+      prices: appDataController.prices,
     );
     if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
     return performance;
@@ -48,6 +50,20 @@ class EvolutionController extends GetxController {
 
   List<Asset> filteredByCategory(Category category) {
     return appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList();
+  }
+
+  void applySort(List<Performance> results, SelectedOrder order) {
+    if (order == SelectedOrder.alphabetic)
+      results.sort((a, b) => a.identifier.compareTo(b.identifier));
+    else if (order == SelectedOrder.bestResult)
+      results.sort((a, b) => b.totalResultValue.value.compareTo(a.totalResultValue.value));
+    else if (order == SelectedOrder.hasMoreMoney)
+      results.sort((a, b) => b.totalInWallet.value.compareTo(a.totalInWallet.value));
+    else if (order == SelectedOrder.moreInvested)
+      results.sort((a, b) => b.totalInvested.value.compareTo(a.totalInvested.value));
+    else if (order == SelectedOrder.moreIncomes)
+      results.sort((a, b) => b.totalIncomes.value.compareTo(a.totalIncomes.value));
+    else if (order == SelectedOrder.moreSales) results.sort((a, b) => b.totalSales.value.compareTo(a.totalSales.value));
   }
 
   SelectedFilter get selectedFilter => _selectedFilter.value;
