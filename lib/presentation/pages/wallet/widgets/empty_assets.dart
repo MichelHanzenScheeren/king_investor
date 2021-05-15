@@ -4,12 +4,12 @@ import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 class EmptyAssets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final textTheme = TextStyle(color: Theme.of(context).primaryColorLight, fontSize: 25);
+    final textTheme = TextStyle(color: Theme.of(context).hintColor, fontSize: 25);
     return CustomCardWidget(
       children: [
         SizedBox(height: 10),
         Text(
-          "Poxa, parece que sua carteira está vazia!",
+          "Sua carteira ainda está vazia...",
           style: textTheme,
           textAlign: TextAlign.center,
         ),
@@ -20,7 +20,7 @@ class EmptyAssets extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          "Sem pânico: comece a cadastrar seus ativos agora mesmo...",
+          "Sem pânico: comece a cadastrar seus ativos agora mesmo!",
           style: textTheme,
           textAlign: TextAlign.center,
         ),

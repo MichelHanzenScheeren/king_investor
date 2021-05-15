@@ -13,6 +13,7 @@ class AssetsOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GetX<HomeController>(
+      autoRemove: false,
       builder: (homeController) {
         if (appDataController.isLoadingSomething) return Container();
         bool activedOption = appDataController.assets.length > 0;

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/evolution_controller.dart';
 import 'package:king_investor/presentation/controllers/filter_controller.dart';
+import 'package:king_investor/presentation/pages/evolution/widgets/empty_evolution_card.dart';
 import 'package:king_investor/presentation/pages/evolution/widgets/evolution_row.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_dropdown_widget.dart';
@@ -21,6 +22,7 @@ class EvolutionPage extends StatelessWidget {
         SizedBox(height: 4),
         Obx(() {
           if (appDataController.isLoadingSomething) return LoadCardWidget();
+          if (appDataController.assets.isEmpty) return EmptyEvolutionCard();
           final result = evolutionController.getGeneralPerformance();
           final titleStyle = TextStyle(color: Theme.of(context).hintColor, fontSize: 20, fontWeight: FontWeight.bold);
           final totalPorcentage = result.totalResultPorcentage.toPorcentage();
@@ -39,6 +41,7 @@ class EvolutionPage extends StatelessWidget {
           );
         }),
         Obx(() {
+          if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();
           return CustomCardWidget(
             margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
             children: [
