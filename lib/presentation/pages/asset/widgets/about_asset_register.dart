@@ -22,7 +22,11 @@ class AboutAssetRegister extends StatelessWidget {
           dividerColor: Theme.of(context).hintColor,
         ),
         CustomFlexText(
-          texts: ['Carteira', '$walletName (${asset?.category?.name})'],
+          texts: ['Carteira', walletName],
+          alignment: MainAxisAlignment.spaceBetween,
+        ),
+        CustomFlexText(
+          texts: ['Categoria', asset?.category?.name],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
+import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
@@ -9,6 +10,8 @@ class AssetController extends GetxController {
   AppDataController appDataController;
   AssetsUseCase assetsUseCase;
   Rx<Asset> _asset = Rx<Asset>(null);
+  Rx<Category> _selectedCategory;
+  List<Category> _categories = <Category>[];
 
   AssetController() {
     appDataController = Get.find();
@@ -21,6 +24,24 @@ class AssetController extends GetxController {
 
   bool get isLoadingSomething {
     return appDataController.walletsLoad || appDataController.assetsLoad || appDataController.pricesLoad;
+  }
+
+  Category get selectedCategory => _selectedCategory.value;
+
+  List<Category> getCategories() {
+    if (_categories.isEmpty) {
+      final aux = appDataController.categories.where((e) => e.objectId != selectedCategory.objectId).toList();
+      _categories.add(selectedCategory);
+      _categories.addAll(aux);
+      _categories.sort((a, b) => a?.order?.compareTo(b?.order));
+    }
+    return _categories;
+  }
+
+  void setSelectedCategory(Category category) => _selectedCategory.value = category;
+
+  void registerInitialCategory(Category category) {
+    _selectedCategory = Rx<Category>(category);
   }
 
   void registerAsset(String assetId) {
@@ -57,6 +78,18 @@ class AssetController extends GetxController {
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {
         appDataController.loadAllAssets();
+        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+      },
+    );
+  }
+
+  Future<void> updateAsset(Asset updatedAsset) async {
+    final response = await assetsUseCase.updateAsset(updatedAsset);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) {
+        appDataController.loadAllAssets();
+        _asset.value = updatedAsset;
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
       },
     );

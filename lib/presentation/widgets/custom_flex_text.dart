@@ -40,7 +40,7 @@ class CustomFlexText extends StatelessWidget {
           }).toList(),
         ),
         showDivider ? Divider(color: theme.primaryColorLight.withAlpha(50), height: 10) : Container(),
-        SizedBox(height: 4),
+        SizedBox(height: 2),
       ],
     );
   }
