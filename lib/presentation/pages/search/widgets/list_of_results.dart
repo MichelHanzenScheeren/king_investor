@@ -8,8 +8,9 @@ import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class ListOfResults extends StatelessWidget {
   final SearchController searchController;
+  final ScrollController scrollController;
 
-  ListOfResults(this.searchController);
+  ListOfResults(this.searchController, this.scrollController);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class ListOfResults extends StatelessWidget {
     final title = TextStyle(fontSize: 18, color: theme.hintColor, fontWeight: FontWeight.bold);
     final normal = TextStyle(fontSize: 14, color: theme.primaryColorLight);
     return ListView.builder(
+      controller: scrollController,
       itemCount: companies.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {

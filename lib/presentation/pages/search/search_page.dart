@@ -8,6 +8,7 @@ import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class SearchPage extends StatelessWidget {
   final searchController = SearchController();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class SearchPage extends StatelessWidget {
           height: double.maxFinite,
           width: double.maxFinite,
           child: SingleChildScrollView(
+            controller: scrollController,
             child: Column(
               children: [
                 Container(
@@ -45,8 +47,9 @@ class SearchPage extends StatelessWidget {
                 Obx(() {
                   if (searchController.load) return _load();
                   if (searchController.companies.isEmpty) return _empty(theme);
-                  return ListOfResults(searchController);
+                  return ListOfResults(searchController, scrollController);
                 }),
+                SizedBox(height: 20),
               ],
             ),
           ),

@@ -174,7 +174,7 @@ class Rebalance extends ValueObject {
   }
 
   void _filterValidCategoriesToBuy(Map<String, double> map, List<String> _boughtCategories) {
-    if (_categoriesMaxNumber.value == 0)
+    if (_categoriesMaxNumber.value == 0 || _assetsMaxNumber.value == 0)
       map.removeWhere((key, value) => !_boughtCategories.any((element) => element == key));
   }
 

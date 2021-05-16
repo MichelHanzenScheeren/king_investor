@@ -84,10 +84,18 @@ class RebalanceController extends GetxController {
         final String message = 'Não foi possível concluir o rebalanceamento por conta de dados inválidos';
         AppSnackbar.show(message: message, type: AppSnackbarType.error);
       } else {
-        _rebalanceResult.value = await rebalance.start();
+        await _doRebalance(rebalance);
       }
     }
     setRebalancing(false);
+  }
+
+  Future<void> _doRebalance(Rebalance rebalance) async {
+    try {
+      _rebalanceResult.value = await rebalance.start();
+    } catch (erro) {
+      AppSnackbar.show(message: 'Não foi possível concluir o rebalanceamento...', type: AppSnackbarType.error);
+    }
   }
 
   Future<void> saveRebalance() async {

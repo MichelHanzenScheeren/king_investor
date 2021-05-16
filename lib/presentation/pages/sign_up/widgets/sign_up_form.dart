@@ -74,7 +74,6 @@ class SignUpForm extends StatelessWidget {
                   backGroundColor: Theme.of(context).accentColor,
                   onPressed: () {
                     if (!Form.of(context).validate()) {
-                      print('INVÁLIDO!');
                       return;
                     }
                     FocusScope.of(context).requestFocus(new FocusNode());
