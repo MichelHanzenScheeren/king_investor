@@ -68,6 +68,15 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, Notification>> requestPasswordReset() async {
+    try {
+      return await _authentication.requestPasswordReset();
+    } catch (erro) {
+      return Left(_getError('currentUser', erro));
+    }
+  }
+
   Either<Notification, User> _buildResponse(Either<Notification, dynamic> response) {
     return response.fold(
       (notification) => Left(notification),

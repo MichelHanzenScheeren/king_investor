@@ -52,7 +52,7 @@ class UserPage extends StatelessWidget {
                       OptionRow(
                         leftIcon: Icons.lock_outline,
                         text: "************",
-                        function: () {},
+                        function: () => _passwordReset(userControler),
                       ),
                       OptionRow(
                         leftIcon: Icons.exit_to_app,
@@ -70,14 +70,6 @@ class UserPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _doLogout(UserController userControler) {
-    Get.dialog(CustomDialogWidget(
-      title: 'Te certeza que deseja fazer o logout?',
-      confirmButtonText: 'SAIR',
-      onConfirm: userControler.doLogout,
-    ));
   }
 
   void _updateName(UserController userControler) {
@@ -121,6 +113,25 @@ class UserPage extends StatelessWidget {
         userControler.user.email?.setAddress(auxEmail.address);
         userControler.updateUserData();
       },
+    ));
+  }
+
+  void _passwordReset(UserController userControler) {
+    Get.dialog(CustomDialogWidget(
+      title: 'Tem certeza que deseja alterar sua senha?',
+      textContent: 'Uma mensagem com as instruções de redefinição será enviada ao seu e-mail.',
+      accentColor: Theme.of(Get.context).primaryColor,
+      textContentColor: Theme.of(Get.context).hintColor,
+      confirmButtonText: 'REDEFINIR',
+      onConfirm: userControler.passwordReset,
+    ));
+  }
+
+  void _doLogout(UserController userControler) {
+    Get.dialog(CustomDialogWidget(
+      title: 'Tem certeza que deseja fazer o logout?',
+      confirmButtonText: 'SAIR',
+      onConfirm: userControler.doLogout,
     ));
   }
 }

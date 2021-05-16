@@ -82,4 +82,14 @@ class UserUseCase {
       },
     );
   }
+
+  Future<Either<Notification, Notification>> requestPasswordReset() async {
+    if (_appData.currentUser == null)
+      return Left(Notification('UserUseCase.updateUserData', 'Nenhum usuário conectado'));
+    final response = await _authentication.requestPasswordReset();
+    return response.fold(
+      (notification) => Left(notification),
+      (notification) => Right(notification),
+    );
+  }
 }

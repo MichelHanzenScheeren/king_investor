@@ -37,6 +37,19 @@ class UserController extends GetxController {
 
   void setUserLoad(bool value) => _userLoad.value = value;
 
+  Future<void> updateUserData() async {
+    final auxUser = _user.value;
+    final response = await userUseCase.updateUserData(auxUser);
+    response.fold(
+      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) {
+        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+        _user.value = null;
+        _user.value = auxUser;
+      },
+    );
+  }
+
   Future<void> doLogout() async {
     final response = await userUseCase.logout();
     response.fold(
@@ -48,15 +61,13 @@ class UserController extends GetxController {
     );
   }
 
-  Future<void> updateUserData() async {
-    final auxUser = _user.value;
-    final response = await userUseCase.updateUserData(auxUser);
+  Future<void> passwordReset() async {
+    final response = await userUseCase.requestPasswordReset();
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {
+        Get.back();
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
-        _user.value = null;
-        _user.value = auxUser;
       },
     );
   }

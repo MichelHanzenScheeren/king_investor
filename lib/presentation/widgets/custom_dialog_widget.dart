@@ -8,8 +8,16 @@ class CustomDialogWidget extends StatelessWidget {
   final String confirmButtonText;
   final Function onConfirm;
   final Color accentColor;
+  final Color textContentColor;
 
-  CustomDialogWidget({this.onConfirm, this.title, this.textContent, this.confirmButtonText, this.accentColor});
+  CustomDialogWidget({
+    this.onConfirm,
+    this.title,
+    this.textContent,
+    this.confirmButtonText,
+    this.accentColor,
+    this.textContentColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +28,23 @@ class CustomDialogWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       title: Text(
         title ?? '',
-        style: TextStyle(color: theme.hintColor, fontSize: 22, fontWeight: FontWeight.w600),
+        style: TextStyle(color: theme.hintColor, fontSize: 24, fontWeight: FontWeight.w800),
+        textAlign: TextAlign.center,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             textContent ?? '',
-            style: TextStyle(color: theme.errorColor, fontSize: 18, fontWeight: FontWeight.w800),
+            style: TextStyle(color: textContentColor ?? theme.errorColor, fontSize: 18, fontWeight: FontWeight.w800),
+            textAlign: TextAlign.justify,
           ),
         ],
       ),
-      contentPadding: const EdgeInsets.all(15),
-      actionsPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+      contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      insetPadding: const EdgeInsets.all(25),
+      actionsPadding: EdgeInsets.fromLTRB(20, 10, 20, 15),
       actions: [
         Row(
           mainAxisSize: MainAxisSize.max,

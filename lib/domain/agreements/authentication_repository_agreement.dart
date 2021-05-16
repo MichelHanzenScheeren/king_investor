@@ -9,4 +9,5 @@ abstract class AuthenticationRepositoryAgreement {
   Future<Either<Notification, User>> currentUser();
   Future<Either<Notification, User>> updateCurrentUser(String sessionToken);
   Future<Either<Notification, Notification>> updateUserData(User user);
+  Future<Either<Notification, Notification>> requestPasswordReset();
 }
