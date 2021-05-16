@@ -91,16 +91,13 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> requestPasswordReset() async {
+  Future<Either<Notification, Notification>> requestPasswordReset(String email) async {
     try {
-      final ParseUser auxUser = await ParseUser.currentUser();
-      if (auxUser == null) return Left(_error('resetPassword', 'Não foi possível obter o usuário atual'));
-      final ParseUser current = ParseUser(auxUser.username, auxUser.password, auxUser.emailAddress, client: _client);
-      current.sessionToken = auxUser.sessionToken;
-      final response2 = await current.requestPasswordReset();
-      if (response2.success)
+      final parseUser = ParseUser(email, '', email);
+      final response = await parseUser.requestPasswordReset();
+      if (response.success)
         return Right(_error('resetPassword', 'Um email com instruções de redefinição foi enviado.'));
-      return Left(_error('resetPassword', ParseException.getDescription(response2.statusCode)));
+      return Left(_error('resetPassword', ParseException.getDescription(response.statusCode)));
     } catch (erro) {
       return Left(_error('resetPassword', erro.toString()));
     }

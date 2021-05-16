@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/domain/value_objects/email.dart';
 import 'package:king_investor/domain/value_objects/name.dart';
 import 'package:king_investor/presentation/controllers/user_controller.dart';
-import 'package:king_investor/presentation/pages/user/user_card.dart';
+import 'package:king_investor/presentation/pages/user/widgets/user_card.dart';
 import 'package:king_investor/presentation/pages/user/widgets/options_row.dart';
 import 'package:king_investor/presentation/pages/user/widgets/update_user_data.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';

@@ -69,9 +69,9 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> requestPasswordReset() async {
+  Future<Either<Notification, Notification>> requestPasswordReset(String email) async {
     try {
-      return await _authentication.requestPasswordReset();
+      return await _authentication.requestPasswordReset(email);
     } catch (erro) {
       return Left(_getError('currentUser', erro));
     }

@@ -62,7 +62,7 @@ class UserController extends GetxController {
   }
 
   Future<void> passwordReset() async {
-    final response = await userUseCase.requestPasswordReset();
+    final response = await userUseCase.requestPasswordReset(_user.value?.email?.address);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {

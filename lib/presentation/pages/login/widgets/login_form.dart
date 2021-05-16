@@ -44,14 +44,17 @@ class LoginForm extends StatelessWidget {
                   ),
                 );
               }),
-              Container(
-                margin: const EdgeInsets.only(top: 5, right: 5),
-                alignment: Alignment.centerRight,
-                child: Text(
-                  'Esqueceu a senha?',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: Theme.of(context).hintColor.withAlpha(230)),
+              GestureDetector(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 5, right: 5),
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Esqueceu a senha?',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Theme.of(context).hintColor.withAlpha(230)),
+                  ),
                 ),
+                onTap: controller.resetPassword,
               ),
               SizedBox(height: size * 0.08),
               Obx(() {

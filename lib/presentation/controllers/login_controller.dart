@@ -57,4 +57,16 @@ class LoginController extends GetxController {
   }
 
   void goToSignUpPage() => Get.offNamed(AppRoutes.signUp);
+
+  void resetPassword() async {
+    if (_email == null || _email.isEmpty) {
+      _showMessage('Informe o email associado a sua conta para recuperar sua senha');
+    } else {
+      final response = await _userUseCase.requestPasswordReset(_email);
+      response.fold(
+        (notification) => _showMessage(notification.message, error: true),
+        (notification) => _showMessage(notification.message, error: false),
+      );
+    }
+  }
 }

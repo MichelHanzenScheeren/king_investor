@@ -83,10 +83,9 @@ class UserUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> requestPasswordReset() async {
-    if (_appData.currentUser == null)
-      return Left(Notification('UserUseCase.updateUserData', 'Nenhum usuário conectado'));
-    final response = await _authentication.requestPasswordReset();
+  Future<Either<Notification, Notification>> requestPasswordReset(String email) async {
+    if (email == null || email.isEmpty) return Left(Notification('UserUseCase.updateUserData', 'Email inválido'));
+    final response = await _authentication.requestPasswordReset(email);
     return response.fold(
       (notification) => Left(notification),
       (notification) => Right(notification),

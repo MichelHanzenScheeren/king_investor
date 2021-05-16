@@ -8,5 +8,5 @@ abstract class AuthenticationServiceAgreement {
   Future<Either<Notification, dynamic>> currentUser();
   Future<Either<Notification, dynamic>> updateCurrentUser(String sessionToken);
   Future<Either<Notification, Notification>> updateUserData(Map userData);
-  Future<Either<Notification, Notification>> requestPasswordReset();
+  Future<Either<Notification, Notification>> requestPasswordReset(String email);
 }
