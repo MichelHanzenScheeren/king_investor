@@ -22,6 +22,7 @@ class UserConverter {
       kFirstName: user.name.firstName,
       kLastName: user.name.lastName,
       kEmail: user.email.address,
+      kUsername: user.email.address,
     };
   }
 }

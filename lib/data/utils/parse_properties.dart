@@ -58,3 +58,4 @@ const kLastName = 'lastName';
 const kEmail = 'email';
 const kSessionToken = 'sessionToken';
 const kEmailVerified = 'emailVerified';
+const kUsername = 'username';

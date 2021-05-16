@@ -54,7 +54,7 @@ class AboutAssetRegister extends StatelessWidget {
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Rendimentos', asset?.incomes?.toMonetary(currency)],
+          texts: ['Proventos', asset?.incomes?.toMonetary(currency)],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         SizedBox(height: 4),
