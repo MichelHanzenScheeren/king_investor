@@ -22,7 +22,7 @@ class RebalanceResultsCard extends StatelessWidget {
     final title = TextStyle(color: theme.hintColor, fontSize: 18, fontWeight: FontWeight.w900);
     final subtitle = title.copyWith(fontSize: 18, fontWeight: FontWeight.w700);
     final item = TextStyle(color: theme.hintColor, fontSize: 16);
-    return ListView(
+    return Column(
       children: [
         SizedBox(height: 6),
         CustomCardWidget(

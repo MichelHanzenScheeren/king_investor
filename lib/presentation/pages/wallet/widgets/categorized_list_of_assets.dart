@@ -31,6 +31,7 @@ class CategorizedListOfAssets extends StatelessWidget {
         children: validCategories.map((category) {
           final categoryAssets = walletController.getCategoryAssets(category);
           return CustomExpansionTileWidget(
+            initiallyExpanded: true,
             title: Text(category?.name ?? "?", style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
               final company = categoryAssets[index].company;

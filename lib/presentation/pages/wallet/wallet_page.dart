@@ -11,7 +11,7 @@ class WalletPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         SizedBox(height: 8),
         WalletsTopCard(appDataController: appDataController, walletController: walletController),

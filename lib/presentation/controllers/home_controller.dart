@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
@@ -15,6 +16,9 @@ class HomeController extends GetxController {
   bool _showModal = true;
   PageController pageController;
   RxInt _currentPage = 0.obs;
+  ScrollController scrollController;
+  RxBool _mustShowFloatButton = true.obs;
+  bool _isScrollingDown = false;
 
   HomeController() {
     appDataController = Get.find();
@@ -22,8 +26,23 @@ class HomeController extends GetxController {
     _assetsUseCase = Get.find();
   }
 
-  registerPageController(PageController pageController) {
+  registerControllers(PageController pageController, ScrollController scrollController) {
     this.pageController = pageController;
+    this.scrollController = scrollController;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse && !_isScrollingDown) {
+        _isScrollingDown = true;
+        _mustShowFloatButton.value = false;
+      } else if (scrollController.position.userScrollDirection == ScrollDirection.forward && _isScrollingDown) {
+        _isScrollingDown = false;
+        _mustShowFloatButton.value = true;
+      }
+    });
   }
 
   @override
@@ -42,13 +61,15 @@ class HomeController extends GetxController {
     _showModal = false;
   }
 
+  bool get mustShowFloatButton => _mustShowFloatButton.value;
+
   int get currentPage => _currentPage.value;
 
   void setCurrentPage(int value) => _currentPage.value = value ?? 0;
 
   void jumpToPage(int page) {
     if (page != currentPage)
-      pageController.animateToPage(page, duration: Duration(milliseconds: 200), curve: Curves.easeInOutCirc);
+      pageController.animateToPage(page, duration: Duration(milliseconds: 150), curve: Curves.easeInOutCirc);
   }
 
   Future<void> saveAssetBuy(Quantity quantity, Amount amount, Asset selectedAsset) async {
@@ -97,6 +118,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     pageController.dispose();
+    scrollController.dispose();
     super.onClose();
   }
 }

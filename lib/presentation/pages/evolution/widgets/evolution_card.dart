@@ -6,8 +6,9 @@ import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.
 class EvolutionCard extends StatelessWidget {
   final Performance result;
   final String resultTitle;
+  final bool initiallyExpanded;
 
-  EvolutionCard({@required this.result, @required this.resultTitle});
+  EvolutionCard({@required this.result, @required this.resultTitle, this.initiallyExpanded: false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class EvolutionCard extends StatelessWidget {
     final totalValue = result.totalResultValue.toMonetary("BRL");
     final style = TextStyle(color: Theme.of(context).hintColor, fontSize: 21, fontWeight: FontWeight.bold);
     return CustomExpansionTileWidget(
+      initiallyExpanded: initiallyExpanded,
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
       childrenPadding: EdgeInsets.fromLTRB(20, 0, 20, 2),
       title: Text(resultTitle ?? '?', style: style),

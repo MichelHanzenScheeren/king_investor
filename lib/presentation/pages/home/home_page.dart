@@ -9,10 +9,11 @@ import 'package:king_investor/presentation/static/app_images.dart';
 
 class HomePage extends StatelessWidget {
   final PageController pageController = PageController(initialPage: 0);
+  final ScrollController scrollController = ScrollController();
   final HomeController homeController = HomeController();
 
   HomePage() {
-    homeController.registerPageController(pageController);
+    homeController.registerControllers(pageController, scrollController);
   }
 
   @override
@@ -22,12 +23,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         leading: Container(
           padding: const EdgeInsets.fromLTRB(4, 2, 0, 2),
-          child: Image(
-            image: AssetImage(AppImages.transparentLogo),
-            fit: BoxFit.fill,
-          ),
+          child: Image(image: AssetImage(AppImages.transparentLogo), fit: BoxFit.fill),
         ),
-        title: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor)),
+        title: Text('KING INVESTOR ', style: TextStyle(color: theme.hintColor)),
         centerTitle: false,
         actions: [
           IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
@@ -37,9 +35,9 @@ class HomePage extends StatelessWidget {
         controller: pageController,
         onPageChanged: (value) => homeController.setCurrentPage(value),
         children: [
-          WalletPage(),
-          EvolutionPage(),
-          RebalancePage(),
+          ListView(controller: scrollController, children: [WalletPage()]),
+          ListView(controller: scrollController, children: [EvolutionPage()]),
+          ListView(controller: scrollController, children: [RebalancePage()]),
         ],
       ),
       bottomNavigationBar: GetX<HomeController>(

@@ -5,8 +5,15 @@ class CustomExpansionTileWidget extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsets margin;
   final EdgeInsets childrenPadding;
+  final bool initiallyExpanded;
 
-  CustomExpansionTileWidget({this.title, this.children, this.margin, this.childrenPadding});
+  CustomExpansionTileWidget({
+    this.title,
+    this.children,
+    this.margin,
+    this.childrenPadding,
+    this.initiallyExpanded: false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +31,8 @@ class CustomExpansionTileWidget extends StatelessWidget {
           accentColor: theme.hintColor,
         ),
         child: ExpansionTile(
+          initiallyExpanded: initiallyExpanded,
+          maintainState: true,
           tilePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,

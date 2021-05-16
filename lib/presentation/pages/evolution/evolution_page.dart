@@ -17,14 +17,14 @@ class EvolutionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         SizedBox(height: 8),
         Obx(() {
           if (appDataController.isLoadingSomething) return LoadCardWidget();
           if (appDataController.assets.isEmpty) return EmptyEvolutionCard();
           final result = evolutionController.getGeneralPerformance();
-          return EvolutionCard(resultTitle: 'Desempenho Geral', result: result);
+          return EvolutionCard(resultTitle: 'Desempenho Geral', result: result, initiallyExpanded: true);
         }),
         Obx(() {
           if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();

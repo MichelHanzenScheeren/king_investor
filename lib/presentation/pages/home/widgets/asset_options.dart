@@ -18,6 +18,7 @@ class AssetsOptions extends StatelessWidget {
         if (appDataController.isLoadingSomething) return Container();
         bool activedOption = appDataController.assets.length > 0;
         return SpeedDial(
+          visible: homeController.mustShowFloatButton,
           backgroundColor: theme.primaryColor,
           icon: Icons.add,
           activeIcon: Icons.arrow_downward,
