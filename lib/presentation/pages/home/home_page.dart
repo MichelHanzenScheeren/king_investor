@@ -8,7 +8,12 @@ import 'package:king_investor/presentation/pages/wallet/wallet_page.dart';
 import 'package:king_investor/presentation/static/app_images.dart';
 
 class HomePage extends StatelessWidget {
+  final PageController pageController = PageController(initialPage: 0);
   final HomeController homeController = HomeController();
+
+  HomePage() {
+    homeController.registerPageController(pageController);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: PageView(
-        controller: homeController.pageController,
+        controller: pageController,
         onPageChanged: (value) => homeController.setCurrentPage(value),
         children: [
           WalletPage(),
@@ -52,7 +57,7 @@ class HomePage extends StatelessWidget {
             _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
             _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
             _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
-            _getIcon("Rebalancear", Icons.account_balance, theme.primaryColor),
+            _getIcon("Rebalancear ", Icons.account_balance, theme.primaryColor),
           ],
         ),
       ),

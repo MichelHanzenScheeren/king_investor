@@ -17,16 +17,20 @@ class HomeController extends GetxController {
   RxInt _currentPage = 0.obs;
 
   HomeController() {
-    this.pageController = PageController(initialPage: _currentPage.value);
     appDataController = Get.find();
     _userUseCase = Get.find();
     _assetsUseCase = Get.find();
+  }
+
+  registerPageController(PageController pageController) {
+    this.pageController = pageController;
   }
 
   @override
   void onReady() {
     super.onReady();
     if (_showModal) _showIntroDialog();
+    appDataController.loadAllData();
   }
 
   void _showIntroDialog() async {

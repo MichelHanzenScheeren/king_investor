@@ -7,6 +7,7 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/empty_assets.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/load_assets_failed.dart';
+import 'package:king_investor/presentation/static/app_routes.dart';
 import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.dart';
 import 'package:king_investor/presentation/widgets/load_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
@@ -56,6 +57,7 @@ class CategorizedListOfAssets extends StatelessWidget {
                     ),
                     subtitle: Text(company.name, style: subtitleStyle),
                     trailing: companyPrice(company, theme),
+                    onTap: () => Get.toNamed(AppRoutes.asset, arguments: categoryAssets[index].objectId),
                   ),
                   Divider(color: theme.primaryColorLight, height: 2),
                 ],

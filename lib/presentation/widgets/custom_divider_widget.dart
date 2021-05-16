@@ -6,6 +6,8 @@ class CustomDividerWidget extends StatelessWidget {
   final Color dividerColor;
   final Alignment align;
   final double height;
+  final double fontSize;
+  final FontWeight fontWeight;
 
   CustomDividerWidget({
     this.text,
@@ -13,6 +15,8 @@ class CustomDividerWidget extends StatelessWidget {
     this.textColor,
     this.align: Alignment.center,
     this.height: 40,
+    this.fontSize: 16,
+    this.fontWeight: FontWeight.w400,
   });
 
   @override
@@ -25,7 +29,7 @@ class CustomDividerWidget extends StatelessWidget {
             ? Expanded(child: Divider(color: dividerColor ?? dividerColor, height: height))
             : Container(),
         SizedBox(width: 5),
-        Text(text ?? '', style: TextStyle(color: textColor ?? textColor, fontSize: 16)),
+        Text(text ?? '', style: TextStyle(color: textColor ?? textColor, fontSize: fontSize, fontWeight: fontWeight)),
         SizedBox(width: 5),
         align != Alignment.centerRight
             ? Expanded(child: Divider(color: dividerColor ?? dividerColor, height: height))

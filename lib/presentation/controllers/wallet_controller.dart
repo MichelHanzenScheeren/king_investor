@@ -9,58 +9,57 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class WalletController extends GetxController {
-  AppDataController loadcontroller;
+  AppDataController appDatacontroller;
   UserUseCase userUseCase;
   WalletsUseCase walletsUseCase;
-  bool get isValidData => loadcontroller.wallets.isNotEmpty && loadcontroller.categories.isNotEmpty;
-  bool get isEmptyData => loadcontroller.assets.isEmpty;
+  bool get isValidData => appDatacontroller.wallets.isNotEmpty && appDatacontroller.categories.isNotEmpty;
+  bool get isEmptyData => appDatacontroller.assets.isEmpty;
 
   WalletController() {
-    loadcontroller = Get.find();
+    appDatacontroller = Get.find();
     userUseCase = Get.find();
     walletsUseCase = Get.find();
-    loadcontroller.loadAllData();
   }
 
   List<Category> validCategories() {
-    return loadcontroller.categories
-        .where((category) => loadcontroller.assets.any((asset) => asset.category?.objectId == category.objectId))
+    return appDatacontroller.categories
+        .where((category) => appDatacontroller.assets.any((asset) => asset.category?.objectId == category.objectId))
         .toList();
   }
 
   List<Asset> getCategoryAssets(Category category) {
-    return loadcontroller.assets.where((asset) => asset.category?.objectId == category?.objectId).toList();
+    return appDatacontroller.assets.where((asset) => asset.category?.objectId == category?.objectId).toList();
   }
 
   Price getPriceByTicker(String ticker) {
-    return loadcontroller.prices.firstWhere(
+    return appDatacontroller.prices.firstWhere(
       (price) => price?.ticker == ticker,
       orElse: () => Price.fromDefaultValues(ticker),
     );
   }
 
   Future<void> changeCurrentWallet(Wallet wallet) async {
-    loadcontroller.setCurrentWalet(wallet);
+    appDatacontroller.setCurrentWalet(wallet);
     AppSnackbar.show(message: 'Carteira atual alterada.', type: AppSnackbarType.success);
-    await loadcontroller.loadAllAssets();
-    loadcontroller.loadAllPrices();
+    await appDatacontroller.loadAllAssets();
+    appDatacontroller.loadAllPrices();
   }
 
   Future<void> changeMainWallet() async {
-    final response = await walletsUseCase.changeMainWallet(loadcontroller.currentWallet?.objectId);
+    final response = await walletsUseCase.changeMainWallet(appDatacontroller.currentWallet?.objectId);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {
-        final current = loadcontroller.currentWallet;
+        final current = appDatacontroller.currentWallet;
         current.setMainWallet(true);
-        loadcontroller.setCurrentWalet(current);
+        appDatacontroller.setCurrentWalet(current);
         AppSnackbar.show(message: 'Carteira definida como principal.', type: AppSnackbarType.success);
       },
     );
   }
 
   Future<void> updateCurrentWalletName(String name) async {
-    final current = loadcontroller.currentWallet;
+    final current = appDatacontroller.currentWallet;
     if (name == current?.name) return;
     current.setName(name);
     if (current.name != name) {
@@ -70,8 +69,8 @@ class WalletController extends GetxController {
       response.fold(
         (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
         (notification) {
-          loadcontroller.setCurrentWalet(null);
-          loadcontroller.setCurrentWalet(current);
+          appDatacontroller.setCurrentWalet(null);
+          appDatacontroller.setCurrentWalet(current);
           AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
         },
       );
@@ -89,9 +88,9 @@ class WalletController extends GetxController {
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) async {
-        loadcontroller.setCurrentWalet(wallet);
+        appDatacontroller.setCurrentWalet(wallet);
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
-        await loadcontroller.loadAllAssets();
+        await appDatacontroller.loadAllAssets();
       },
     );
   }

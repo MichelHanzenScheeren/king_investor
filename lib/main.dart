@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/dependencies_injection.dart';
+import 'package:king_investor/presentation/pages/asset/asset_page.dart';
 import 'package:king_investor/presentation/pages/home/home_page.dart';
 import 'package:king_investor/presentation/pages/login/login_page.dart';
 import 'package:king_investor/presentation/pages/search/search_page.dart';
@@ -54,6 +55,11 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: AppRoutes.search,
             page: () => SearchPage(),
+            transition: Transition.zoom,
+            transitionDuration: Duration(milliseconds: 400)),
+        GetPage(
+            name: AppRoutes.asset,
+            page: () => AssetPage(),
             transition: Transition.zoom,
             transitionDuration: Duration(milliseconds: 400)),
         GetPage(name: AppRoutes.login, page: () => LoginPage(), transition: Transition.rightToLeftWithFade),

@@ -118,10 +118,10 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     map.keys.forEach((key) {
       if (key.contains(pointerIndicator)) {
         String newKey = key.replaceAll(pointerIndicator, '');
-        if (newKey.capitalize() == kUserTable)
+        if (newKey.firstToUpper() == kUserTable)
           parseObject.set<ParseUser>(newKey, ParseUser('', '', '')..objectId = map[key]);
         else
-          parseObject.set<ParseObject>(newKey, ParseObject(newKey.capitalize())..objectId = map[key]);
+          parseObject.set<ParseObject>(newKey, ParseObject(newKey.firstToUpper())..objectId = map[key]);
       } else {
         parseObject.set(key, map[key]);
       }
