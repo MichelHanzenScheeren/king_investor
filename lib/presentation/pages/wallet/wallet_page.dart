@@ -20,6 +20,7 @@ class WalletPage extends StatelessWidget {
           child: Divider(color: Theme.of(context).primaryColorLight),
         ),
         CategorizedListOfAssets(appDataController: appDataController, walletController: walletController),
+        SizedBox(height: 8),
       ],
     );
   }

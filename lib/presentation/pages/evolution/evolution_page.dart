@@ -19,7 +19,7 @@ class EvolutionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        SizedBox(height: 4),
+        SizedBox(height: 8),
         Obx(() {
           if (appDataController.isLoadingSomething) return LoadCardWidget();
           if (appDataController.assets.isEmpty) return EmptyEvolutionCard();
@@ -61,7 +61,7 @@ class EvolutionPage extends StatelessWidget {
             children: results.map((e) => EvolutionCard(resultTitle: e.identifier, result: e)).toList(),
           );
         }),
-        SizedBox(height: 4),
+        SizedBox(height: 8),
       ],
     );
   }

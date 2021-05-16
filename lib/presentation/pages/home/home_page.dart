@@ -30,7 +30,6 @@ class HomePage extends StatelessWidget {
         title: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor)),
         centerTitle: false,
         actions: [
-          IconButton(icon: Icon(Icons.visibility, color: theme.hintColor), onPressed: () {}),
           IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
         ],
       ),
@@ -40,7 +39,6 @@ class HomePage extends StatelessWidget {
         children: [
           WalletPage(),
           EvolutionPage(),
-          Container(color: Colors.purple),
           RebalancePage(),
         ],
       ),
@@ -56,7 +54,6 @@ class HomePage extends StatelessWidget {
           items: [
             _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
             _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
-            _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
             _getIcon("Rebalancear ", Icons.account_balance, theme.primaryColor),
           ],
         ),

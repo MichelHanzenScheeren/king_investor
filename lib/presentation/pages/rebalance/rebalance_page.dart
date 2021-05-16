@@ -28,6 +28,7 @@ class RebalancePage extends StatelessWidget {
             SizedBox(height: 8),
             CategoryScoresExpansionTile(rebalanceController),
             RebalanceForm(rebalanceController),
+            SizedBox(height: 8),
           ],
         );
       },

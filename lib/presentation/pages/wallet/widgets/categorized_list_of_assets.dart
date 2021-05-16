@@ -27,13 +27,11 @@ class CategorizedListOfAssets extends StatelessWidget {
       if (!walletController.isValidData) return LoadAssetsFailed();
       if (walletController.isEmptyData) return EmptyAssets();
       final validCategories = walletController.validCategories();
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: validCategories.length,
-        itemBuilder: (context, index) {
-          final categoryAssets = walletController.getCategoryAssets(validCategories[index]);
+      return Column(
+        children: validCategories.map((category) {
+          final categoryAssets = walletController.getCategoryAssets(category);
           return CustomExpansionTileWidget(
-            title: Text(validCategories[index]?.name ?? "?", style: TextStyle(fontSize: 20)),
+            title: Text(category?.name ?? "?", style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
               final company = categoryAssets[index].company;
               final normalStyle = TextStyle(color: theme.primaryColorLight, fontSize: 13);
@@ -64,7 +62,7 @@ class CategorizedListOfAssets extends StatelessWidget {
               );
             }),
           );
-        },
+        }).toList(),
       );
     });
   }
