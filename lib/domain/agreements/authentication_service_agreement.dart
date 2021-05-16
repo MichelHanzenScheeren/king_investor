@@ -7,4 +7,5 @@ abstract class AuthenticationServiceAgreement {
   Future<Either<Notification, Notification>> logout();
   Future<Either<Notification, dynamic>> currentUser();
   Future<Either<Notification, dynamic>> updateCurrentUser(String sessionToken);
+  Future<Either<Notification, Notification>> updateUserData(Map userData);
 }

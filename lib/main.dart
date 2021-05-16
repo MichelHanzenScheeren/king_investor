@@ -7,6 +7,7 @@ import 'package:king_investor/presentation/pages/login/login_page.dart';
 import 'package:king_investor/presentation/pages/search/search_page.dart';
 import 'package:king_investor/presentation/pages/sign_up/sign_up_page.dart';
 import 'package:king_investor/presentation/pages/splash/splash_page.dart';
+import 'package:king_investor/presentation/pages/user/user_page.dart';
 import 'package:king_investor/presentation/static/app_routes.dart';
 
 void main() async {
@@ -60,6 +61,11 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: AppRoutes.asset,
             page: () => AssetPage(),
+            transition: Transition.zoom,
+            transitionDuration: Duration(milliseconds: 400)),
+        GetPage(
+            name: AppRoutes.user,
+            page: () => UserPage(),
             transition: Transition.zoom,
             transitionDuration: Duration(milliseconds: 400)),
         GetPage(name: AppRoutes.login, page: () => LoginPage(), transition: Transition.rightToLeftWithFade),

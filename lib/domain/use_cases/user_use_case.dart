@@ -69,4 +69,17 @@ class UserUseCase {
       return Right(updatedUser);
     });
   }
+
+  Future<Either<Notification, Notification>> updateUserData(User user) async {
+    if (_appData.currentUser == null)
+      return Left(Notification('UserUseCase.updateUserData', 'Nenhum usuário conectado'));
+    final response = await _authentication.updateUserData(user);
+    return response.fold(
+      (notification) => Left(notification),
+      (notification) {
+        _appData.updateCurrentUser(user);
+        return Right(notification);
+      },
+    );
+  }
 }

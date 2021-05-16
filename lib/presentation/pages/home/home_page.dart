@@ -6,6 +6,7 @@ import 'package:king_investor/presentation/pages/home/widgets/asset_options.dart
 import 'package:king_investor/presentation/pages/rebalance/rebalance_page.dart';
 import 'package:king_investor/presentation/pages/wallet/wallet_page.dart';
 import 'package:king_investor/presentation/static/app_images.dart';
+import 'package:king_investor/presentation/static/app_routes.dart';
 
 class HomePage extends StatelessWidget {
   final PageController pageController = PageController(initialPage: 0);
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget {
         title: Text('KING INVESTOR ', style: TextStyle(color: theme.hintColor)),
         centerTitle: false,
         actions: [
-          IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () {}),
+          IconButton(icon: Icon(Icons.settings, color: theme.hintColor), onPressed: () => Get.toNamed(AppRoutes.user)),
         ],
       ),
       body: PageView(

@@ -72,6 +72,21 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, Notification>> updateUserData(Map userData) async {
+    try {
+      final ParseUser auxUser = await ParseUser.currentUser();
+      if (auxUser == null) return Left(_error('updateUserData', 'Não foi possível obter o usuário atual'));
+      final ParseUser current = ParseUser(auxUser.username, auxUser.password, auxUser.emailAddress, client: _client);
+      userData.keys.forEach((key) => current.set(key, userData[key]));
+      final response2 = await current.update();
+      if (response2.success) return Right(_error('updateUserData', 'Alterações salvas'));
+      return Left(_error('updateUserData', ParseException.getDescription(response2.statusCode)));
+    } catch (erro) {
+      return Left(_error('updateUserData', erro.toString()));
+    }
+  }
+
   Notification _error(String key, String message) {
     return Notification('ParseAuthenticationService.$key', message);
   }

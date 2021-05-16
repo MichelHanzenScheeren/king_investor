@@ -58,6 +58,16 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
     }
   }
 
+  @override
+  Future<Either<Notification, Notification>> updateUserData(User user) async {
+    try {
+      Map userData = UserConverter().fromModelToMap(user);
+      return await _authentication.updateUserData(userData);
+    } catch (erro) {
+      return Left(_getError('currentUser', erro));
+    }
+  }
+
   Either<Notification, User> _buildResponse(Either<Notification, dynamic> response) {
     return response.fold(
       (notification) => Left(notification),
