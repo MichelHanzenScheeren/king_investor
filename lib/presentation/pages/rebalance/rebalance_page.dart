@@ -19,7 +19,7 @@ class RebalancePage extends StatelessWidget {
         SizedBox(height: 8),
         GetX<RebalanceController>(
           init: rebalanceController,
-          autoRemove: false,
+          autoRemove: true,
           builder: (rebalanceController) {
             if (appDataController.categoryScoresLoad || appDataController.assetsLoad || appDataController.pricesLoad)
               return LoadCardWidget();

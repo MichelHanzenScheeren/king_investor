@@ -150,4 +150,8 @@ class AppDataController extends GetxController {
     );
     setCategoryScoresLoad(false);
   }
+
+  void clear() {
+    _currentWallet.value = null;
+  }
 }

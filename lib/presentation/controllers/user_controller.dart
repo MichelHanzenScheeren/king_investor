@@ -55,6 +55,7 @@ class UserController extends GetxController {
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {
+        appDataController.clear();
         Get.offAllNamed(AppRoutes.login);
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
       },
