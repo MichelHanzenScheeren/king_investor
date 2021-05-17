@@ -12,7 +12,7 @@ import 'package:king_investor/presentation/static/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DependenciesInjection.init(Environments.development);
+  await DependenciesInjection.init(Environments.production);
   runApp(MyApp());
 }
 
