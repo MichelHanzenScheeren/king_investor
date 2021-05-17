@@ -20,4 +20,26 @@ Para utilizar o aplicativo, algumas ferramentas serão necessárias:
 * Execute a aplicação (F5 ou comando "flutter run" no prompt de comando - com o cmd aberto na pasta do projeto).
 
 ## Funcionalidades
-* Em andamento...
+* Gerenciamento de carteiras de ativos financeiros:
+  * Permite criação e gerenciamento carteiras de ativos de renda variável;
+  * Gerenciamento de ativos financeiros;
+  * Acompanhamento das variações de preços dos ativos.
+* Acompanhamento da evolução da carteira:
+  * Consolidação de resultados gerais;
+  * Consolidação por categorias (ações, FIIs...);
+  * Consolidação dos ativos individualmente.
+* Sugestão de rebalanceamento:
+  * Baseia-se nas “notas” atribuídas aos ativos e categorias (ações, FIIS…);
+  * Sugestão de ativos para compra a partir do valor desejado do aporte;
+  * Controle do número de ativos e categorias sugeridos;
+  * Possibilidade de aplicar o aporte a carteira.
+
+## Arquitetura
+* O projeto é dividido em 4 pastas principais (encontradas dentro da pasta "lib"):
+  * Data: Gerencia a transformação de classes do domínio para dados manipuláveis pelo banco de dados e API financeira (e vice versa). Também é responsável pela comunicação efetiva com o "mundo exterior" (banco de dados, APIs...);
+  * Domain: Onde se encontram as regras de negócio da aplicação (modelos e casos de uso), bem como a definição dos contratos implementados pela camada de Data;
+  * Presentation: Cuida da interação com o usuário: telas, widgets, notificações...
+  * Shared: Define Notifications, Contracts e classes genéricas utilizadas por diversas outras camadas da aplicação.
+* Há ainda a pasta "resources", onde são definidos mocks e arquivos estáticos para simular os retornos de apis e do banco de dados, muito útil no ambiente de desenvolvimento ou para testar a aplicação.
+
+
