@@ -19,7 +19,7 @@ Para utilizar o aplicativo, algumas ferramentas serão necessárias:
 * Se o visual Studio Code ou o Android Studio solicitarem permissão para baixar "arquivos faltando", permita;
 * Execute a aplicação (F5 ou comando "flutter run" no prompt de comando - com o cmd aberto na pasta do projeto).
 * Neste cenário, a aplicação será executada em "ambiente de desenvolvimento", com dados simulados e estáticos que estão salvos na pasta "resources". Nesta modalidade, nenhum dado é persistido e nenhuma chamada a API é feita.
-* Para executar o aplicativo em "ambiente de desenvolvimento", com os dados sendo persistidos e chamadas a APIs sendo executadas, consulte o tópico a seguir.
+* Para executar o aplicativo em "ambiente de produção", com os dados sendo persistidos e chamadas a APIs sendo executadas, consulte o tópico a seguir.
 
 ## Executando (Ambiente real)
 * 1 - Primeiro, srá preciso criar uma conta no ParseServer do Back4App.com, que foi o BaaS utilizado para persistência de dados e autenticação do usuário;
