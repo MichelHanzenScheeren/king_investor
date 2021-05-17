@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/asset_controller.dart';
 import 'package:king_investor/presentation/pages/asset/widgets/about_asset_register.dart';
 import 'package:king_investor/presentation/pages/asset/widgets/about_company.dart';
+import 'package:king_investor/presentation/pages/asset/widgets/about_prices.dart';
 import 'package:king_investor/presentation/pages/asset/widgets/edit_asset_form.dart';
 import 'package:king_investor/presentation/pages/asset/widgets/empty_asset_card.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
@@ -34,19 +35,16 @@ class AssetPage extends StatelessWidget {
           children: [
             SizedBox(height: 4),
             CustomCardWidget(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
               children: [
-                AboutCompany(asset.company),
-                SizedBox(height: 8),
                 AboutAssetRegister(assetController),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       child: CustomButtonWidget(
                         buttonText: 'EDITAR',
-                        textStyle: TextStyle(color: theme.hintColor, fontSize: 18, fontWeight: FontWeight.bold),
+                        textStyle: TextStyle(color: theme.hintColor, fontSize: 16, fontWeight: FontWeight.bold),
                         onPressed: _editAsset,
                       ),
                     ),
@@ -54,7 +52,7 @@ class AssetPage extends StatelessWidget {
                     Flexible(
                       child: CustomButtonWidget(
                         buttonText: 'APAGAR',
-                        textStyle: TextStyle(color: theme.hintColor, fontSize: 18, fontWeight: FontWeight.bold),
+                        textStyle: TextStyle(color: theme.hintColor, fontSize: 16, fontWeight: FontWeight.bold),
                         backGroundColor: theme.errorColor,
                         borderColor: Colors.transparent,
                         onPressed: _deleteAsset,
@@ -62,9 +60,21 @@ class AssetPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
               ],
             ),
+            CustomCardWidget(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              children: [
+                AboutCompany(asset.company),
+              ],
+            ),
+            CustomCardWidget(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              children: [
+                AboutPrice(assetController),
+              ],
+            ),
+            SizedBox(height: 12),
           ],
         );
       }),

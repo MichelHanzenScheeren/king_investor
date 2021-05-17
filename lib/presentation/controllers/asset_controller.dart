@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
+import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/use_cases/assets_use_case.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
@@ -93,5 +94,11 @@ class AssetController extends GetxController {
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
       },
     );
+  }
+
+  Price getAssetPrice() {
+    final price = appDataController.prices.firstWhere((e) => e.ticker == asset.company?.ticker, orElse: () => null);
+    if (price == null) return Price.fromDefaultValues(_asset.value?.company?.ticker);
+    return price;
   }
 }

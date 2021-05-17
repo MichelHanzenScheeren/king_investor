@@ -20,7 +20,7 @@ class AboutCompany extends StatelessWidget {
           showDivider: false,
           weight: FontWeight.bold,
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6),
         CustomDividerWidget(
           text: 'Sobre a companhia',
           fontSize: 17,
