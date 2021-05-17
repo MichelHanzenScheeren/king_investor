@@ -1,0 +1,67 @@
+{
+    "results": [
+        {
+            "name": "Ação",
+            "order": 0,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "Fundo imobiliário",
+            "order": 1,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "Fundo de Índice",
+            "order": 2,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "Stock",
+            "order": 3,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "REIT",
+            "order": 4,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "ETF",
+            "order": 5,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        },
+        {
+            "name": "Outro",
+            "order": 6,
+            "ACL": {
+                "*": {
+                    "read": true
+                }
+            }
+        }
+    ]
+}

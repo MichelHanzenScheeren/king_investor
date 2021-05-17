@@ -2,10 +2,10 @@ import 'dart:convert';
 
 const kLoginSucessResponseMap = {
   "objectId": "ySHIHT13xA",
-  "username": "michelhanzenscheeren@gmail.com",
-  "email": "michelhanzenscheeren@gmail.com",
+  "username": "michel@gmail.com",
+  "email": "michel@gmail.com",
   "firstName": "Michel",
-  "lastName": "Hanzen Scheeren",
+  "lastName": "Da Silva",
   "createdAt": "2021-04-24T19:25:58.814Z",
   "updatedAt": "2021-04-24T19:25:58.814Z",
   "ACL": {
