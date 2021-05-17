@@ -14,12 +14,6 @@ class AboutCompany extends StatelessWidget {
     final theme = Theme.of(context);
     return Column(
       children: [
-        CustomFlexText(
-          texts: ['${company.name} (${company.symbol})'],
-          size: 20,
-          showDivider: false,
-          weight: FontWeight.bold,
-        ),
         SizedBox(height: 6),
         CustomDividerWidget(
           text: 'Sobre a companhia',

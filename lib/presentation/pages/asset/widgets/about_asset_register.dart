@@ -15,6 +15,12 @@ class AboutAssetRegister extends StatelessWidget {
     final walletName = assetController.getWalletName(asset.walletForeignKey);
     return Column(
       children: [
+        CustomFlexText(
+          texts: ['${asset?.company?.name} (${asset?.company?.symbol})'],
+          size: 20,
+          showDivider: false,
+          weight: FontWeight.bold,
+        ),
         CustomDividerWidget(
           text: 'Informações do cadastro',
           fontSize: 17,

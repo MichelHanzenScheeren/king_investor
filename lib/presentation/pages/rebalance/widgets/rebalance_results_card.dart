@@ -6,6 +6,7 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/controllers/rebalance_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
+import 'package:king_investor/presentation/widgets/custom_dialog_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class RebalanceResultsCard extends StatelessWidget {
@@ -68,7 +69,7 @@ class RebalanceResultsCard extends StatelessWidget {
                           backGroundColor: theme.primaryColor,
                           buttonText: 'APLICAR',
                           textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: theme.hintColor),
-                          onPressed: rebalanceResult.items.isEmpty ? null : () => rebalanceController.saveRebalance(),
+                          onPressed: rebalanceResult.items.isEmpty ? null : _saveRebalance,
                         ),
                 ],
               );
@@ -122,5 +123,20 @@ class RebalanceResultsCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _saveRebalance() {
+    Get.dialog(CustomDialogWidget(
+      title: 'Tem certeza que deseja aplicar o rebalanceamento?',
+      textContent: '    As quantidades serão incrementadas aos ativos correspondentes e o preço médio ' +
+          'recalculado com base no preço atual do ativo.',
+      confirmButtonText: 'APLICAR',
+      accentColor: Theme.of(Get.context).primaryColor,
+      textContentColor: Theme.of(Get.context).hintColor,
+      onConfirm: () {
+        Get.back();
+        rebalanceController.saveRebalance();
+      },
+    ));
   }
 }

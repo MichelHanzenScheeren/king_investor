@@ -63,13 +63,13 @@ class AssetPage extends StatelessWidget {
               ],
             ),
             CustomCardWidget(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
               children: [
                 AboutCompany(asset.company),
               ],
             ),
             CustomCardWidget(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
               children: [
                 AboutPrice(assetController),
               ],
