@@ -17,6 +17,12 @@ Para utilizar o aplicativo, algumas ferramentas serão necessárias:
 * Abra-o projeto com o editor de código que preferir (Visual Code recomendado) ou no prompt de comandos do seu computador;
 * Se ainda não tiver inicializado o emulador ou conectado seu celular (em modo de depuração) ao computador, faça isso;
 * Se o visual Studio Code ou o Android Studio solicitarem permissão para baixar "arquivos faltando", permita;
+* Vá até a pasta resources (dentro de "lib") e crie um arquivo chamado "keys.dart". Dentro dele, preencha como no card abaixo (não é necessário setar os valores para a execução em ambiente local).  
+      
+      const kBloombergKey = '';    
+      const kAppId = '';    
+      const kServerUrl = '';    
+      const kClientKey = '';    
 * Execute a aplicação (F5 ou comando "flutter run" no prompt de comando - com o cmd aberto na pasta do projeto).
 * Neste cenário, a aplicação será executada em "ambiente de desenvolvimento", com dados simulados e estáticos que estão salvos na pasta "resources". Nesta modalidade, nenhum dado é persistido e nenhuma chamada a API é feita.
 * Para executar o aplicativo em "ambiente de produção", com os dados sendo persistidos e chamadas a APIs sendo executadas, consulte o tópico a seguir.
@@ -34,7 +40,7 @@ Para utilizar o aplicativo, algumas ferramentas serão necessárias:
 * 2 - Também é preciso criar uma conta na api financeira que foi utilizada para obter as atualizaçãos de preço.
   * Vá até o site da [API Bloomberg](<https://rapidapi.com/pt/apidojo/api/Bloomberg%20Market%20and%20Financial%20News/?endpoint=apiendpoint_fe0f5da7-39e3-4920-89f3-8be55dd83304>), clique em "preços", escolha a opção "Basic" (que é gratuita e dá direito a 500 requisições grátis por mês), e faça o login com o método de sua preferência.
   * Depois vá em "Meus aplicativos", selecione o aplicativo criado quando você se cadastrou na api (alguma coisa próxima de "default_application..."), aí em "segurança" e copie a "application key", que ela será será usada daqui a pouco.
-* 3 - Por fim, será necessário criar um arquivo chamado "keys.dart" dentro da pasta "resources". Neste arquivo, preencha como no exemplo abaixo substituindo as respectivas chaves dos pontos "1" e "2" nos locais corretos:  
+* 3 - Por fim, será necessário criar um arquivo chamado "keys.dart" dentro da pasta "resources" (você já criou esse arquivo se seguiu o passo a passo "Executando (Ambiente local)"). Neste arquivo, preencha como no exemplo abaixo substituindo as respectivas chaves dos pontos "1" e "2" nos locais corretos:  
   
         const kBloombergKey = 'YOUR_BLOOMBERG_KEY_HERE';  
         const kAppId = 'YOUR_PARSE_APP_ID_HERE';  
