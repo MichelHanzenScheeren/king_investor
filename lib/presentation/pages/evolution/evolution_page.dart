@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:king_investor/domain/value_objects/performance.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/evolution_controller.dart';
-import 'package:king_investor/presentation/controllers/filter_controller.dart';
 import 'package:king_investor/presentation/pages/evolution/widgets/empty_evolution_card.dart';
 import 'package:king_investor/presentation/pages/evolution/widgets/evolution_card.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
@@ -11,7 +10,6 @@ import 'package:king_investor/presentation/widgets/custom_dropdown_widget.dart';
 import 'package:king_investor/presentation/widgets/load_card_widget.dart';
 
 class EvolutionPage extends StatelessWidget {
-  final filterController = FilterController();
   final EvolutionController evolutionController = EvolutionController();
   final AppDataController appDataController = Get.find();
 
