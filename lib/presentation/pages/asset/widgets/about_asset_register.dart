@@ -20,6 +20,7 @@ class AboutAssetRegister extends StatelessWidget {
           size: 20,
           showDivider: false,
           weight: FontWeight.bold,
+          alignment: MainAxisAlignment.center,
         ),
         CustomDividerWidget(
           text: 'Informações do cadastro',

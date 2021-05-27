@@ -50,11 +50,13 @@ class CategorizedListOfAssets extends StatelessWidget {
                         text: TextSpan(
                           text: company.symbol + '   ',
                           style: titleStyle,
-                          children: [TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)],
+                          children: [
+                            TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)
+                          ],
                         ),
                       ),
                     ),
-                    subtitle: Text(company.name, style: subtitleStyle),
+                    subtitle: Text(company.name, style: subtitleStyle, overflow: TextOverflow.ellipsis),
                     trailing: companyPrice(company, theme),
                     onTap: () => Get.toNamed(AppRoutes.asset, arguments: categoryAssets[index].objectId),
                   ),
@@ -70,33 +72,37 @@ class CategorizedListOfAssets extends StatelessWidget {
 
   Widget companyPrice(Company company, ThemeData theme) {
     return Obx(() {
-      if (appDataController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+      if (appDataController.pricesLoad)
+        return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
       final price = walletController.getPriceByTicker(company?.ticker);
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '${price.lastPrice.toMonetary(company.currency)}',
-            style: theme.textTheme.headline1.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: theme.primaryColorLight,
+      return Container(
+        margin: const EdgeInsets.only(left: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '${price.lastPrice.toMonetary(company.currency)}',
+              style: theme.textTheme.headline1.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: theme.primaryColorLight,
+              ),
             ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            price.variation.toPorcentage(),
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: price.variation.value > 0
-                  ? theme.hoverColor
-                  : (price.variation.value < 0 ? theme.errorColor : theme.primaryColorLight),
+            SizedBox(height: 4),
+            Text(
+              price.variation.toPorcentage(),
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: price.variation.value > 0
+                    ? theme.hoverColor
+                    : (price.variation.value < 0 ? theme.errorColor : theme.primaryColorLight),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }
