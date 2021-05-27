@@ -23,7 +23,7 @@ class DistributionPage extends StatelessWidget {
           init: distributionController,
           builder: (distributionController) {
             if (appDataController.isLoadingSomething) return LoadCardWidget();
-            if (appDataController.assets.isEmpty) return EmptyDistributionCard();
+            if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyDistributionCard();
             return CustomCardWidget(
               margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
               children: [

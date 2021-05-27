@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/category.dart';
@@ -12,12 +9,6 @@ import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 const kGeralCategoryId = '-2';
 const kAllCategoryId = '-1';
-const colors = <Color>[
-  Colors.deepPurple,
-  Colors.purple,
-  Colors.deepPurpleAccent,
-  Colors.purpleAccent,
-];
 
 class DistributionController extends GetxController {
   AppDataController appDataController;
@@ -25,6 +16,23 @@ class DistributionController extends GetxController {
   RxInt _selectedIndex = 0.obs;
   List<DistributionResultItem> _currentDistributionItems = <DistributionResultItem>[];
   Rx<DistributionResultItem> _selectedResultItem = Rx<DistributionResultItem>(null);
+  List<Color> colors = <Color>[
+    Colors.deepPurple,
+    Colors.purple,
+    Colors.deepPurpleAccent,
+    Colors.purpleAccent,
+    Colors.indigo[400],
+    Colors.pink[400],
+    Colors.blue[800],
+    Colors.purple[300],
+    Colors.blueAccent[700],
+    Colors.blue[700],
+    Colors.deepPurple[300],
+    Colors.purpleAccent[400],
+    Colors.blue,
+    Colors.indigo[700],
+    Colors.pink[800],
+  ];
 
   DistributionController() {
     appDataController = Get.find();

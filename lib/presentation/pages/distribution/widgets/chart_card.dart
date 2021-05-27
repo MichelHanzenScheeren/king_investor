@@ -33,26 +33,27 @@ class ChartCard extends StatelessWidget {
                   centerSpaceRadius: 0,
                   startDegreeOffset: 0,
                   pieTouchData: PieTouchData(touchCallback: controller.setSelectedDistributionItem),
-                  sections: List.generate(result.items.length, (index) {
+                  sections: List.generate(result.items.length, (i) {
                     final items = result.items;
-                    final isSelected = items[index].identifier == (controller.selectedResultItem?.identifier ?? null);
+                    final isSelected = items[i].identifier == (controller.selectedResultItem?.identifier ?? null);
                     final style = TextStyle(
-                        color: theme.hintColor,
-                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                        fontSize: isSelected ? 16 : 14);
+                      color: theme.hintColor,
+                      fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
+                      fontSize: isSelected ? 15 : 13,
+                    );
                     return PieChartSectionData(
-                      color: controller.getColor(index),
-                      value: items[index].percentageValue.value,
+                      color: controller.getColor(i),
+                      value: items[i].percentageValue.value,
                       title: '',
                       radius: MediaQuery.of(context).size.width * (isSelected ? 0.88 : 0.84) / 2,
-                      badgePositionPercentageOffset: 0.8,
+                      badgePositionPercentageOffset: isSelected ? 0.84 : 0.8,
                       badgeWidget: Container(
-                        padding: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: theme.primaryColorDark,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        child: Text(items[index].title, style: style),
+                        child: Text(items[i].title, style: style),
                       ),
                     );
                   }),
