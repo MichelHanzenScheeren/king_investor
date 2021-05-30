@@ -19,7 +19,12 @@ class AppSnackbar {
         messageText: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text(_message, style: style)],
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(_message, style: style),
+            )
+          ],
         ),
         duration: Duration(seconds: type == AppSnackbarType.success ? 3 : 5),
         backgroundColor: type == AppSnackbarType.success ? Colors.green[400] : Colors.red[400],

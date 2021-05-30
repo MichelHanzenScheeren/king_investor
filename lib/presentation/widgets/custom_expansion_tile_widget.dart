@@ -29,6 +29,7 @@ class CustomExpansionTileWidget extends StatelessWidget {
           unselectedWidgetColor: theme.primaryColorLight,
           textTheme: TextTheme(subtitle1: TextStyle(fontSize: 20, color: theme.primaryColorLight)),
           accentColor: theme.hintColor,
+          primaryColor: theme.hintColor,
         ),
         child: ExpansionTile(
           initiallyExpanded: initiallyExpanded,
@@ -36,6 +37,10 @@ class CustomExpansionTileWidget extends StatelessWidget {
           tilePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
+          iconColor: theme.hintColor,
+          textColor: theme.hintColor,
+          collapsedIconColor: theme.primaryColorLight,
+          collapsedTextColor: theme.primaryColorLight,
           childrenPadding: childrenPadding ?? EdgeInsets.zero,
           title: title ?? Text(''),
           children: children ?? [Container()],

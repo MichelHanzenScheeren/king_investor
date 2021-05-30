@@ -14,7 +14,7 @@ class EvolutionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalPorcentage = result.totalResultPorcentage.toPorcentage();
     final totalValue = result.totalResultValue.toMonetary("BRL");
-    final style = TextStyle(color: Theme.of(context).hintColor, fontSize: 21, fontWeight: FontWeight.bold);
+    final style = TextStyle(fontSize: 21, fontWeight: FontWeight.bold);
     return CustomExpansionTileWidget(
       initiallyExpanded: initiallyExpanded,
       margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
