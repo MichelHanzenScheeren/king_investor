@@ -16,7 +16,7 @@ class ChartLegendCard extends StatelessWidget {
       builder: (distributionController) {
         if (distributionController.selectedResultItem == null) return Container();
         final style = TextStyle(color: theme.hintColor, fontWeight: FontWeight.w600, fontSize: 16);
-        final selected = distributionController.selectedResultItem;
+        final selected = distributionController.selectedResultItem!;
         return CustomCardWidget(
           children: [
             _getText(
@@ -37,7 +37,7 @@ class ChartLegendCard extends StatelessWidget {
     );
   }
 
-  Widget _getText(String title, TextStyle style, {MainAxisAlignment alignment}) {
+  Widget _getText(String title, TextStyle style, {MainAxisAlignment? alignment}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(

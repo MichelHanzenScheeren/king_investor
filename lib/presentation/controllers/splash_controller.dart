@@ -5,9 +5,9 @@ import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/presentation/static/app_routes.dart';
 
 class SplashController extends GetxController {
-  AnimationController control;
-  Animation<double> curve;
-  UserUseCase userUseCase;
+  late AnimationController control;
+  late Animation<double> curve;
+  late UserUseCase userUseCase;
   String _nextPage = '';
   RxString _error = ''.obs;
 

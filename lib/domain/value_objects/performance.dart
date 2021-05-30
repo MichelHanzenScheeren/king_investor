@@ -13,25 +13,23 @@ class Performance extends ValueObject {
   final totalResultValue = Amount(0.0);
   final totalResultPorcentage = Amount(0.0);
 
-  List<Asset> _assets;
-  List<Price> _prices;
+  late List<Asset> _assets;
+  late List<Price> _prices;
 
-  Performance(this.identifier, {List<Asset> assets, List<Price> prices}) {
+  Performance(this.identifier, {List<Asset> assets: const [], List<Price> prices: const []}) {
+    _assets = List.from(assets);
+    _prices = List.from(prices);
     _applyWalletContracts(assets, prices);
-    if (isValid) {
-      _assets = List.from(assets);
-      _prices = List.from(prices);
-      _measurePerformance();
-    }
+    _measurePerformance();
   }
 
-  void _applyWalletContracts(List<Asset> assets, List<Price> prices) {
+  void _applyWalletContracts(List<Asset>? assets, List<Price>? prices) {
     if (assets == null || assets.isEmpty) addNotification('Performance.assets', 'A lista de ativos não pode ser vazia');
     if (prices == null || prices.isEmpty) addNotification('Performance.prices', 'A lista de preços não pode ser vazia');
     if (!isValid) return;
-    if (assets.any((e) => _containNull([e.category, e.averagePrice, e.quantity, e.incomes, e.sales, e.company])))
+    if (assets!.any((e) => _containNull([e.category, e.averagePrice, e.quantity, e.incomes, e.sales, e.company])))
       addNotification('Performance.assets', 'Um ou mais ativos possuem dados inválidos');
-    if (prices.any((e) => _containNull([e.lastPrice, e.ticker, e.variation])))
+    if (prices!.any((e) => _containNull([e.lastPrice, e.ticker, e.variation])))
       addNotification('Performance.scores', 'Um ou mais preços dos ativos possuem dados inválidos');
     if (!isValid) return;
     if (assets.any((e) => !e.averagePrice.isValid || !e.sales.isValid || !e.incomes.isValid || !e.quantity.isValid))
@@ -74,6 +72,3 @@ class Performance extends ValueObject {
     totalResultPorcentage.setValue(totalResultValue.value * 100 / auxTotalInvested);
   }
 }
-
-// totalInvested: 400
-// totalValue: 500

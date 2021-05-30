@@ -11,14 +11,14 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class RebalanceController extends GetxController {
-  AppDataController appDataController;
-  CategoriesUseCase categoriesUseCase;
-  AssetsUseCase assetsUseCase;
+  late AppDataController appDataController;
+  late CategoriesUseCase categoriesUseCase;
+  late AssetsUseCase assetsUseCase;
   RxBool _isRebalancing = false.obs;
   final Amount aportValue = Amount(300.0, mustBeGreaterThanZero: true);
   final Quantity assetsMaxNumber = Quantity(3, mustBeGreaterThanZero: true);
   final Quantity categoriesMaxNumber = Quantity(2, mustBeGreaterThanZero: true);
-  Rx<RebalanceResult> _rebalanceResult = Rx<RebalanceResult>(null);
+  Rx<RebalanceResult?> _rebalanceResult = Rx<RebalanceResult?>(null);
   RxBool _savingRebalanceResults = false.obs;
 
   RebalanceController() {
@@ -39,18 +39,18 @@ class RebalanceController extends GetxController {
 
   bool get containsRebalanceResults => _rebalanceResult.value != null;
 
-  RebalanceResult get rebalanceResult => _rebalanceResult.value;
+  RebalanceResult? get rebalanceResult => _rebalanceResult.value;
 
   bool get savingRebalanceResults => _savingRebalanceResults.value;
 
-  void setSavingRebalanceResults(bool value) => _savingRebalanceResults.value = value ?? false;
+  void setSavingRebalanceResults(bool value) => _savingRebalanceResults.value = value;
 
   Future<void> updateCategoryScore(CategoryScore categoryScore) async {
     final response = await categoriesUseCase.updateCategoryScores(categoryScore);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {
-        int index = appDataController.categoryScores.indexWhere((e) => e?.objectId == categoryScore?.objectId);
+        int index = appDataController.categoryScores.indexWhere((e) => e.objectId == categoryScore.objectId);
         if (index != -1) appDataController.categoryScores[index] = categoryScore;
         AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
       },
@@ -78,7 +78,7 @@ class RebalanceController extends GetxController {
     } else {
       final app = appDataController;
       final rebalance = Rebalance();
-      rebalance.registerWalletValues(app.assets, app.categoryScores, app.prices);
+      rebalance.registerWalletValues(app.assets, app.usedCategoryScores, app.prices);
       rebalance.registerRebalanceValues(aportValue, assetsMaxNumber, categoriesMaxNumber);
       if (!rebalance.isValid) {
         final String message = 'Não foi possível concluir o rebalanceamento por conta de dados inválidos';
@@ -101,20 +101,16 @@ class RebalanceController extends GetxController {
   Future<void> saveRebalance() async {
     if (!containsRebalanceResults)
       return AppSnackbar.show(message: 'Nenhum dado de rebalanceamento disponível', type: AppSnackbarType.error);
-    if (rebalanceResult.items.isEmpty)
+    if (rebalanceResult!.items.isEmpty)
       return AppSnackbar.show(message: 'O rebalanceamento não possui itens', type: AppSnackbarType.error);
     setSavingRebalanceResults(true);
     bool success = true;
-    for (int index = 0; index < rebalanceResult.items.length; index++) {
-      final element = rebalanceResult.items[index];
-      Asset asset = appDataController.assets.where((asset) => asset?.company?.ticker == element?.ticker)?.first;
-      if (asset == null) {
-        success = false;
-      } else {
-        asset.registerBuy(element.quantity, element.price);
-        final result = await assetsUseCase.updateAsset(asset);
-        if (result.isLeft()) success = false;
-      }
+    for (int index = 0; index < rebalanceResult!.items.length; index++) {
+      final element = rebalanceResult!.items[index];
+      Asset asset = appDataController.assets.where((asset) => asset.company.ticker == element.ticker).first;
+      asset.registerBuy(element.quantity, element.price);
+      final result = await assetsUseCase.updateAsset(asset);
+      if (result.isLeft()) success = false;
     }
     if (success) {
       AppSnackbar.show(message: 'Alterações salvas', type: AppSnackbarType.success);

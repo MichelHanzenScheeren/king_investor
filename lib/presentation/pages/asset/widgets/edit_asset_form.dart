@@ -20,13 +20,13 @@ class EditAssetForm extends StatelessWidget {
   final Amount incomes = Amount(0.0);
   final Amount sales = Amount(0.0);
 
-  EditAssetForm({@required this.asset, @required this.assetController}) {
+  EditAssetForm({required this.asset, required this.assetController}) {
     assetController.registerInitialCategory(asset.category);
-    quantity.setValue(asset.quantity?.value);
-    averagePrice.setValue(asset.averagePrice?.value);
-    score.setValue(asset.score?.value);
-    incomes.setValue(asset.incomes?.value);
-    sales.setValue(asset.sales?.value);
+    quantity.setValue(asset.quantity.value);
+    averagePrice.setValue(asset.averagePrice.value);
+    score.setValue(asset.score.value);
+    incomes.setValue(asset.incomes.value);
+    sales.setValue(asset.sales.value);
   }
 
   @override
@@ -38,12 +38,12 @@ class EditAssetForm extends StatelessWidget {
           children: [
             SizedBox(height: 12),
             Obx(() {
-              return CustomDropdownWidget<Category>(
+              return CustomDropdownWidget<Category?>(
                 prefixText: 'Categoria',
                 initialValue: assetController.selectedCategory,
-                onChanged: assetController.setSelectedCategory,
+                onChanged: (cat) => assetController.setSelectedCategory(cat!),
                 values: assetController.getCategories().map((category) {
-                  return CustomDropdownItems<Category>(category, category?.name ?? '');
+                  return CustomDropdownItems<Category>(category, category.name);
                 }).toList(),
               );
             }),
@@ -54,7 +54,7 @@ class EditAssetForm extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               textInputType: TextInputType.number,
               onChanged: (value) => quantity.setValueFromString(value),
-              validator: (value) => quantity.isValid ? null : quantity.notifications.first.message,
+              validator: (value) => quantity.isValid ? null : quantity.firstNotification,
             ),
             SizedBox(height: 14),
             CustomTextFieldWidget(
@@ -113,11 +113,20 @@ class EditAssetForm extends StatelessWidget {
                     buttonText: 'SALVAR',
                     textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                     onPressed: () {
-                      if (!Form.of(context).validate()) return;
+                      if (!(Form.of(context)?.validate() ?? false)) return;
                       Get.back();
-                      final aux = Asset(asset.objectId, asset.createdAt, asset.company,
-                          assetController.selectedCategory, averagePrice, score, quantity, asset.walletForeignKey,
-                          incomes: incomes, sales: sales);
+                      final aux = Asset(
+                        asset.objectId,
+                        asset.createdAt,
+                        asset.company,
+                        assetController.selectedCategory!,
+                        averagePrice,
+                        score,
+                        quantity,
+                        asset.walletForeignKey,
+                        incomes: incomes,
+                        sales: sales,
+                      );
                       assetController.updateAsset(aux);
                     },
                   ),

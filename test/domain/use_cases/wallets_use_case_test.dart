@@ -14,9 +14,9 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/app_client_database_mock.dart';
 
 main() {
-  DatabaseRepositoryAgreement database;
-  AppData appData;
-  WalletsUseCase walletsUseCase;
+  late DatabaseRepositoryAgreement database;
+  late AppData appData;
+  late WalletsUseCase walletsUseCase;
 
   setUpAll(() async {
     await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
@@ -28,17 +28,10 @@ main() {
   });
 
   group('Testes about WalletUseCase.getAll', () {
-    /*test('should create a valid MainWallet when empty', () async {
-      final response = await walletsUseCase.getWallets();
-      expect(response.isRight(), isTrue);
-      expect(response.getOrElse(() => null)?.length, 1);
-      expect(response.getOrElse(() => null)?.first?.isMainWallet, true);
-    });*/
-
     test('should return a valid list of Wallets', () async {
       final response = await walletsUseCase.getAllUserWallets();
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(() => null), isInstanceOf<List<Wallet>>());
+      expect(response.getOrElse(() => <Wallet>[]), isInstanceOf<List<Wallet>>());
       expect(appData.wallets.isEmpty, isFalse);
     });
   });

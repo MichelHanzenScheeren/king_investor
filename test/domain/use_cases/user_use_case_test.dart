@@ -14,9 +14,9 @@ import '../../mocks/app_client_authentication_mock.dart';
 import '../../static/authentication_response.dart';
 
 main() {
-  AuthenticationRepositoryAgreement authentication;
-  AppData appData;
-  UserUseCase userUseCase;
+  late AuthenticationRepositoryAgreement authentication;
+  late AppData appData;
+  late UserUseCase userUseCase;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
@@ -37,9 +37,9 @@ main() {
     test('Should do correct signUp', () async {
       User user = User('12345678', null, Name('Michel', 'Scheeren'), Email('michel@gmail.com'));
       final response = await userUseCase.signUp(user, 'ABCDEF');
-      expect(response.getOrElse(() => null), isInstanceOf<User>());
-      expect(appData.currentUser, response.getOrElse(null));
-      expect(appData.currentUser.sessionToken, 'r:acc24187bc16109398c5a2fad2f06d0a');
+      expect(response.getOrElse(() => Object as User), isInstanceOf<User>());
+      expect(appData.currentUser, response.getOrElse(() => Object as User));
+      expect(appData.currentUser!.sessionToken, 'r:acc24187bc16109398c5a2fad2f06d0a');
     });
 
     test('Expect "wasUpdated" is true and "wallets" is empty after signup', () async {
@@ -63,9 +63,9 @@ main() {
 
     test('Should do correct login', () async {
       final response = await userUseCase.login('michel@gmail.com', 'ABCDEF');
-      expect(response.getOrElse(() => null), isInstanceOf<User>());
-      expect(appData.currentUser, response.getOrElse(null));
-      expect(appData.currentUser.sessionToken, 'r:acc24187bc16109398c5a2fad2f06d0a');
+      expect(response.getOrElse(() => Object as User), isInstanceOf<User>());
+      expect(appData.currentUser, response.getOrElse(() => Object as User));
+      expect(appData.currentUser!.sessionToken, 'r:acc24187bc16109398c5a2fad2f06d0a');
     });
 
     test('Expect "wasUpdated" is true and "wallets" is empty after login', () async {
@@ -89,11 +89,11 @@ main() {
     test('Should obtain correct User and update him', () async {
       final response = await userUseCase.currentUser();
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(() => null), isInstanceOf<User>());
+      expect(response.getOrElse(() => Object as User), isInstanceOf<User>());
     });
 
     test('Expect AppData properties is ok after logout', () async {
-      expect(appData.currentUser.name.firstName, 'Michel');
+      expect(appData.currentUser!.name.firstName, 'Michel');
       expect(appData.wasUpdated, isTrue);
       expect(appData.wallets.isEmpty, isTrue);
     });

@@ -83,7 +83,7 @@ class RebalanceForm extends StatelessWidget {
                 buttonText: 'REBALANCEAR CARTEIRA',
                 textStyle: TextStyle(color: theme.hintColor, fontSize: 15, fontWeight: FontWeight.bold),
                 onPressed: () {
-                  if (!Form.of(context).validate()) return;
+                  if (!Form.of(context)!.validate()) return;
                   rebalanceController.doRebalance();
                 },
               );

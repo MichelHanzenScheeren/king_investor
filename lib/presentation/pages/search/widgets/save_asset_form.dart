@@ -20,7 +20,7 @@ class SaveAssetForm extends StatelessWidget {
   final Amount amount = Amount(50.0, mustBeGreaterThanZero: true);
   final Score score = Score(10);
 
-  SaveAssetForm({@required this.company, @required this.searchController}) {
+  SaveAssetForm({required this.company, required this.searchController}) {
     searchController.setCurrentCategory(company: company);
   }
 
@@ -33,18 +33,18 @@ class SaveAssetForm extends StatelessWidget {
         builder: (context) => CustomBottomSheetWidget(
           children: [
             CustomDividerWidget(text: 'Inforações'),
-            _basicRow('Símbolo', company?.symbol, theme),
-            _basicRow('Nome', company?.name, theme),
-            _basicRow('Bolsa', '${company?.exchange ?? ''} (${company?.country} - ${company?.currency ?? ''})', theme),
+            _basicRow('Símbolo', company.symbol, theme),
+            _basicRow('Nome', company.name, theme),
+            _basicRow('Bolsa', '${company.exchange} (${company.country} - ${company.currency})', theme),
             CustomDividerWidget(text: 'Configurações adicionais'),
             SizedBox(height: 4),
             Obx(() {
-              return CustomDropdownWidget<Category>(
+              return CustomDropdownWidget<Category?>(
                 prefixText: 'Categoria',
                 initialValue: searchController.currentCategory,
                 onChanged: (category) => searchController.setCurrentCategory(category: category),
                 values: categories.map((category) {
-                  return CustomDropdownItems<Category>(category, category?.name ?? '');
+                  return CustomDropdownItems<Category>(category, category.name);
                 }).toList(),
               );
             }),
@@ -94,7 +94,7 @@ class SaveAssetForm extends StatelessWidget {
                   buttonText: 'SALVAR',
                   textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                   onPressed: () {
-                    if (!Form.of(context).validate()) return;
+                    if (!Form.of(context)!.validate()) return;
                     Get.back();
                     searchController.saveAsset(company, quantity, amount, score);
                   },
@@ -107,12 +107,12 @@ class SaveAssetForm extends StatelessWidget {
     );
   }
 
-  Widget _basicRow(String title, String value, ThemeData theme) {
+  Widget _basicRow(String title, String? value, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
       child: Row(
         children: [
-          Text((title ?? '') + ':', style: TextStyle(color: theme.primaryColorLight, fontSize: 15)),
+          Text((title) + ':', style: TextStyle(color: theme.primaryColorLight, fontSize: 15)),
           SizedBox(width: 8),
           Expanded(
             child: Text(

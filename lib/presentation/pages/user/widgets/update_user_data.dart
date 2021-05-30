@@ -5,10 +5,10 @@ import 'package:king_investor/presentation/widgets/custom_text_field_widget.dart
 
 class UpdateUserData extends StatelessWidget {
   final String prefixText;
-  final String value;
-  final Function(String) onChange;
-  final Function(String) validate;
-  final Function onSubmit;
+  final String? value;
+  final Function(String)? onChange;
+  final String? Function(String?)? validate;
+  final Function? onSubmit;
 
   UpdateUserData({this.prefixText: '', this.value: '', this.onChange, this.validate, this.onSubmit});
 
@@ -35,9 +35,9 @@ class UpdateUserData extends StatelessWidget {
                 onChanged: onChange,
                 validator: validate,
                 onSubmit: (value) {
-                  if (!Form.of(context).validate()) return;
+                  if (!Form.of(context)!.validate()) return;
                   Get.back();
-                  onSubmit();
+                  onSubmit!();
                 },
               ),
             ],

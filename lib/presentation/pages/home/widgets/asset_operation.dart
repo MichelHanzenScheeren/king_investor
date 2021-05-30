@@ -20,7 +20,7 @@ class AssetOperation extends StatelessWidget {
   final bool isIncomeOperation;
   final filterController = FilterController();
 
-  AssetOperation({@required this.dividerOperation, @required this.onSave, this.isIncomeOperation: false});
+  AssetOperation({required this.dividerOperation, required this.onSave, this.isIncomeOperation: false});
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +71,9 @@ class AssetOperation extends StatelessWidget {
                   buttonText: 'SALVAR',
                   textStyle: TextStyle(color: theme.hintColor, fontSize: 15),
                   onPressed: () {
-                    if (!Form.of(context).validate()) return;
+                    if (!Form.of(context)!.validate()) return;
                     Get.back();
-                    onSave(quantity, amount, filterController.selectedAsset);
+                    onSave(quantity, amount, filterController.selectedAsset!);
                   },
                 ),
               ],

@@ -5,9 +5,9 @@ import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 class RequestService implements RequestAgreement {
-  Dio _dio;
+  late Dio _dio;
 
-  RequestService({Dio dio}) {
+  RequestService({Dio? dio}) {
     _dio = dio ?? Dio();
   }
 
@@ -16,7 +16,7 @@ class RequestService implements RequestAgreement {
     int conectTimeoutMiliseconds: 5000,
     int sendTimeoutMiliseconds: 5000,
     int receiveTimeoutMiliseconds: 10000,
-    Map<String, dynamic> headers,
+    Map<String, dynamic> headers: const {},
     String baseUrl: '',
   }) {
     _dio.options = BaseOptions(
@@ -40,7 +40,7 @@ class RequestService implements RequestAgreement {
   }
 
   Either<Notification, Map> _validateResponse(Response response) {
-    if (response == null || response.statusCode != 200) {
+    if (response.statusCode != 200) {
       return Left(Notification('RequestService.invalidResponse', 'O servidor retornou uma resposta inválida.'));
     } else {
       return Right(Map.from(response.data));

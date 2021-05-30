@@ -2,19 +2,19 @@ import 'package:king_investor/shared/notifications/contract.dart';
 import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Score extends ValueObject {
-  int _value;
+  late int _value;
 
-  Score(int value) {
+  Score(int? value) {
     _applyContracts(value);
-    _value = isValid ? value : 0;
+    _value = isValid ? value! : 0;
   }
 
   int get value => _value;
 
-  void setValue(int value) {
+  void setValue(int? value) {
     clearNotifications();
     _applyContracts(value);
-    if (isValid) _value = value;
+    if (isValid) _value = value!;
   }
 
   void setValueFromString(String value) {
@@ -23,7 +23,7 @@ class Score extends ValueObject {
     if (isValid) _value = int.parse(value);
   }
 
-  void _applyContracts(int value) {
+  void _applyContracts(int? value) {
     addNotifications(
       Contract()
           .requires()

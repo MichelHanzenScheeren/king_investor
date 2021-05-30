@@ -11,7 +11,7 @@ import 'package:king_investor/domain/models/company.dart';
 import 'package:king_investor/resources/keys.dart';
 
 class FinanceRepository implements FinanceAgreement {
-  RequestAgreement _requestService;
+  late RequestAgreement _requestService;
 
   FinanceRepository(RequestAgreement requestService) {
     _requestService = requestService;
@@ -40,7 +40,7 @@ class FinanceRepository implements FinanceAgreement {
   @override
   Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
     String symbols = '';
-    tickers?.forEach((e) => symbols += ',' + e);
+    tickers.forEach((e) => symbols += ',' + e);
     final response = await _requestService.request('/get-compact?id=${symbols.replaceFirst(",", "")}');
     return response.fold(
       (notification) => Left(notification),

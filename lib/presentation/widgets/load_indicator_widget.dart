@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoadIndicatorWidget extends StatelessWidget {
-  final Color color;
-  final double size;
-  final double strokeWidth;
+  final Color? color;
+  final double? size;
+  final double? strokeWidth;
   final bool usePrimaryColor;
 
   LoadIndicatorWidget({this.color, this.size, this.strokeWidth, this.usePrimaryColor: true});

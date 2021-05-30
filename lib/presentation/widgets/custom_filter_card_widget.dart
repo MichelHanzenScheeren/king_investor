@@ -19,20 +19,20 @@ class CustomFilterCardWidget extends StatelessWidget {
       builder: (filterController) {
         return Column(
           children: [
-            CustomDropdownWidget<Category>(
+            CustomDropdownWidget<Category?>(
               prefixText: 'Filtrar por',
               initialValue: filterController.selectedCategory,
               onChanged: filterController.setSelectedCategory,
               values: filterController.categoriesDropdown.map((category) {
-                return CustomDropdownItems<Category>(category, category?.name ?? '');
+                return CustomDropdownItems<Category>(category, category.name);
               }).toList(),
             ),
             SizedBox(height: 14),
-            CustomDropdownWidget<Asset>(
+            CustomDropdownWidget<Asset?>(
               initialValue: filterController.selectedAsset,
               onChanged: filterController.setSelectedAsset,
               values: filterController.assetsDropDown.map((asset) {
-                return CustomDropdownItems<Asset>(asset, asset?.company?.symbol ?? '');
+                return CustomDropdownItems<Asset>(asset, asset.company.symbol);
               }).toList(),
             )
           ],

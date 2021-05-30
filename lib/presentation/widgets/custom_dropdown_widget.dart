@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomDropdownWidget<T> extends StatelessWidget {
   final T initialValue;
-  final Function(T) onChanged;
+  final Function(T?)? onChanged;
   final List<CustomDropdownItems<T>> values;
 
   final IconData icon;
@@ -12,8 +12,8 @@ class CustomDropdownWidget<T> extends StatelessWidget {
   final String prefixText;
 
   CustomDropdownWidget({
-    @required this.initialValue,
-    @required this.values,
+    required this.initialValue,
+    required this.values,
     this.onChanged,
     this.icon: Icons.filter_list,
     this.isDense: true,
@@ -51,7 +51,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
                 ),
                 padding: EdgeInsets.fromLTRB(20, 14, 10, 10),
                 child: Text(
-                  (prefixText.isNotEmpty ? '$prefixText:  ' : '') + item.text,
+                  (prefixText.isNotEmpty ? '$prefixText:  ' : '') + item.text!,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               );
@@ -62,7 +62,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
               value: item.value,
               child: Container(
                 padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                child: Text(item.text, style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: Text(item.text!, style: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             );
           }).toList()),
@@ -72,7 +72,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
 
 class CustomDropdownItems<T> {
   final T value;
-  final String text;
+  final String? text;
 
   CustomDropdownItems(this.value, this.text);
 }

@@ -11,7 +11,7 @@ import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/shared/models/model.dart';
 
 class AppData extends Model {
-  User _currentUser;
+  User? _currentUser;
   bool _wasUpdated = false;
   final List<Wallet> _wallets = <Wallet>[];
   final List<Company> _localSearch = <Company>[];
@@ -24,7 +24,7 @@ class AppData extends Model {
   AppData() : super(null, null);
 
   /* GETERS */
-  User get currentUser => _currentUser;
+  User? get currentUser => _currentUser;
 
   String get currentUserId => currentUser?.objectId ?? '';
 
@@ -36,11 +36,11 @@ class AppData extends Model {
 
   UnmodifiableListView<Category> get categories => UnmodifiableListView<Category>(_categories);
 
-  bool containWallet(String objectId) => _wallets.any((element) => element.objectId == objectId);
+  bool containWallet(String? objectId) => _wallets.any((element) => element.objectId == objectId);
 
   bool containCategory(String objectId) => _categories.any((element) => element.objectId == objectId);
 
-  bool containPrice(String ticker) => _prices.containsKey(ticker?.toLowerCase());
+  bool containPrice(String ticker) => _prices.containsKey(ticker.toLowerCase());
 
   bool containExchangeRates(String origin, String destiny) {
     return _exchangeRates.containsKey('$origin$destiny'.toLowerCase());
@@ -48,25 +48,25 @@ class AppData extends Model {
 
   bool containCategoryScores(String walletId) => _categoryScores.containsKey(walletId);
 
-  Wallet getMainWallet() => _wallets.firstWhere((element) => element.isMainWallet, orElse: () => null);
+  Wallet getMainWallet() => _wallets.firstWhere((element) => element.isMainWallet);
 
   Wallet getWalletById(String objectId) => _wallets.firstWhere((element) => element.objectId == objectId);
 
-  Price getPrice(String ticker) => _prices[ticker?.toLowerCase()];
+  Price getPrice(String ticker) => _prices[ticker.toLowerCase()]!;
 
   ExchangeRate getCopyOfExchangeRate(String origin, String destiny) {
-    final aux = _exchangeRates['$origin$destiny'.toLowerCase()];
+    final aux = _exchangeRates['$origin$destiny'.toLowerCase()]!;
     return ExchangeRate(null, null, aux.origin, aux.destiny, Amount(aux.lastPrice.value));
   }
 
   UnmodifiableListView<CategoryScore> getCategoryScores(String walletId) {
-    return UnmodifiableListView<CategoryScore>(_categoryScores[walletId]);
+    return UnmodifiableListView<CategoryScore>(_categoryScores[walletId]!);
   }
 
-  CategoryScore getSpecificCategoryScore(String walletId, String categoryId) {
+  CategoryScore? getSpecificCategoryScore(String walletId, String categoryId) {
     if (!_categoryScores.containsKey(walletId)) return null;
-    if (_categoryScores[walletId].any((score) => score?.category?.objectId == categoryId))
-      return _categoryScores[walletId].firstWhere((score) => score?.category?.objectId == categoryId);
+    if (_categoryScores[walletId]!.any((score) => score.category.objectId == categoryId))
+      return _categoryScores[walletId]!.firstWhere((score) => score.category.objectId == categoryId);
     return null;
   }
 
@@ -101,8 +101,8 @@ class AppData extends Model {
     _wallets[index] = wallet;
   }
 
-  Asset findAsset(String objectId) {
-    Asset asset;
+  Asset? findAsset(String objectId) {
+    Asset? asset;
     _wallets.forEach((wallet) {
       if (wallet.hasAsset(objectId)) asset = wallet.getAsset(objectId);
     });
@@ -118,7 +118,7 @@ class AppData extends Model {
     _localSearch.addAll(results);
   }
 
-  void registerPrice(String ticker, Price price) => _prices[ticker?.toLowerCase()] = price;
+  void registerPrice(String ticker, Price price) => _prices[ticker.toLowerCase()] = price;
 
   void registerExchangeRate(String origin, String destiny, ExchangeRate value) {
     _exchangeRates['$origin$destiny'.toLowerCase()] = value;

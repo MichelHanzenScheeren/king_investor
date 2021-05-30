@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
-  final String labelText;
-  final String placeHolder;
-  final String helperText;
-  final Widget prefixIcon;
-  final Widget suffixIcon;
+  final String? labelText;
+  final String? placeHolder;
+  final String? helperText;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final TextInputType textInputType;
-  final Function(String) onChanged;
-  final Function(String) validator;
-  final Function(String) onSubmit;
-  final Function(String) onSave;
+  final Function(String)? onChanged;
+  final String? Function(String?)? validator;
+  final Function(String)? onSubmit;
+  final Function(String?)? onSave;
   final bool enabled;
   final bool obscure;
   final bool enablePasteOption;
-  final TextEditingController controller;
-  final String initialValue;
+  final TextEditingController? controller;
+  final String? initialValue;
   final double borderRadius;
-  final EdgeInsets contentPadding;
-  final bool autoFocus;
+  final EdgeInsets? contentPadding;
+  final bool? autoFocus;
   final bool centerTitle;
-  final String prefixText;
+  final String? prefixText;
 
   CustomTextFieldWidget({
     this.labelText,
@@ -70,7 +70,7 @@ class CustomTextFieldWidget extends StatelessWidget {
         validator: validator,
         onChanged: onChanged,
         keyboardType: textInputType,
-        style: theme.textTheme.bodyText2.copyWith(fontSize: 16),
+        style: theme.textTheme.bodyText2!.copyWith(fontSize: 16),
         decoration: InputDecoration(
           contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           errorMaxLines: 2,
@@ -88,8 +88,8 @@ class CustomTextFieldWidget extends StatelessWidget {
           prefixStyle: TextStyle(color: Colors.black),
           enabledBorder: getBorder(Colors.transparent),
           focusedBorder: getBorder(Colors.transparent),
-          errorBorder: getBorder(Colors.red[600]),
-          focusedErrorBorder: getBorder(Colors.red[600]),
+          errorBorder: getBorder(Colors.red[600]!),
+          focusedErrorBorder: getBorder(Colors.red[600]!),
           filled: true,
           fillColor: Colors.grey[100],
         ),

@@ -47,6 +47,6 @@ class ParseException {
   };
 
   static String getDescription(int error) {
-    return _error[error];
+    return _error[error] ?? 'Erro desconhecido';
   }
 }

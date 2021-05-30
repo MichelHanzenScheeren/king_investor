@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomFlexText extends StatelessWidget {
   final MainAxisAlignment alignment;
-  final List<String> texts;
-  final TextStyle style;
+  final List<String?> texts;
+  final TextStyle? style;
   final FontWeight weight;
   final double size;
-  final Color color;
+  final Color? color;
   final bool strong;
   final bool showDivider;
 

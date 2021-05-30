@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 
 class UserCard extends StatelessWidget {
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   UserCard(this.createdAt);
 
@@ -40,6 +40,6 @@ class UserCard extends StatelessWidget {
   String getDataText() {
     if (createdAt == null) return "";
     var model = DateFormat("dd/MM/yyyy");
-    return "Usuário desde ${model.format(createdAt)}.";
+    return "Usuário desde ${model.format(createdAt!)}.";
   }
 }

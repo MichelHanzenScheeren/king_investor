@@ -13,8 +13,8 @@ import 'package:king_investor/presentation/widgets/load_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class CategorizedListOfAssets extends StatelessWidget {
-  final AppDataController appDataController;
-  final WalletController walletController;
+  final AppDataController? appDataController;
+  final WalletController? walletController;
 
   CategorizedListOfAssets({this.appDataController, this.walletController});
 
@@ -22,17 +22,17 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (appDataController.walletsLoad || appDataController.categoriesLoad || appDataController.assetsLoad)
+      if (appDataController!.walletsLoad || appDataController!.categoriesLoad || appDataController!.assetsLoad)
         return LoadCardWidget();
-      if (!walletController.isValidData) return LoadAssetsFailed();
-      if (walletController.isEmptyData) return EmptyAssets();
-      final validCategories = walletController.validCategories();
+      if (!walletController!.isValidData) return LoadAssetsFailed();
+      if (walletController!.isEmptyData) return EmptyAssets();
+      final validCategories = walletController!.validCategories();
       return Column(
         children: validCategories.map((category) {
-          final categoryAssets = walletController.getCategoryAssets(category);
+          final categoryAssets = walletController!.getCategoryAssets(category);
           return CustomExpansionTileWidget(
             initiallyExpanded: true,
-            title: Text(category?.name ?? "?", style: TextStyle(fontSize: 20)),
+            title: Text(category.name, style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
               final company = categoryAssets[index].company;
               final normalStyle = TextStyle(color: theme.primaryColorLight, fontSize: 13);
@@ -50,9 +50,7 @@ class CategorizedListOfAssets extends StatelessWidget {
                         text: TextSpan(
                           text: company.symbol + '   ',
                           style: titleStyle,
-                          children: [
-                            TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)
-                          ],
+                          children: [TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)],
                         ),
                       ),
                     ),
@@ -72,9 +70,8 @@ class CategorizedListOfAssets extends StatelessWidget {
 
   Widget companyPrice(Company company, ThemeData theme) {
     return Obx(() {
-      if (appDataController.pricesLoad)
-        return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
-      final price = walletController.getPriceByTicker(company?.ticker);
+      if (appDataController!.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+      final price = walletController!.getPriceByTicker(company.ticker);
       return Container(
         margin: const EdgeInsets.only(left: 8),
         child: Column(
@@ -84,7 +81,7 @@ class CategorizedListOfAssets extends StatelessWidget {
           children: <Widget>[
             Text(
               '${price.lastPrice.toMonetary(company.currency)}',
-              style: theme.textTheme.headline1.copyWith(
+              style: theme.textTheme.headline1!.copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: theme.primaryColorLight,

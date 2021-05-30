@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomExpansionTileWidget extends StatelessWidget {
-  final Widget title;
-  final List<Widget> children;
-  final EdgeInsets margin;
-  final EdgeInsets childrenPadding;
+  final Widget? title;
+  final List<Widget>? children;
+  final EdgeInsets? margin;
+  final EdgeInsets? childrenPadding;
   final bool initiallyExpanded;
 
   CustomExpansionTileWidget({

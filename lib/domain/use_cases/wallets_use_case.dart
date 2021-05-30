@@ -6,8 +6,8 @@ import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 class WalletsUseCase {
-  DatabaseRepositoryAgreement _database;
-  AppData _appData;
+  late DatabaseRepositoryAgreement _database;
+  late AppData _appData;
 
   WalletsUseCase(DatabaseRepositoryAgreement database, AppData appData) {
     _database = database;
@@ -41,10 +41,10 @@ class WalletsUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> addWallet(Wallet newWallet) async {
+  Future<Either<Notification, Notification?>> addWallet(Wallet? newWallet) async {
     final validate = _validateWalletToAdd(newWallet);
     if (validate.isLeft()) return validate;
-    final response = await _database.create(newWallet);
+    final response = await _database.create(newWallet!);
     return response.fold(
       (notification) => Left(notification),
       (notification2) {
@@ -54,10 +54,10 @@ class WalletsUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> deleteWallet(String walletId) async {
+  Future<Either<Notification, Notification>> deleteWallet(String? walletId) async {
     final validate = _validateWalletToDelete(walletId);
     if (validate.isLeft()) return validate;
-    final Wallet wallet = _appData.getWalletById(walletId);
+    final Wallet wallet = _appData.getWalletById(walletId!);
     final response = await _database.delete(wallet);
     return response.fold(
       (notification1) => Left(notification1),
@@ -68,10 +68,10 @@ class WalletsUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> updateWallet(Wallet wallet) async {
+  Future<Either<Notification, Notification>> updateWallet(Wallet? wallet) async {
     final validate = _validateWalletToUpdate(wallet);
     if (validate.isLeft()) return validate;
-    final response = await _database.update(wallet);
+    final response = await _database.update(wallet!);
     return response.fold(
       (notification1) => Left(notification1),
       (notification2) {
@@ -81,13 +81,13 @@ class WalletsUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> changeMainWallet(String newMainWalletId) async {
+  Future<Either<Notification, Notification>> changeMainWallet(String? newMainWalletId) async {
     final validate = _validateWalletsToChangeMainWallet(newMainWalletId);
     if (validate.isLeft()) return validate;
     final validate2 = await _setCurrentMainWallet();
     if (validate2.isLeft()) return validate2;
 
-    final Wallet newMainWallet = _appData.getWalletById(newMainWalletId);
+    final Wallet newMainWallet = _appData.getWalletById(newMainWalletId!);
     newMainWallet.setMainWallet(true);
     final response2 = await _database.update(newMainWallet);
     return response2.fold(
@@ -96,7 +96,7 @@ class WalletsUseCase {
     );
   }
 
-  Either<Notification, Notification> _validateWalletToAdd(Wallet wallet) {
+  Either<Notification, Notification> _validateWalletToAdd(Wallet? wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.addWallet', 'Uma carteira inválida não pode ser salva'));
     if (_appData.containWallet(wallet.objectId))
@@ -106,15 +106,15 @@ class WalletsUseCase {
     return Right(Notification('', ''));
   }
 
-  Either<Notification, Notification> _validateWalletToDelete(String walletId) {
+  Either<Notification, Notification> _validateWalletToDelete(String? walletId) {
     if (!_appData.containWallet(walletId))
       return Left(Notification('WalletsUseCase.deleteWallet', 'Carteira não encontrada'));
-    if (_appData.getWalletById(walletId).isMainWallet)
+    if (_appData.getWalletById(walletId!).isMainWallet)
       return Left(Notification('WalletsUseCase.deleteWallet', 'Não é possível apagar a carteira principal'));
     return Right(Notification('', ''));
   }
 
-  Either<Notification, Notification> _validateWalletToUpdate(Wallet wallet) {
+  Either<Notification, Notification> _validateWalletToUpdate(Wallet? wallet) {
     if (wallet == null || !wallet.isValid)
       return Left(Notification('WalletsUseCase.editWallet', 'Uma carteira inválida não pode ser editada'));
     if (!_appData.containWallet(wallet.objectId))
@@ -125,21 +125,19 @@ class WalletsUseCase {
     return Right(Notification('', ''));
   }
 
-  Either<Notification, Notification> _validateWalletsToChangeMainWallet(String newMainWalletId) {
+  Either<Notification, Notification> _validateWalletsToChangeMainWallet(String? newMainWalletId) {
     if (!_appData.containWallet(newMainWalletId))
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Carteira não encontrada'));
-    if (_appData.getMainWallet()?.objectId == newMainWalletId)
+    if (_appData.getMainWallet().objectId == newMainWalletId)
       return Left(Notification('WalletsUseCase.changeMainWallet', 'Esta já é a carteira principal'));
     return Right(Notification('', ''));
   }
 
   Future<Either<Notification, Notification>> _setCurrentMainWallet() async {
     final Wallet oldMainWallet = _appData.getMainWallet();
-    if (oldMainWallet != null) {
-      oldMainWallet.setMainWallet(false);
-      final response1 = await _database.update(oldMainWallet);
-      if (response1.isLeft()) return response1;
-    }
+    oldMainWallet.setMainWallet(false);
+    final response1 = await _database.update(oldMainWallet);
+    if (response1.isLeft()) return response1;
     return Right(Notification('', ''));
   }
 }

@@ -1,11 +1,13 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/distribution_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 
 class ChartCard extends StatelessWidget {
   final DistributionController controller;
+  final AppDataController appDataController = Get.find();
 
   ChartCard(this.controller);
 
@@ -16,6 +18,7 @@ class ChartCard extends StatelessWidget {
       init: controller,
       builder: (controller) {
         final result = controller.getDistributionItems();
+        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return Container();
         if (result.items.isEmpty) CustomCardWidget(children: [Icon(Icons.warning, size: 150)]);
         return CustomCardWidget(
           children: [

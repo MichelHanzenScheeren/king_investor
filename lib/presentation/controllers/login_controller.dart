@@ -6,7 +6,7 @@ import 'package:king_investor/presentation/static/app_routes.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class LoginController extends GetxController {
-  UserUseCase _userUseCase;
+  late UserUseCase _userUseCase;
   RxBool _loading = false.obs;
   RxBool _showPassword = false.obs;
   String _email = '';
@@ -21,18 +21,18 @@ class LoginController extends GetxController {
   String get email => _email;
   String get password => _password;
 
-  void setLoading(bool value) => _loading.value = value ?? false;
+  void setLoading(bool value) => _loading.value = value;
   void setShowPassword() => _showPassword.value = !_showPassword.value;
-  void setEmail(String value) => _email = value ?? '';
-  void setPassword(String value) => _password = value ?? '';
+  void setEmail(String value) => _email = value;
+  void setPassword(String value) => _password = value;
 
-  String emailValidator(String value) {
+  String? emailValidator(String? value) {
     final Email email = Email(value);
     if (email.isValid) return null;
     return email.notifications.first.message;
   }
 
-  String passwordValidator(String value) {
+  String? passwordValidator(String? value) {
     final Password password = Password(value);
     if (password.isValid) return null;
     return password.notifications.first.message;
@@ -59,7 +59,7 @@ class LoginController extends GetxController {
   void goToSignUpPage() => Get.offNamed(AppRoutes.signUp);
 
   void resetPassword() async {
-    if (_email == null || _email.isEmpty) {
+    if (_email.isEmpty) {
       _showMessage('Informe o email associado a sua conta para recuperar sua senha');
     } else {
       final response = await _userUseCase.requestPasswordReset(_email);

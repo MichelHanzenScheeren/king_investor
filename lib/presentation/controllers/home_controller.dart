@@ -10,13 +10,13 @@ import 'package:king_investor/presentation/controllers/app_data_controller.dart'
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class HomeController extends GetxController {
-  AppDataController appDataController;
-  UserUseCase _userUseCase;
-  AssetsUseCase _assetsUseCase;
+  late AppDataController appDataController;
+  late UserUseCase _userUseCase;
+  late AssetsUseCase _assetsUseCase;
   bool _showModal = true;
-  PageController pageController;
+  late PageController pageController;
+  late ScrollController scrollController;
   RxInt _currentPage = 0.obs;
-  ScrollController scrollController;
   RxBool _mustShowFloatButton = true.obs;
   bool _isScrollingDown = false;
 
@@ -56,7 +56,9 @@ class HomeController extends GetxController {
     final response = await _userUseCase.currentUser();
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
-      (user) => AppSnackbar.show(message: 'Bem vindo(a), ${user?.name?.firstName}!', type: AppSnackbarType.success),
+      (user) {
+        AppSnackbar.show(message: 'Bem vindo(a), ${user?.name.firstName ?? "usuário"}!', type: AppSnackbarType.success);
+      },
     );
     _showModal = false;
   }
@@ -66,7 +68,7 @@ class HomeController extends GetxController {
   int get currentPage => _currentPage.value;
 
   void setCurrentPage(int value) {
-    _currentPage.value = value ?? 0;
+    _currentPage.value = value;
     _isScrollingDown = false;
     _mustShowFloatButton.value = true;
   }

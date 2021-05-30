@@ -4,7 +4,7 @@ import 'package:king_investor/domain/models/price.dart';
 import '../../static/prices_response.dart';
 
 main() async {
-  Map<String, dynamic> map = kPricesResponseMap['result']['PSSA3:BZ'];
+  Map<String, dynamic>? map = kPricesResponseMap['result']!['PSSA3:BZ'];
 
   test('Should return valid Price when use fromMapToModel(map)', () {
     Price item = PriceConverter().fromMapToModel(map);

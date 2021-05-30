@@ -44,8 +44,8 @@ class EvolutionRow extends StatelessWidget {
     String auxValue = value.replaceAll(' ', '').replaceAll('R\$', '').replaceAll(',', '').replaceAll('%', '');
     auxValue.replaceAll('(', '').replaceAll(')', '');
     if (double.tryParse(auxValue) == null) return style;
-    if (double.parse(auxValue) > 0) return style.copyWith(color: Colors.green[300].withAlpha(240));
-    if (double.parse(auxValue) < 0) return style.copyWith(color: Colors.red[400].withAlpha(220));
+    if (double.parse(auxValue) > 0) return style.copyWith(color: Colors.green[300]!.withAlpha(240));
+    if (double.parse(auxValue) < 0) return style.copyWith(color: Colors.red[400]!.withAlpha(220));
     return style;
   }
 }

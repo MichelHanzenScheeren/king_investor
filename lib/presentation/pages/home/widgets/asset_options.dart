@@ -59,7 +59,7 @@ class AssetsOptions extends StatelessWidget {
     );
   }
 
-  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap, bool actived: true}) {
+  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function? onTap, bool actived: true}) {
     return SpeedDialChild(
       child: Icon(icon, color: theme.hintColor),
       label: label,
@@ -68,7 +68,7 @@ class AssetsOptions extends StatelessWidget {
       foregroundColor: Colors.transparent,
       elevation: 0,
       labelStyle: TextStyle(color: theme.hintColor),
-      onTap: actived ? onTap : null,
+      onTap: actived ? onTap as void Function()? : null,
     );
   }
 

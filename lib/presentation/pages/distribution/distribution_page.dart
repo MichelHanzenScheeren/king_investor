@@ -30,7 +30,7 @@ class DistributionPage extends StatelessWidget {
                 CustomDropdownWidget<Category>(
                   prefixText: 'Agrupar por',
                   initialValue: distributionController.selectedCategory,
-                  onChanged: distributionController.setSelectedFilter,
+                  onChanged: (item) => distributionController.setSelectedFilter(item!),
                   values: _filterDropdownValues(),
                 ),
               ],
@@ -46,6 +46,6 @@ class DistributionPage extends StatelessWidget {
 
   List<CustomDropdownItems<Category>> _filterDropdownValues() {
     final categories = distributionController.categoriesFilter;
-    return List.generate(categories.length, (i) => CustomDropdownItems(categories[i], categories[i]?.name));
+    return List.generate(categories.length, (i) => CustomDropdownItems(categories[i], categories[i].name));
   }
 }

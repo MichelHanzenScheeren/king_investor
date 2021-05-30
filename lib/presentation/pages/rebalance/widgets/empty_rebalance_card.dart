@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 
-class EmptyERebalanceCard extends StatelessWidget {
+class EmptyRebalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = TextStyle(color: Theme.of(context).hintColor, fontSize: 22);

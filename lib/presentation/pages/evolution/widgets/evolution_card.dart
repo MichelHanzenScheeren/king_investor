@@ -5,10 +5,10 @@ import 'package:king_investor/presentation/widgets/custom_expansion_tile_widget.
 
 class EvolutionCard extends StatelessWidget {
   final Performance result;
-  final String resultTitle;
+  final String? resultTitle;
   final bool initiallyExpanded;
 
-  EvolutionCard({@required this.result, @required this.resultTitle, this.initiallyExpanded: false});
+  EvolutionCard({required this.result, required this.resultTitle, this.initiallyExpanded: false});
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class RebalancePage extends StatelessWidget {
           builder: (rebalanceController) {
             if (appDataController.categoryScoresLoad || appDataController.assetsLoad || appDataController.pricesLoad)
               return LoadCardWidget();
-            if (appDataController.assets.isEmpty) return EmptyERebalanceCard();
+            if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyRebalanceCard();
             if (rebalanceController.containsRebalanceResults) return RebalanceResultsCard(rebalanceController);
             return Column(
               children: [

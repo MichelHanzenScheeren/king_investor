@@ -17,7 +17,7 @@ class RebalanceResultsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rebalanceResult = rebalanceController.rebalanceResult;
+    final rebalanceResult = rebalanceController.rebalanceResult!;
     final totalValue = Amount(rebalanceController.aportValue.value - rebalanceResult.totalValue.value);
     final theme = Theme.of(context);
     final title = TextStyle(color: theme.hintColor, fontSize: 18, fontWeight: FontWeight.w900);
@@ -131,8 +131,8 @@ class RebalanceResultsCard extends StatelessWidget {
       textContent: '    As quantidades serão incrementadas aos ativos correspondentes e o preço médio ' +
           'recalculado com base no preço atual do ativo.',
       confirmButtonText: 'APLICAR',
-      accentColor: Theme.of(Get.context).primaryColor,
-      textContentColor: Theme.of(Get.context).hintColor,
+      accentColor: Theme.of(Get.context!).primaryColor,
+      textContentColor: Theme.of(Get.context!).hintColor,
       onConfirm: () {
         Get.back();
         rebalanceController.saveRebalance();

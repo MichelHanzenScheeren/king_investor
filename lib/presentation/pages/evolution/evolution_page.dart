@@ -20,7 +20,7 @@ class EvolutionPage extends StatelessWidget {
         SizedBox(height: 8),
         Obx(() {
           if (appDataController.isLoadingSomething) return LoadCardWidget();
-          if (appDataController.assets.isEmpty) return EmptyEvolutionCard();
+          if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyEvolutionCard();
           final result = evolutionController.getGeneralPerformance();
           return EvolutionCard(resultTitle: 'Desempenho Geral', result: result, initiallyExpanded: true);
         }),
@@ -32,15 +32,15 @@ class EvolutionPage extends StatelessWidget {
               CustomDropdownWidget<SelectedFilter>(
                 prefixText: 'Filtrar por',
                 initialValue: evolutionController.selectedFilter,
-                onChanged: evolutionController.setSelectedFilter,
-                values: _filterDropdownValues(),
+                onChanged: (item) => evolutionController.setSelectedFilter(item!),
+                values: _filterDropdownValues() as List<CustomDropdownItems<SelectedFilter>>,
               ),
               SizedBox(height: 12),
               CustomDropdownWidget<SelectedOrder>(
                 prefixText: 'Ordenar por',
                 initialValue: evolutionController.selectedOrder,
-                onChanged: evolutionController.setSelectedOrder,
-                values: _orderDropdownValues(),
+                onChanged: (item) => evolutionController.setSelectedOrder(item!),
+                values: _orderDropdownValues() as List<CustomDropdownItems<SelectedOrder>>,
               ),
             ],
           );

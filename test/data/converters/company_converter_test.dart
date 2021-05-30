@@ -5,7 +5,7 @@ import 'package:king_investor/domain/models/company.dart';
 import '../../static/search_response.dart';
 
 main() async {
-  Map<String, dynamic> map = kSearchResponseMap['quote'][0];
+  Map<String, dynamic> map = kSearchResponseMap['quote']![0];
 
   test('Should return valid Company when use fromMapToModel(map)', () {
     Company item = CompanyConverter().fromMapToModel(map);

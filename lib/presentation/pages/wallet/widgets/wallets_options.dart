@@ -9,7 +9,7 @@ class WalletsOptions extends StatelessWidget {
   final WalletController walletController;
   final AppDataController appDataController;
 
-  WalletsOptions({@required this.walletController, @required this.appDataController});
+  WalletsOptions({required this.walletController, required this.appDataController});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class WalletsOptions extends StatelessWidget {
         CustomBottomSheetOption(
           icon: Icons.library_add_check,
           text: "Definir como carteira principal",
-          show: !appDataController.currentWallet.isMainWallet,
+          show: !appDataController.currentWallet!.isMainWallet,
           onTap: _defineMainWallet,
         ),
         CustomBottomSheetOption(
@@ -44,12 +44,12 @@ class WalletsOptions extends StatelessWidget {
   void _changeWallet() {
     Get.back();
     final current = appDataController.currentWallet;
-    final wallets = appDataController.wallets.where((e) => e.objectId != current.objectId).toList();
+    final wallets = appDataController.wallets.where((e) => e.objectId != current!.objectId).toList();
     Get.bottomSheet(CustomBottomSheetWidget(
       options: List<CustomBottomSheetOption>.generate(
         wallets.length,
         (index) => CustomBottomSheetOption(
-          text: '${index + 1}  -  ${wallets[index]?.name}',
+          text: '${index + 1}  -  ${wallets[index].name}',
           textSize: 18,
           onTap: () {
             Get.back();

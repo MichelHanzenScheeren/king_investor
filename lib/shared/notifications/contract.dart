@@ -11,35 +11,35 @@ class Contract extends Notifiable {
     return this;
   }
 
-  Contract isNotEmpty(String value, String property, String message) {
-    if (value?.trim()?.length == 0) addNotification(property, message);
+  Contract isNotEmpty(String? value, String property, String message) {
+    if (value?.trim().length == 0) addNotification(property, message);
     return this;
   }
 
-  Contract isNotNullOrEmpty(String value, String property, String message) {
-    if (value == null || value?.trim()?.length == 0) addNotification(property, message);
+  Contract isNotNullOrEmpty(String? value, String property, String message) {
+    if (value == null || value.trim().length == 0) addNotification(property, message);
     return this;
   }
 
-  Contract minLength(String value, int min, String property, String message) {
+  Contract minLength(String? value, int min, String property, String message) {
     if (value == null) return this;
     if (value.trim().length < min) addNotification(property, message);
     return this;
   }
 
-  Contract maxLength(String value, int max, String property, String message) {
+  Contract maxLength(String? value, int max, String property, String message) {
     if (value == null) return this;
     if (value.trim().length > max) addNotification(property, message);
     return this;
   }
 
-  Contract minAndMaxLength(String value, int min, int max, String property, String message) {
+  Contract minAndMaxLength(String? value, int min, int max, String property, String message) {
     if (value == null) return this;
     if (value.trim().length < min || value.trim().length > max) addNotification(property, message);
     return this;
   }
 
-  Contract isValidEmail(String value, String property, String message) {
+  Contract isValidEmail(String? value, String property, String message) {
     if (value == null) return this;
     if (!RegExp(emailRegex).hasMatch(value)) addNotification(property, message);
     return this;
@@ -57,13 +57,13 @@ class Contract extends Notifiable {
     return this;
   }
 
-  Contract canBeConvertedToDouble(String value, String property, String message) {
+  Contract canBeConvertedToDouble(String? value, String property, String message) {
     if (value == null) return this;
     if (double.tryParse(value) == null) addNotification(property, message);
     return this;
   }
 
-  Contract canBeConvertedToInt(String value, String property, String message) {
+  Contract canBeConvertedToInt(String? value, String property, String message) {
     if (value == null) return this;
     if (int.tryParse(value) == null) addNotification(property, message);
     return this;

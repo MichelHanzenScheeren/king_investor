@@ -18,7 +18,7 @@ import 'package:king_investor/shared/models/model.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 class DatabaseRepository implements DatabaseRepositoryAgreement {
-  DatabaseServiceAgreement _database;
+  late DatabaseServiceAgreement _database;
 
   DatabaseRepository(DatabaseServiceAgreement database) {
     _database = database;
@@ -50,7 +50,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   Future<Either<Notification, Notification>> delete(Object appObject) async {
     try {
       String tableName = getTableName(appObject.runtimeType);
-      Model model = appObject;
+      Model model = appObject as Model;
       return await _database.delete(tableName, model.objectId);
     } catch (erro) {
       return Left(_getError('delete', erro));
@@ -134,7 +134,7 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   List _convertList(List list, Type type) {
-    int len = list?.length ?? 0;
+    int len = list.length;
     if (type == Asset) return List<Asset>.generate(len, (i) => AssetConverter().fromMapToModel(list[i]));
     if (type == Category) return List<Category>.generate(len, (i) => CategoryConverter().fromMapToModel(list[i]));
     if (type == Company) return List<Company>.generate(len, (i) => CompanyConverter().fromMapToModel(list[i]));

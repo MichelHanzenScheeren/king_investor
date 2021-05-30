@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomButtonWidget extends StatelessWidget {
-  final Color backGroundColor;
-  final Color borderColor;
+  final Color? backGroundColor;
+  final Color? borderColor;
   final String buttonText;
-  final TextStyle textStyle;
-  final Function onPressed;
-  final double heigth;
+  final TextStyle? textStyle;
+  final Function? onPressed;
+  final double? heigth;
   final double width;
   final double borderRadius;
   CustomButtonWidget({
@@ -41,7 +41,7 @@ class CustomButtonWidget extends StatelessWidget {
           style: textStyle ?? theme.textTheme.bodyText2,
           textAlign: TextAlign.center,
         ),
-        onPressed: onPressed,
+        onPressed: onPressed as void Function()?,
       ),
     );
   }

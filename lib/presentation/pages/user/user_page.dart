@@ -27,7 +27,7 @@ class UserPage extends StatelessWidget {
             builder: (userController) {
               if (userControler.userLoad) return LoadCardWidget();
               // if (!userControler.validUSer) return InvalidUserCard();
-              final user = userControler.user;
+              final user = userControler.user!;
               return Column(
                 children: [
                   SizedBox(height: 4),
@@ -36,17 +36,17 @@ class UserPage extends StatelessWidget {
                     children: [
                       OptionRow(
                         leftIcon: Icons.person,
-                        text: user.name?.firstName ?? '?',
+                        text: user.name.firstName,
                         function: () => _updateName(userControler),
                       ),
                       OptionRow(
                         leftIcon: Icons.person_add_alt,
-                        text: user.name.lastName ?? '?',
+                        text: user.name.lastName,
                         function: () => _updateLastName(userControler),
                       ),
                       OptionRow(
                         leftIcon: Icons.alternate_email,
-                        text: user.email?.address ?? '?',
+                        text: user.email.address,
                         function: () => _updateEmail(userControler),
                       ),
                       OptionRow(
@@ -81,15 +81,15 @@ class UserPage extends StatelessWidget {
       onChange: (firstName) => auxName.setName(firstName, 'Auxiliar'),
       validate: (value) => auxName.isValid ? null : auxName.firstNotification,
       onSubmit: () {
-        userName.setName(auxName.firstName, userName?.lastName);
+        userName!.setName(auxName.firstName, userName.lastName);
         userControler.updateUserData();
       },
     ));
   }
 
   void _updateLastName(UserController userControler) {
-    final userName = userControler.user.name;
-    final Name auxLastName = Name(userName?.firstName, userName?.lastName ?? '');
+    final userName = userControler.user!.name;
+    final Name auxLastName = Name(userName.firstName, userName.lastName);
     Get.bottomSheet(UpdateUserData(
       value: auxLastName.lastName,
       prefixText: 'Sobrenome',
@@ -103,14 +103,14 @@ class UserPage extends StatelessWidget {
   }
 
   void _updateEmail(UserController userControler) {
-    final Email auxEmail = Email(userControler.user.email?.address);
+    final Email auxEmail = Email(userControler.user!.email.address);
     Get.bottomSheet(UpdateUserData(
       value: auxEmail.address,
       prefixText: 'E-mail',
       onChange: (email) => auxEmail.setAddress(email),
       validate: (value) => auxEmail.isValid ? null : auxEmail.firstNotification,
       onSubmit: () {
-        userControler.user.email?.setAddress(auxEmail.address);
+        userControler.user!.email.setAddress(auxEmail.address);
         userControler.updateUserData();
       },
     ));
@@ -120,8 +120,8 @@ class UserPage extends StatelessWidget {
     Get.dialog(CustomDialogWidget(
       title: 'Tem certeza que deseja alterar sua senha?',
       textContent: 'Uma mensagem com as instruções de redefinição será enviada ao seu e-mail.',
-      accentColor: Theme.of(Get.context).primaryColor,
-      textContentColor: Theme.of(Get.context).hintColor,
+      accentColor: Theme.of(Get.context!).primaryColor,
+      textContentColor: Theme.of(Get.context!).hintColor,
       confirmButtonText: 'REDEFINIR',
       onConfirm: userControler.passwordReset,
     ));

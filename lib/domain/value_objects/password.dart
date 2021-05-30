@@ -2,9 +2,10 @@ import 'package:king_investor/shared/notifications/contract.dart';
 import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Password extends ValueObject {
-  String _value;
-  Password(String value) {
-    _value = value;
+  late String _value;
+
+  Password(String? value) {
+    _value = value ?? '';
     _applyContracts();
   }
 

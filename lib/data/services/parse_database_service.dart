@@ -9,14 +9,14 @@ import 'package:king_investor/shared/extensions/string_extension.dart';
 const pointerIndicator = 'ForeignKey';
 
 class ParseDatabaseService implements DatabaseServiceAgreement {
-  ParseClient _client;
+  ParseClient? _client;
 
-  ParseDatabaseService({ParseClient client}) {
+  ParseDatabaseService({ParseClient? client}) {
     _client = client ?? ParseHTTPClient();
   }
 
   @override
-  Future<Either<Notification, Notification>> create(String table, Map map, {String ownerId}) async {
+  Future<Either<Notification, Notification>> create(String table, Map map, {String? ownerId}) async {
     try {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
@@ -59,7 +59,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       myQuery.includeObject(include);
       final response = await myQuery.query();
-      if (response.success) return Right(response.results);
+      if (response.success) return Right(response.results ?? []);
       return Left(_getError('getAll', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.getAll', erro.toString()));
@@ -85,7 +85,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       }
       myQuery.includeObject(include);
       final response = await myQuery.query();
-      if (response.success) return Right(response.results);
+      if (response.success) return Right(response.results ?? []);
       return Left(_getError('filterByRelation', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.filterByRelation', erro.toString()));
@@ -106,7 +106,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       }
       myQuery.includeObject(include);
       final response = await myQuery.query();
-      if (response.success) return Right(response.results);
+      if (response.success) return Right(response.results ?? []);
       return Left(_getError('filterByProperties', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.filterByProperties', erro.toString()));

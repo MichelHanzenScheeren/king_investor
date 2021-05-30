@@ -3,17 +3,17 @@ import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/shared/models/model.dart';
 
 class Wallet extends Model {
-  bool _isMainWallet;
-  String _name;
+  late bool _isMainWallet;
+  late String _name;
   final String userForeignKey;
 
-  List<Asset> _assets;
+  late List<Asset> _assets;
 
   Wallet(
-    String objectId,
-    DateTime createdAt,
-    bool isMainWallet,
-    String name,
+    String? objectId,
+    DateTime? createdAt,
+    bool? isMainWallet,
+    String? name,
     this.userForeignKey,
   ) : super(objectId, createdAt) {
     _name = name == null || name.trim().isEmpty ? 'Nova Carteira' : name;
@@ -33,17 +33,17 @@ class Wallet extends Model {
 
   UnmodifiableListView<Asset> get assets => UnmodifiableListView<Asset>(_assets);
 
-  void setName(String name) {
+  void setName(String? name) {
     if (name != null && name.trim().isNotEmpty) _name = name;
   }
 
-  void setMainWallet(bool isMainWallet) {
+  void setMainWallet(bool? isMainWallet) {
     if (isMainWallet != null) _isMainWallet = isMainWallet;
   }
 
-  bool isValidAssetToAdd(Asset asset) {
+  bool isValidAssetToAdd(Asset? asset) {
     clearNotifications();
-    if (asset == null || asset?.company == null) {
+    if (asset == null) {
       addNotification('Wallet.assets', 'O item não pode ser nulo');
       return false;
     } else if (!asset.isValid) {
@@ -78,11 +78,11 @@ class Wallet extends Model {
   bool hasAsset(String objectId) => _assets.any((asset) => asset.objectId == objectId);
 
   void updateAsset(Asset asset) {
-    if (!isValidAssetToManipulate(asset?.objectId))
+    if (!isValidAssetToManipulate(asset.objectId))
       throw Exception('Tentativa de edição de item que não existe na carteira');
     int index = _assets.indexWhere((item) => item.objectId == asset.objectId);
     _assets[index] = asset;
   }
 
-  Asset getAsset(String id) => _assets.firstWhere((item) => item.objectId == id, orElse: () => null);
+  Asset getAsset(String id) => _assets.firstWhere((item) => item.objectId == id);
 }

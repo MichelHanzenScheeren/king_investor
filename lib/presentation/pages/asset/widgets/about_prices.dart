@@ -10,8 +10,8 @@ class AboutPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final asset = assetController.asset;
-    final currency = asset.company?.currency ?? '';
+    final asset = assetController.asset!;
+    final currency = asset.company.currency;
     final price = assetController.getAssetPrice();
     return Column(
       children: [

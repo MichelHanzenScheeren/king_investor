@@ -17,9 +17,9 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/app_client_database_mock.dart';
 
 main() {
-  AppData appData;
-  CategoriesUseCase categoriesUseCase;
-  Wallet wallet1;
+  late AppData appData;
+  late CategoriesUseCase categoriesUseCase;
+  late Wallet wallet1;
 
   setUpAll(() async {
     await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
@@ -38,7 +38,7 @@ main() {
     test('should Return Right(List<Categories>)', () async {
       final response = await categoriesUseCase.getCategories();
       expect(response.isRight(), isTrue);
-      expect(response.getOrElse(() => null)?.length, 7);
+      expect(response.getOrElse(() => <Category>[]).length, 7);
     });
     test('expect appData.categories contains getted categories)', () async {
       expect(appData.categories.length, 7);
@@ -49,12 +49,12 @@ main() {
     test('should Return left when send null to walletId parameter)', () async {
       final response = await categoriesUseCase.getCategoryScores(null);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Carteira não encontrada');
+      expect(response.fold((l) => l.message, (r) => null), 'Carteira não encontrada');
     });
     test('should Return left when send invalid value to walletId parameter)', () async {
       final response = await categoriesUseCase.getCategoryScores('123789');
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Carteira não encontrada');
+      expect(response.fold((l) => l.message, (r) => null), 'Carteira não encontrada');
     });
     test('should Return Right(List) when correct request', () async {
       final response = await categoriesUseCase.getCategoryScores(wallet1.objectId);
@@ -72,7 +72,7 @@ main() {
     test('should Return left when send null to catScore parameter', () async {
       final response = await categoriesUseCase.updateCategoryScores(null);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Nota de categoria inválida');
+      expect(response.fold((l) => l.message, (r) => null), 'Nota de categoria inválida');
     });
     test('should Return left when send invalid categoryScore', () async {
       final score = CategoryScore(null, null, Score(null), Category(null, null, 'A', 9), 'AB');
@@ -83,19 +83,19 @@ main() {
       final score = CategoryScore(null, null, Score(5), Category(null, null, 'A', 9), 'AB');
       final response = await categoriesUseCase.updateCategoryScores(score);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Carteira não encontrada');
+      expect(response.fold((l) => l.message, (r) => null), 'Carteira não encontrada');
     });
     test('should Return left when send category that doesnt exists', () async {
       final score = CategoryScore(null, null, Score(5), Category(null, null, 'A', 9), wallet1.objectId);
       final response = await categoriesUseCase.updateCategoryScores(score);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Categoria não encontrada');
+      expect(response.fold((l) => l.message, (r) => null), 'Categoria não encontrada');
     });
     test('should Return left when send exists categoryScore with invalid id', () async {
       final score = CategoryScore(null, null, Score(5), appData.categories.first, wallet1.objectId);
       final response = await categoriesUseCase.updateCategoryScores(score);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Tentativa de edição inválida');
+      expect(response.fold((l) => l.message, (r) => null), 'Tentativa de edição inválida');
     });
     test('should Return Right when valid categoryScore that already exist', () async {
       final score = CategoryScore('cxgmtUYfM4', null, Score(5), appData.categories.first, wallet1.objectId);

@@ -11,7 +11,7 @@ class AppRequestServiceSimulated implements RequestAgreement {
     int conectTimeoutMiliseconds: 5000,
     int sendTimeoutMiliseconds: 5000,
     int receiveTimeoutMiliseconds: 10000,
-    Map headers,
+    Map? headers,
     String baseUrl: '',
   }) {}
 

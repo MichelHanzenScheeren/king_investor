@@ -5,8 +5,8 @@ import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 class UserUseCase {
-  AuthenticationRepositoryAgreement _authentication;
-  AppData _appData;
+  late AuthenticationRepositoryAgreement _authentication;
+  late AppData _appData;
 
   UserUseCase(AuthenticationRepositoryAgreement authentication, AppData appData) {
     _authentication = authentication;
@@ -45,7 +45,7 @@ class UserUseCase {
     });
   }
 
-  Future<Either<Notification, User>> currentUser() async {
+  Future<Either<Notification, User?>> currentUser() async {
     if (_appData.currentUser != null) return Right(_appData.currentUser);
     final response = await _authentication.currentUser();
     return response.fold(
@@ -70,9 +70,10 @@ class UserUseCase {
     });
   }
 
-  Future<Either<Notification, Notification>> updateUserData(User user) async {
+  Future<Either<Notification, Notification>> updateUserData(User? user) async {
     if (_appData.currentUser == null)
       return Left(Notification('UserUseCase.updateUserData', 'Nenhum usuário conectado'));
+    if (user == null) return Left(Notification('UserUseCase.updateUserData', 'Usuário inválido'));
     final response = await _authentication.updateUserData(user);
     return response.fold(
       (notification) => Left(notification),
@@ -83,7 +84,7 @@ class UserUseCase {
     );
   }
 
-  Future<Either<Notification, Notification>> requestPasswordReset(String email) async {
+  Future<Either<Notification, Notification>> requestPasswordReset(String? email) async {
     if (email == null || email.isEmpty) return Left(Notification('UserUseCase.updateUserData', 'Email inválido'));
     final response = await _authentication.requestPasswordReset(email);
     return response.fold(

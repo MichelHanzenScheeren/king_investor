@@ -8,13 +8,13 @@ class AppSnackbar {
 
   static void show({String message: '', AppSnackbarType type: AppSnackbarType.error}) {
     try {
-      if (Get.isSnackbarOpen) Get.back();
+      if (Get.isSnackbarOpen!) Get.back();
 
       String _message = _getMessage(message, type);
       TextStyle style = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
       Get.snackbar(
-        null,
-        null,
+        '',
+        '',
         titleText: Container(),
         messageText: Column(
           mainAxisAlignment: MainAxisAlignment.center,

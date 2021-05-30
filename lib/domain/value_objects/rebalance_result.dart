@@ -18,9 +18,9 @@ class RebalanceResult extends ValueObject {
     assetsToBuy.keys.forEach((key) {
       final ticker = key;
       final symbol = assets.firstWhere((e) => e.company.ticker == ticker).company.symbol;
-      final quantity = Quantity(assetsToBuy[key][kRebalanceQtd]);
+      final quantity = Quantity(assetsToBuy[key]![kRebalanceQtd]);
       final price = prices.firstWhere((e) => e.ticker == ticker).lastPrice;
-      final total = Amount(assetsToBuy[key][kRebalanceTotal]);
+      final total = Amount(assetsToBuy[key]![kRebalanceTotal]);
       _items.add(RebalanceResultItem(ticker, symbol, quantity, price, total));
       _totalValue.setValue(_totalValue.value + total.value);
     });

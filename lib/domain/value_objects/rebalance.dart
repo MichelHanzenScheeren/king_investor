@@ -12,40 +12,31 @@ const String kRebalanceTotal = 'total';
 
 class Rebalance extends ValueObject {
   /* PUBLIC  */
-  Map<String, Map<String, dynamic>> _assetsToBuy;
-  List<String> _boughtCategories;
+  late Map<String, Map<String, dynamic>> _assetsToBuy = <String, Map<String, dynamic>>{};
+  late List<String> _boughtCategories = <String>[];
 
   /* PRIVATE  */
   bool _walletData = false;
   bool _rebalanceData = false;
-  List<Asset> _assets;
-  List<CategoryScore> _scores;
-  List<Price> _prices;
-  Amount _aportValue;
-  Quantity _assetsMaxNumber;
-  Quantity _categoriesMaxNumber;
+  late List<Asset> _assets;
+  late List<CategoryScore> _scores;
+  late List<Price> _prices;
+  final Amount _aportValue = Amount(0);
+  final Quantity _assetsMaxNumber = Quantity(0);
+  final Quantity _categoriesMaxNumber = Quantity(0);
 
   void registerWalletValues(List<Asset> assets, List<CategoryScore> scores, List<Price> prices) {
+    _assets = List<Asset>.from(assets);
+    _scores = List<CategoryScore>.from(scores);
+    _prices = List<Price>.from(prices);
     _applyWalletContracts(assets, scores, prices);
-    if (isValid) {
-      _assets = List<Asset>.from(assets);
-      _scores = List<CategoryScore>.from(scores);
-      _prices = List<Price>.from(prices);
-    }
     _walletData = true;
   }
 
   void _applyWalletContracts(List<Asset> assets, List<CategoryScore> scores, List<Price> prices) {
-    if (assets == null || assets.isEmpty) addNotification('Rebalance.assets', 'A lista de ativos não pode ser vazia');
-    if (scores == null || scores.isEmpty) addNotification('Rebalance.scores', 'A lista de notas não pode ser vazia');
-    if (prices == null || prices.isEmpty) addNotification('Rebalance.prices', 'A lista de preços não pode ser vazia');
-    if (!isValid) return;
-    if (assets.any((e) => e.company == null || e.category == null || e.score == null || e.quantity == null))
-      addNotification('Rebalance.assets', 'Um ou mais ativos possuem dados inválidos');
-    if (scores.any((e) => e.category == null || e.score == null))
-      addNotification('Rebalance.scores', 'Uma ou mais notas das categorias possuem dados inválidos');
-    if (prices.any((e) => e.lastPrice == null || e.ticker == null))
-      addNotification('Rebalance.scores', 'Um ou mais preços dos ativos possuem dados inválidos');
+    if (assets.isEmpty) addNotification('Rebalance.assets', 'A lista de ativos não pode ser vazia');
+    if (scores.isEmpty) addNotification('Rebalance.scores', 'A lista de notas não pode ser vazia');
+    if (prices.isEmpty) addNotification('Rebalance.prices', 'A lista de preços não pode ser vazia');
     if (!isValid) return;
     if (assets.any((e) => !e.company.isValid || !e.category.isValid || !e.score.isValid || !e.quantity.isValid))
       addNotification('Rebalance.assets', 'Um ou mais ativos possuem dados inválidos');
@@ -54,23 +45,21 @@ class Rebalance extends ValueObject {
     if (prices.any((e) => !e.lastPrice.isValid || e.ticker.isEmpty))
       addNotification('Rebalance.scores', 'Um ou mais preços dos ativos possuem dados inválidos');
     if (!isValid) return;
-    if (assets.any((e) => !prices.any((item) => item.ticker == e.company.ticker)))
+    if (!assets.any((e) => prices.any((item) => item.ticker == e.company.ticker)))
       addNotification('Rebalance.assets', 'Um ou mais ativos não possuem preço');
   }
 
   void registerRebalanceValues(Amount aportValue, Quantity assetsMaxNumber, Quantity categoriesMaxNumber) {
     _applyRebalanceContracts(aportValue, assetsMaxNumber, categoriesMaxNumber);
     if (isValid) {
-      _aportValue = Amount(aportValue.value);
-      _assetsMaxNumber = Quantity(assetsMaxNumber.value);
-      _categoriesMaxNumber = Quantity(categoriesMaxNumber.value);
+      _aportValue.setValue(aportValue.value);
+      _assetsMaxNumber.setValue(assetsMaxNumber.value);
+      _categoriesMaxNumber.setValue(categoriesMaxNumber.value);
     }
     _rebalanceData = true;
   }
 
   void _applyRebalanceContracts(Amount aportValue, Quantity assetsMaxNumber, Quantity categoriesMaxNumber) {
-    if (aportValue == null || assetsMaxNumber == null || categoriesMaxNumber == null)
-      addNotification('Rebalance.start', 'Uma ou mais configurações de balanceamento são inválidas');
     if (!isValid) return;
     if (!aportValue.isValid || !assetsMaxNumber.isValid || !categoriesMaxNumber.isValid)
       addNotification('Rebalance.start', 'Uma ou mais configurações de balanceamento são inválidas');
@@ -86,10 +75,6 @@ class Rebalance extends ValueObject {
 
   Future<void> _doRebalance() async {
     await Future.delayed(Duration(milliseconds: 50));
-    _removeInutilizedCategoryScores();
-    _assetsToBuy = <String, Map<String, dynamic>>{}; // {tycker: {quantity, total}}
-    _boughtCategories = <String>[]; // [idCategory1, idCategory2]
-
     while (true) {
       final individualAssetsTotalValue = _calculeIndividualAssetsTotalValue();
       final individualCategoriesTotalValue = _calculeIndividualCategoriesTotalValue(individualAssetsTotalValue);
@@ -105,12 +90,12 @@ class Rebalance extends ValueObject {
 
       if (_aportValue.value - priceOfToBuyAsset < 0) break;
       if (_assetsToBuy.containsKey(assetToBuyTicker)) {
-        _assetsToBuy[assetToBuyTicker][kRebalanceQtd] += 1;
-        _assetsToBuy[assetToBuyTicker][kRebalanceTotal] += priceOfToBuyAsset;
+        _assetsToBuy[assetToBuyTicker]![kRebalanceQtd] += 1;
+        _assetsToBuy[assetToBuyTicker]![kRebalanceTotal] += priceOfToBuyAsset;
       } else {
         _assetsToBuy[assetToBuyTicker] = <String, dynamic>{};
-        _assetsToBuy[assetToBuyTicker][kRebalanceQtd] = 1;
-        _assetsToBuy[assetToBuyTicker][kRebalanceTotal] = priceOfToBuyAsset;
+        _assetsToBuy[assetToBuyTicker]![kRebalanceQtd] = 1;
+        _assetsToBuy[assetToBuyTicker]![kRebalanceTotal] = priceOfToBuyAsset;
         _assetsMaxNumber.setValue(_assetsMaxNumber.value - 1);
         if (!_boughtCategories.any((e) => e == categoryToBuyId)) {
           _boughtCategories.add(categoryToBuyId);
@@ -121,15 +106,11 @@ class Rebalance extends ValueObject {
     }
   }
 
-  void _removeInutilizedCategoryScores() {
-    _scores.removeWhere((score) => !_assets.any((asset) => asset.category.objectId == score.category.objectId));
-  }
-
   Map<String, double> _calculeIndividualAssetsTotalValue() {
     final total = <String, double>{};
     _assets.forEach((asset) {
       final price = _prices.firstWhere((price) => price.ticker == asset.company.ticker);
-      int quantity = _assetsToBuy.containsKey(price.ticker) ? _assetsToBuy[price.ticker][kQuantity] : 0;
+      int quantity = _assetsToBuy.containsKey(price.ticker) ? _assetsToBuy[price.ticker]![kQuantity] : 0;
       total[price.ticker] = ((asset.quantity.value + quantity) * price.lastPrice.value);
     });
     return total;
@@ -140,14 +121,17 @@ class Rebalance extends ValueObject {
     _scores.forEach((score) {
       map[score.category.objectId] = 0;
       final assets = _assets.where((e) => e.category.objectId == score.category.objectId).toList();
-      assets.forEach((asset) => map[score.category.objectId] += individualAssetsTotalValue[asset.company.ticker]);
+      assets.forEach((asset) {
+        double value = individualAssetsTotalValue[asset.company.ticker]!;
+        map[score.category.objectId] = value + map[score.category.objectId]!;
+      });
     });
     return map;
   }
 
   double _calculeTotalValue(Map<String, double> map) {
     double value = 0.0;
-    map.keys.forEach((key) => value += map[key]);
+    map.keys.forEach((key) => value += map[key]!);
     return value;
   }
 
@@ -157,7 +141,7 @@ class Rebalance extends ValueObject {
       double totalScore = 0;
       _assets.where((e) => e.category.objectId == asset.category.objectId).forEach((e) => totalScore += e.score.value);
       int assetScoreValue = asset.score.value;
-      map[asset.company.ticker] = idealTotalCategoriesValue[asset.category.objectId] * assetScoreValue / totalScore;
+      map[asset.company.ticker] = idealTotalCategoriesValue[asset.category.objectId]! * assetScoreValue / totalScore;
     });
     return map;
   }
@@ -175,20 +159,20 @@ class Rebalance extends ValueObject {
 
   void _filterValidCategoriesToBuy(Map<String, double> map, List<String> _boughtCategories) {
     if (_categoriesMaxNumber.value == 0 || _assetsMaxNumber.value == 0)
-      map.removeWhere((key, value) => !_boughtCategories.any((element) => element == key));
+      map.removeWhere((key, value) => _boughtCategories.any((element) => element == key));
   }
 
   String _getCategoryToBuy(Map<String, double> total, Map<String, double> ideal) {
     String id = total.keys.first;
     total.keys.forEach((key) {
-      if ((ideal[key] - total[key]) > (ideal[id] - total[id])) id = key;
+      if ((ideal[key]! - total[key]!) > (ideal[id]! - total[id]!)) id = key;
     });
     return id;
   }
 
   void _filterValidAssetsToBuy(Map<String, double> map, Map<String, dynamic> boughtAssets) {
     if (_assetsMaxNumber.value == 0)
-      map.removeWhere((key, value) => !boughtAssets.keys.any((element) => element == key));
+      map.removeWhere((key, value) => boughtAssets.keys.any((element) => element == key));
   }
 
   String _getAssetToBuy(String categoryId, Map<String, double> total, Map<String, double> ideal) {
@@ -196,7 +180,7 @@ class Rebalance extends ValueObject {
     final filteredKeys = total.keys.where((key) => filteredAssets.any((element) => element.company.ticker == key));
     String ticker = filteredKeys.first;
     filteredKeys.forEach((key) {
-      if ((ideal[key] - total[key]) > (ideal[ticker] - total[ticker])) ticker = key;
+      if ((ideal[key]! - total[key]!) > (ideal[ticker]! - total[ticker]!)) ticker = key;
     });
     return ticker;
   }

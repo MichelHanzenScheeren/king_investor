@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomDividerWidget extends StatelessWidget {
-  final String text;
-  final Color textColor;
-  final Color dividerColor;
+  final String? text;
+  final Color? textColor;
+  final Color? dividerColor;
   final Alignment align;
   final double height;
   final double fontSize;
@@ -25,15 +25,11 @@ class CustomDividerWidget extends StatelessWidget {
     final dividerColor = Theme.of(context).primaryColorLight;
     return Row(
       children: <Widget>[
-        align != Alignment.centerLeft
-            ? Expanded(child: Divider(color: dividerColor ?? dividerColor, height: height))
-            : Container(),
+        align != Alignment.centerLeft ? Expanded(child: Divider(color: dividerColor, height: height)) : Container(),
         SizedBox(width: 5),
-        Text(text ?? '', style: TextStyle(color: textColor ?? textColor, fontSize: fontSize, fontWeight: fontWeight)),
+        Text(text ?? '', style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: fontWeight)),
         SizedBox(width: 5),
-        align != Alignment.centerRight
-            ? Expanded(child: Divider(color: dividerColor ?? dividerColor, height: height))
-            : Container(),
+        align != Alignment.centerRight ? Expanded(child: Divider(color: dividerColor, height: height)) : Container(),
       ],
     );
   }

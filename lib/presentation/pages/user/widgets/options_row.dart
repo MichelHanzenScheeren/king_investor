@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class OptionRow extends StatelessWidget {
   final IconData leftIcon;
-  final Color itemsColor;
-  final String text;
+  final Color? itemsColor;
+  final String? text;
   final bool showRrightIcon;
-  final Function function;
+  final Function? function;
 
   OptionRow({
-    @required this.leftIcon,
+    required this.leftIcon,
     this.itemsColor,
     this.text,
     this.showRrightIcon: true,
@@ -34,7 +34,7 @@ class OptionRow extends StatelessWidget {
           ],
         ),
       ),
-      onTap: function,
+      onTap: function as void Function()?,
     );
   }
 

@@ -2,13 +2,13 @@ import 'package:king_investor/shared/notifications/contract.dart';
 import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Name extends ValueObject {
-  String _firstName;
-  String _lastName;
+  late String _firstName;
+  late String _lastName;
 
-  Name(String firstName, String lastName) {
-    _firstName = firstName;
-    _lastName = lastName;
+  Name(String? firstName, String? lastName) {
     _applyContracts(firstName, lastName);
+    _firstName = firstName ?? '';
+    _lastName = lastName ?? '';
   }
 
   String get firstName => _firstName;
@@ -17,16 +17,16 @@ class Name extends ValueObject {
   @override
   String toString() => _firstName + ' ' + _lastName;
 
-  void setName(String firstName, String lastName) {
+  void setName(String? firstName, String? lastName) {
     clearNotifications();
     _applyContracts(firstName, lastName);
     if (isValid) {
-      _firstName = firstName;
-      _lastName = lastName;
+      _firstName = firstName!;
+      _lastName = lastName!;
     }
   }
 
-  void _applyContracts(String firstName, String lastName) {
+  void _applyContracts(String? firstName, String? lastName) {
     addNotifications(
       Contract()
           .requires()

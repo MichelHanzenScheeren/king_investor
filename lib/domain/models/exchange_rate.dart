@@ -7,8 +7,8 @@ class ExchangeRate extends Model {
   final Amount lastPrice;
 
   ExchangeRate(
-    String objectId,
-    DateTime createdAt,
+    String? objectId,
+    DateTime? createdAt,
     this.origin,
     this.destiny,
     this.lastPrice,

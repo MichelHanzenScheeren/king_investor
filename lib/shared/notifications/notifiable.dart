@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 abstract class Notifiable {
-  List<Notification> _notifications;
+  late List<Notification> _notifications;
 
   Notifiable() {
     _notifications = <Notification>[];

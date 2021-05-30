@@ -5,9 +5,9 @@ import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class ParseAuthenticationService implements AuthenticationServiceAgreement {
-  ParseClient _client;
+  ParseClient? _client;
 
-  ParseAuthenticationService({ParseClient client}) {
+  ParseAuthenticationService({ParseClient? client}) {
     _client = client ?? ParseHTTPClient();
   }
 
@@ -30,7 +30,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
     try {
       ParseUser parseUser = ParseUser(email, password, email, client: _client);
       final response = await parseUser.login();
-      if (response.success) return Right(response.results.first);
+      if (response.success) return Right(response.results!.first);
       return Left(_error('login', ParseException.getDescription((response.statusCode))));
     } catch (erro) {
       return Left(_error('login', erro.toString()));
@@ -64,9 +64,9 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
   @override
   Future<Either<Notification, dynamic>> updateCurrentUser(String sessionToken) async {
     try {
-      final response = await ParseUser.getCurrentUserFromServer(sessionToken, client: _client);
-      if (response.success) return Right(response.results.first);
-      return Left(_error('updateCurrentUser', ParseException.getDescription(response.statusCode)));
+      final response = await (ParseUser.getCurrentUserFromServer(sessionToken, client: _client));
+      if (response?.success ?? false) return Right(response!.results!.first);
+      return Left(_error('updateCurrentUser', ParseException.getDescription(response?.statusCode ?? -1)));
     } catch (erro) {
       return Left(_error('updateCurrentUser', erro.toString()));
     }
@@ -78,9 +78,10 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
       final response = await currentUser();
       if (response.isLeft()) return Left(_error('updateUserData', 'Não foi possível obter o usuário atual'));
       String sessionToken = response.getOrElse(() => null)['sessionToken'];
-      final response2 = await ParseUser.getCurrentUserFromServer(sessionToken, client: _client);
-      if (!response2.success) return Left(_error('updateUserData', 'Não foi possível atualizar o usuário atual'));
-      final ParseUser current = response2.results.first;
+      final response2 = await (ParseUser.getCurrentUserFromServer(sessionToken, client: _client));
+      if (!(response2?.success ?? false))
+        return Left(_error('updateUserData', 'Não foi possível atualizar o usuário atual'));
+      final ParseUser current = response2!.results!.first;
       userData.keys.forEach((key) => current.set(key, userData[key]));
       final response3 = await current.save();
       if (response3.success) return Right(_error('updateUserData', 'Alterações salvas'));
@@ -103,7 +104,7 @@ class ParseAuthenticationService implements AuthenticationServiceAgreement {
     }
   }
 
-  Notification _error(String key, String message) {
-    return Notification('ParseAuthenticationService.$key', message);
+  Notification _error(String key, String? message) {
+    return Notification('ParseAuthenticationService.$key', message ?? 'Erro desconhecido');
   }
 }

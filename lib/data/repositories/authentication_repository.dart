@@ -6,7 +6,7 @@ import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:king_investor/domain/models/user.dart';
 
 class AuthenticationRepository implements AuthenticationRepositoryAgreement {
-  AuthenticationServiceAgreement _authentication;
+  late AuthenticationServiceAgreement _authentication;
 
   AuthenticationRepository(AuthenticationServiceAgreement authentication) {
     _authentication = authentication;
@@ -39,10 +39,13 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, User>> currentUser() async {
+  Future<Either<Notification, User?>> currentUser() async {
     try {
       final response = await _authentication.currentUser();
-      return _buildResponse(response);
+      return response.fold(
+        (notification) => Left(notification),
+        (mapUser) => Right(mapUser == null ? null : UserConverter().fromMapToModel(mapUser)),
+      );
     } catch (erro) {
       return Left(_getError('currentUser', erro));
     }
@@ -80,7 +83,7 @@ class AuthenticationRepository implements AuthenticationRepositoryAgreement {
   Either<Notification, User> _buildResponse(Either<Notification, dynamic> response) {
     return response.fold(
       (notification) => Left(notification),
-      (mapUser) => Right(mapUser == null ? null : UserConverter().fromMapToModel(mapUser)),
+      (mapUser) => Right(UserConverter().fromMapToModel(mapUser)),
     );
   }
 

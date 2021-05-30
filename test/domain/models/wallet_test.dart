@@ -48,14 +48,14 @@ main() async {
   });
 
   group('Tests about list of assets', () {
-    Map companies;
-    Company company1;
-    Company company2;
-    Category category1;
-    Category category2;
-    Asset asset1;
-    Asset asset2;
-    Wallet wallet;
+    late Map companies;
+    late Company company1;
+    late Company company2;
+    late Category category1;
+    late Category category2;
+    late Asset asset1;
+    late Asset asset2;
+    late Wallet wallet;
 
     setUpAll(() async {
       companies = kSearchResponseMap;
@@ -93,16 +93,6 @@ main() async {
 
     test('should be invalid and return false when send null to method isValidAssetToAdd ', () {
       wallet.isValidAssetToAdd(null);
-      expect(wallet.isValid, isFalse);
-    });
-
-    test('should throw error when send null to addAsset', () {
-      expect(() => wallet.addAsset(null), throwsException);
-    });
-
-    test('should be invalid and return false when send asset with null company to method isValidAssetToAdd ', () {
-      Asset asset3 = Asset('1', null, null, category1, Amount(100.0), Score(10), Quantity(5), '1234');
-      wallet.isValidAssetToAdd(asset3);
       expect(wallet.isValid, isFalse);
     });
 

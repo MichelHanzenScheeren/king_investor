@@ -27,12 +27,12 @@ class CategoryScoresExpansionTile extends StatelessWidget {
                 title: Container(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
-                    categoryScore?.category?.name ?? '',
+                    categoryScore.category.name,
                     style: TextStyle(color: theme.hintColor, fontSize: 16),
                   ),
                 ),
                 subtitle: Text(
-                  'Nota: ${categoryScore?.score?.value ?? ""}',
+                  'Nota: ${categoryScore.score.value}',
                   style: TextStyle(color: theme.primaryColorLight, fontSize: 14),
                 ),
                 trailing: IconButton(

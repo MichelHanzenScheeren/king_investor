@@ -40,7 +40,7 @@ class ListOfResults extends StatelessWidget {
                   ),
                 ),
                 subtitle: Text(
-                  company?.name ?? '?',
+                  company.name,
                   style: TextStyle(color: theme.primaryColorLight, fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -55,7 +55,7 @@ class ListOfResults extends StatelessWidget {
 
   Widget _getTrailing(Company company, ThemeData theme) {
     if (searchController.save && company.objectId == searchController.saveId) return LoadIndicatorWidget();
-    if (searchController.isSavedAsset(company?.ticker))
+    if (searchController.isSavedAsset(company.ticker))
       return IconButton(icon: Icon(Icons.check), disabledColor: theme.hintColor, onPressed: null);
     return IconButton(
       icon: Icon(Icons.add, color: theme.hintColor),

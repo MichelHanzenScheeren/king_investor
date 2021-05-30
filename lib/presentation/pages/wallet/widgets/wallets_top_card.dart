@@ -10,7 +10,7 @@ class WalletsTopCard extends StatelessWidget {
   final AppDataController appDataController;
   final WalletController walletController;
 
-  WalletsTopCard({@required this.appDataController, @required this.walletController});
+  WalletsTopCard({required this.appDataController, required this.walletController});
 
   @override
   Widget build(BuildContext context) {

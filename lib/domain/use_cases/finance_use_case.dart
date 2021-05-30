@@ -8,15 +8,15 @@ import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/shared/notifications/notification.dart';
 
 class FinanceUseCase {
-  FinanceAgreement _finance;
-  AppData _appData;
+  late FinanceAgreement _finance;
+  late AppData _appData;
 
   FinanceUseCase(FinanceAgreement finance, AppData appData) {
     _finance = finance;
     _appData = appData;
   }
 
-  Future<Either<Notification, List<Company>>> search(String query) async {
+  Future<Either<Notification, List<Company>>> search(String? query) async {
     if (query == null || query.isEmpty) return Right(_appData.localSearch);
     final response = await _finance.search(query);
     return response.fold(
@@ -28,9 +28,9 @@ class FinanceUseCase {
     );
   }
 
-  Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
-    if (tickers == null || tickers.isEmpty)
-      return Left(Notification('FinanceUseCase.getPrices', 'A lista de ativos não pode ser vazia'));
+  Future<Either<Notification, List<Price>>> getPrices(List<String>? tickers) async {
+    if (tickers == null) return Left(Notification('FinanceUseCase.getPrices', 'A lista de ativos não pode ser nula'));
+    if (tickers.isEmpty) return Right(<Price>[]);
     List<Price> localPrices = getLocalPrices(tickers);
     if (tickers.isEmpty) return Right(_saveAndReturnPrices(localPrices, []));
 
@@ -41,7 +41,7 @@ class FinanceUseCase {
     );
   }
 
-  Future<Either<Notification, ExchangeRate>> getExchangeRate(String origin, String destiny) async {
+  Future<Either<Notification, ExchangeRate>> getExchangeRate(String? origin, String? destiny) async {
     if (origin == null || origin.isEmpty)
       return Left(Notification('FinanceUseCase.getExchangeRate', 'Valor inválido para parâmetro "origem"'));
     if (destiny == null || destiny.isEmpty)
@@ -73,10 +73,8 @@ class FinanceUseCase {
 
   List<Price> _saveAndReturnPrices(List<Price> localPrices, List<Price> apiPrices) {
     apiPrices.forEach((price) {
-      if (price != null && price.ticker != null && price.ticker.isNotEmpty) {
-        _appData.registerPrice(price.ticker, price);
-        localPrices.add(price);
-      }
+      _appData.registerPrice(price.ticker, price);
+      localPrices.add(price);
     });
     return UnmodifiableListView<Price>(localPrices);
   }

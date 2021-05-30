@@ -22,15 +22,15 @@ class AboutCompany extends StatelessWidget {
           dividerColor: theme.hintColor,
         ),
         CustomFlexText(
-          texts: ['Região', company?.region?.firstToUpper()],
+          texts: ['Região', company.region.firstToUpper()],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['País', '${company?.country} (${company?.currency})'],
+          texts: ['País', '${company.country} (${company.currency})'],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Bolsa negociada', company?.exchange],
+          texts: ['Bolsa negociada', company.exchange],
           alignment: MainAxisAlignment.spaceBetween,
         ),
       ],

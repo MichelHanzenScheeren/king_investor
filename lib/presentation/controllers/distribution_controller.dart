@@ -11,12 +11,12 @@ const kGeralCategoryId = '-2';
 const kAllCategoryId = '-1';
 
 class DistributionController extends GetxController {
-  AppDataController appDataController;
+  late AppDataController appDataController;
   List<Category> categoriesFilter = <Category>[];
   RxInt _selectedIndex = 0.obs;
   List<DistributionResultItem> _currentDistributionItems = <DistributionResultItem>[];
-  Rx<DistributionResultItem> _selectedResultItem = Rx<DistributionResultItem>(null);
-  List<Color> colors = <Color>[
+  Rx<DistributionResultItem?> _selectedResultItem = Rx<DistributionResultItem?>(null);
+  List<Color?> colors = <Color?>[
     Colors.deepPurple,
     Colors.purple,
     Colors.deepPurpleAccent,
@@ -52,13 +52,13 @@ class DistributionController extends GetxController {
     categoriesFilter.addAll(List.from(appDataController.usedCategories));
   }
 
-  int get selectedIndex => _selectedIndex.value ?? 0;
+  int get selectedIndex => _selectedIndex.value;
 
   Category get selectedCategory => categoriesFilter[selectedIndex];
 
   void setSelectedFilter(Category category) => _selectedIndex.value = categoriesFilter.indexOf(category);
 
-  DistributionResultItem get selectedResultItem => _selectedResultItem.value;
+  DistributionResultItem? get selectedResultItem => _selectedResultItem.value;
 
   DistributionResult getDistributionItems() {
     try {
@@ -83,14 +83,14 @@ class DistributionController extends GetxController {
     );
   }
 
-  Color getColor(int index) => colors[index % colors.length];
+  Color? getColor(int index) => colors[index % colors.length];
 
   void setSelectedDistributionItem(PieTouchResponse pieTouchResponse) {
     if (pieTouchResponse.touchInput.down && pieTouchResponse.touchedSection != null) {
-      int index = pieTouchResponse.touchedSection.touchedSectionIndex;
+      int index = pieTouchResponse.touchedSection!.touchedSectionIndex;
       if (index < 0 || index >= _currentDistributionItems.length) return;
       final selected = _currentDistributionItems[index];
-      if (selected?.identifier == _selectedResultItem?.value?.identifier)
+      if (selected.identifier == _selectedResultItem.value?.identifier)
         _selectedResultItem.value = null;
       else
         _selectedResultItem.value = selected;

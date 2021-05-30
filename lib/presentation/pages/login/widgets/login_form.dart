@@ -9,7 +9,7 @@ class LoginForm extends StatelessWidget {
   final double size;
   final LoginController controller;
 
-  LoginForm({@required this.controller, @required this.size});
+  LoginForm({required this.controller, required this.size});
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -64,7 +64,7 @@ class LoginForm extends StatelessWidget {
                   textStyle: TextStyle(fontSize: 18, color: Theme.of(context).hintColor, fontWeight: FontWeight.bold),
                   backGroundColor: Theme.of(context).accentColor,
                   onPressed: () {
-                    if (!Form.of(context).validate()) return;
+                    if (!Form.of(context)!.validate()) return;
                     FocusScope.of(context).requestFocus(new FocusNode());
                     controller.doLogin();
                   },

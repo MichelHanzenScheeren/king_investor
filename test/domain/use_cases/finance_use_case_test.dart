@@ -9,9 +9,9 @@ import 'package:king_investor/domain/use_cases/finance_use_case.dart';
 import '../../mocks/app_request_service_simulated.dart';
 
 main() {
-  AppData appData;
-  FinanceUseCase finance;
-  Company company1;
+  late AppData appData;
+  late FinanceUseCase finance;
+  late Company company1;
 
   setUpAll(() {
     RequestAgreement requestService = AppRequestServiceSimulated();
@@ -31,7 +31,7 @@ main() {
       appData.registerLocalSearch([company1]);
       final response = await finance.search('');
       expect(response.isRight(), isTrue);
-      expect(response.fold((l) => null, (list) => list), <Company>[company1]);
+      expect(response.fold((l) => null, (list) => list), <Company?>[company1]);
     });
     test('Should return Right(List) when send valid search', () async {
       appData.registerLocalSearch([company1]);
@@ -46,12 +46,12 @@ main() {
     test('Should return Left when send null to getPrices', () async {
       final response = await finance.getPrices(null);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'A lista de ativos não pode ser vazia');
+      expect(response.fold((l) => l.message, (r) => null), 'A lista de ativos não pode ser vazia');
     });
     test('Should return Left when send empty list to getPrices', () async {
       final response = await finance.getPrices([]);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'A lista de ativos não pode ser vazia');
+      expect(response.fold((l) => l.message, (r) => null), 'A lista de ativos não pode ser vazia');
     });
     test('Should return Right when send valid list of tickets to getPrices', () async {
       final response = await finance.getPrices(['PSSA3:BZ', 'XPML11:BZ']);
@@ -72,22 +72,22 @@ main() {
     test('Should return Left when send null to origin parameter of getExchangeRate', () async {
       final response = await finance.getExchangeRate(null, 'BRL');
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Valor inválido para parâmetro "origem"');
+      expect(response.fold((l) => l.message, (r) => null), 'Valor inválido para parâmetro "origem"');
     });
     test('Should return Left when send empty string to origin parameter of getExchangeRate', () async {
       final response = await finance.getExchangeRate('', 'BRL');
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Valor inválido para parâmetro "origem"');
+      expect(response.fold((l) => l.message, (r) => null), 'Valor inválido para parâmetro "origem"');
     });
     test('Should return Left when send null to destiny parameter of getExchangeRate', () async {
       final response = await finance.getExchangeRate('USD', null);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Valor inválido para parâmetro "destino"');
+      expect(response.fold((l) => l.message, (r) => null), 'Valor inválido para parâmetro "destino"');
     });
     test('Should return Left when send empty string to destiny parameter of getExchangeRate', () async {
       final response = await finance.getExchangeRate('USD', '');
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l?.message, (r) => null), 'Valor inválido para parâmetro "destino"');
+      expect(response.fold((l) => l.message, (r) => null), 'Valor inválido para parâmetro "destino"');
     });
     test('Should return Right(ExchangeRate) when send valid parameters', () async {
       final response = await finance.getExchangeRate('USD', 'BRL');

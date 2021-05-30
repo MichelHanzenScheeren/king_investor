@@ -3,8 +3,8 @@ import 'package:king_investor/shared/models/model.dart';
 import 'package:king_investor/shared/notifications/contract.dart';
 
 class Price extends Model {
-  String _ticker;
-  int _lastUpdate;
+  late String _ticker;
+  late int _lastUpdate;
   final Amount volume;
   final Amount variation;
   final Amount monthVariation;
@@ -16,10 +16,10 @@ class Price extends Model {
   final Amount yearLow;
 
   Price(
-    String objectId,
-    DateTime createdAt,
-    String ticker,
-    int lastUpdate,
+    String? objectId,
+    DateTime? createdAt,
+    String? ticker,
+    int? lastUpdate,
     this.volume,
     this.variation,
     this.monthVariation,
@@ -35,7 +35,7 @@ class Price extends Model {
     _applyContracts(ticker, lastUpdate);
   }
 
-  factory Price.fromDefaultValues(String ticker) {
+  factory Price.fromDefaultValues(String? ticker) {
     Amount aux = Amount(0);
     int time = DateTime.fromMillisecondsSinceEpoch(0).microsecondsSinceEpoch;
     Price price = Price(null, null, ticker ?? '', time, aux, aux, aux, aux, aux, aux, aux, aux, aux);
@@ -43,7 +43,7 @@ class Price extends Model {
     return price;
   }
 
-  void _applyContracts(String ticker, int lastUpdate) {
+  void _applyContracts(String? ticker, int? lastUpdate) {
     addNotifications(
       Contract()
           .requires()

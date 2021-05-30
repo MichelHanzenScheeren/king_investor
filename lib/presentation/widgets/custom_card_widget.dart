@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomCardWidget extends StatelessWidget {
-  final List<Widget> children;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
-  final Axis direction;
+  final List<Widget>? children;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
+  final Axis? direction;
 
   CustomCardWidget({this.children, this.margin, this.padding, this.direction});
 

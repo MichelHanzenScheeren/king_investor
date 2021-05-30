@@ -2,26 +2,26 @@ import 'package:king_investor/shared/models/model.dart';
 import 'package:king_investor/shared/notifications/contract.dart';
 
 class Company extends Model {
-  String _symbol; // ITUB3, XPML11, AAPL, AMT
-  String _ticker; // pssa3:bz, xpml11:bz, aapl:us, eqix:us
-  String _currency; // BRL, USD
-  String _region; // Americas,
-  String _name; // Porto Seguro S.A., XP MALLS FDO INV IMOB FII
-  String _securityType; // Common Stock, Closed-End Fund, REIT
-  String _exchange; // B3, NASDAQ
-  String _country; // Brazil, United States
+  late String _symbol; // ITUB3, XPML11, AAPL, AMT
+  late String _ticker; // pssa3:bz, xpml11:bz, aapl:us, eqix:us
+  late String _currency; // BRL, USD
+  late String _region; // Americas,
+  late String _name; // Porto Seguro S.A., XP MALLS FDO INV IMOB FII
+  late String _securityType; // Common Stock, Closed-End Fund, REIT
+  late String _exchange; // B3, NASDAQ
+  late String _country; // Brazil, United States
 
   Company(
-    String objectId,
-    DateTime createdAt,
-    String symbol,
-    String ticker,
-    String currency,
-    String region,
-    String name,
-    String securityType,
-    String exchange,
-    String country,
+    String? objectId,
+    DateTime? createdAt,
+    String? symbol,
+    String? ticker,
+    String? currency,
+    String? region,
+    String? name,
+    String? securityType,
+    String? exchange,
+    String? country,
   ) : super(objectId, createdAt) {
     _symbol = symbol ?? 'NULL_COMPANY';
     _ticker = ticker ?? 'NULL_COMPANY';
@@ -35,21 +35,21 @@ class Company extends Model {
     _applyContracts(symbol, ticker, currency);
   }
 
-  String _formatExchange(String exchange) {
+  String _formatExchange(String? exchange) {
     if (exchange == null || exchange == '') return 'Desconhecido';
     if (exchange.toLowerCase().contains('b3')) return 'B3';
     if (exchange.toLowerCase().contains('nasdaq')) return 'Nasdaq';
     return exchange;
   }
 
-  String _formatCountry(String country) {
+  String _formatCountry(String? country) {
     if (country == null || country == '') return 'Desconhecido';
     if (country.toLowerCase().contains('brazil')) return 'Brasil';
     if (country.toLowerCase().contains('united states')) return 'Estados Unidos';
     return country;
   }
 
-  void _applyContracts(String symbol, String ticker, String currency) {
+  void _applyContracts(String? symbol, String? ticker, String? currency) {
     addNotifications(Contract()
         .requires()
         .isNotNullOrEmpty(symbol, 'Company.symbol', 'O símbolo de uma companhia não pode ser vazio')

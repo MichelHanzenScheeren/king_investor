@@ -16,7 +16,7 @@ import '../static/wallets_response.dart';
 
 class AppClientDatabaseMock extends Mock implements ParseClient {
   @override
-  Future<ParseNetworkResponse> post(String path, {String data, ParseNetworkOptions options}) async {
+  Future<ParseNetworkResponse> post(String path, {String? data, ParseNetworkOptions? options}) async {
     await Future.delayed(Duration(milliseconds: 200));
     String uuid = Uuid().v1().replaceAll('-', '').substring(0, 10);
     String date = DateTime.now().toIso8601String().substring(0, 23) + 'Z';
@@ -27,8 +27,8 @@ class AppClientDatabaseMock extends Mock implements ParseClient {
   @override
   Future<ParseNetworkResponse> get(
     String path, {
-    ParseNetworkOptions options,
-    ProgressCallback onReceiveProgress,
+    ParseNetworkOptions? options,
+    ProgressCallback? onReceiveProgress,
   }) async {
     String responseData = '';
     if (path.contains('classes/' + kCategoryScoreTable))
@@ -46,14 +46,14 @@ class AppClientDatabaseMock extends Mock implements ParseClient {
   }
 
   @override
-  Future<ParseNetworkResponse> put(String path, {String data, ParseNetworkOptions options}) async {
+  Future<ParseNetworkResponse> put(String path, {String? data, ParseNetworkOptions? options}) async {
     await Future.delayed(Duration(milliseconds: 200));
     String date = DateTime.now().toIso8601String() + 'Z';
     return ParseNetworkResponse(data: '{"updatedAt": "$date"}', statusCode: 200);
   }
 
   @override
-  Future<ParseNetworkResponse> delete(String path, {ParseNetworkOptions options}) async {
+  Future<ParseNetworkResponse> delete(String path, {ParseNetworkOptions? options}) async {
     await Future.delayed(Duration(milliseconds: 200));
     return ParseNetworkResponse(data: '{}', statusCode: 200);
   }

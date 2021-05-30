@@ -6,7 +6,7 @@ import '../../static/exchange_rate_response.dart';
 main() async {
   TestWidgetsFlutterBinding.ensureInitialized(); // Para carregar assets
   final responseData = kExchangeRateResponseMap;
-  Map<String, dynamic> map = responseData['result']['USDBRL:cur'];
+  Map<String, dynamic>? map = responseData['result']!['USDBRL:cur'];
 
   test('Should return valid Price when use fromMapToModel(map)', () {
     ExchangeRate item = ExchangeRateConverter().fromMapToModel(map);

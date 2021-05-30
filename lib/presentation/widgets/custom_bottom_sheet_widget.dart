@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomSheetWidget extends StatelessWidget {
-  final List<Widget> children;
-  final List<CustomBottomSheetOption> options;
+  final List<Widget>? children;
+  final List<CustomBottomSheetOption>? options;
 
   CustomBottomSheetWidget({this.children, this.options});
 
@@ -30,11 +30,11 @@ class CustomBottomSheetWidget extends StatelessWidget {
 }
 
 class CustomBottomSheetOption extends StatelessWidget {
-  final String text;
-  final double textSize;
-  final IconData icon;
-  final bool show;
-  final Function onTap;
+  final String? text;
+  final double? textSize;
+  final IconData? icon;
+  final bool? show;
+  final Function? onTap;
 
   CustomBottomSheetOption({this.text, this.textSize, this.icon, this.show, this.onTap});
 
@@ -62,7 +62,7 @@ class CustomBottomSheetOption extends StatelessWidget {
             ),
           ],
         ),
-        onTap: onTap,
+        onTap: onTap as void Function()?,
       ),
     );
   }

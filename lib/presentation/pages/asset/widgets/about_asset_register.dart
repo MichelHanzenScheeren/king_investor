@@ -10,13 +10,13 @@ class AboutAssetRegister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final asset = assetController.asset;
-    final currency = asset.company?.currency ?? '';
+    final asset = assetController.asset!;
+    final currency = asset.company.currency;
     final walletName = assetController.getWalletName(asset.walletForeignKey);
     return Column(
       children: [
         CustomFlexText(
-          texts: ['${asset?.company?.name} (${asset?.company?.symbol})'],
+          texts: ['${asset.company.name} (${asset.company.symbol})'],
           size: 20,
           showDivider: false,
           weight: FontWeight.bold,
@@ -33,19 +33,19 @@ class AboutAssetRegister extends StatelessWidget {
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Categoria', asset?.category?.name],
+          texts: ['Categoria', asset.category.name],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Nota/peso', '${asset?.score?.value ?? ""}'],
+          texts: ['Nota/peso', '${asset.score.value}'],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Quantidade', '${asset.quantity?.value ?? ""} un.'],
+          texts: ['Quantidade', '${asset.quantity.value} un.'],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Preço médio', asset?.averagePrice?.toMonetary(currency)],
+          texts: ['Preço médio', asset.averagePrice.toMonetary(currency)],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
@@ -57,11 +57,11 @@ class AboutAssetRegister extends StatelessWidget {
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Vendas', asset?.sales?.toMonetary(currency)],
+          texts: ['Vendas', asset.sales.toMonetary(currency)],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         CustomFlexText(
-          texts: ['Proventos', asset?.incomes?.toMonetary(currency)],
+          texts: ['Proventos', asset.incomes.toMonetary(currency)],
           alignment: MainAxisAlignment.spaceBetween,
         ),
         SizedBox(height: 4),

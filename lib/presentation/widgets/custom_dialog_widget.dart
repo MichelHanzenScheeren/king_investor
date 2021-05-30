@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:king_investor/presentation/widgets/custom_button_widget.dart';
 
 class CustomDialogWidget extends StatelessWidget {
-  final String title;
-  final String textContent;
-  final String confirmButtonText;
-  final Function onConfirm;
-  final Color accentColor;
-  final Color textContentColor;
+  final String? title;
+  final String? textContent;
+  final String? confirmButtonText;
+  final Function? onConfirm;
+  final Color? accentColor;
+  final Color? textContentColor;
 
   CustomDialogWidget({
     this.onConfirm,

@@ -2,21 +2,21 @@ import 'package:king_investor/shared/notifications/contract.dart';
 import 'package:king_investor/shared/value_objects/value_object.dart';
 
 class Quantity extends ValueObject {
-  int _value;
-  bool _mustBeGreaterThanZero;
+  late int _value;
+  late bool _mustBeGreaterThanZero;
 
-  Quantity(int value, {mustBeGreaterThanZero: false}) {
+  Quantity(int? value, {mustBeGreaterThanZero: false}) {
     _mustBeGreaterThanZero = mustBeGreaterThanZero ?? false;
     _applyContracts(value);
-    _value = isValid ? value : (mustBeGreaterThanZero ? 1 : 0);
+    _value = isValid ? value! : (mustBeGreaterThanZero ? 1 : 0);
   }
 
   int get value => _value;
 
-  void setValue(int value) {
+  void setValue(int? value) {
     clearNotifications();
     _applyContracts(value);
-    if (isValid) _value = value;
+    if (isValid) _value = value!;
   }
 
   void setValueFromString(String value) {
@@ -25,7 +25,7 @@ class Quantity extends ValueObject {
     if (isValid) _value = int.parse(value);
   }
 
-  void _applyContracts(int value) {
+  void _applyContracts(int? value) {
     if (_mustBeGreaterThanZero) {
       addNotifications(
         Contract()

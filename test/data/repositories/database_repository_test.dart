@@ -6,13 +6,14 @@ import 'package:king_investor/domain/agreements/database_service_agreement.dart'
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/user.dart';
 import 'package:king_investor/domain/models/wallet.dart';
+import 'package:king_investor/shared/notifications/notification.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../mocks/app_client_database_mock.dart';
 
 main() {
   AppClientDatabaseMock databaseClientMock;
   DatabaseServiceAgreement databaseService;
-  DatabaseRepositoryAgreement repository;
+  late DatabaseRepositoryAgreement repository;
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     await Parse().initialize('appId', 'test.com', fileDirectory: '', appName: '', appPackageName: '', appVersion: '');
@@ -31,7 +32,7 @@ main() {
 
   test('Should return Right(Notification) when save in database', () async {
     final response = await repository.create(Wallet.createMainWallet('1234'));
-    expect(response.getOrElse(() => null)?.message, 'Item salvo com sucesso');
+    expect(response.getOrElse(() => Notification('', '')).message, 'Item salvo com sucesso');
   });
 
   test('Should return correct Notification when update', () async {

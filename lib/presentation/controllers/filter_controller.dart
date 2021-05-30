@@ -4,18 +4,18 @@ import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 
 class FilterController extends GetxController {
-  AppDataController appDataController;
+  late AppDataController appDataController;
   final Category _allCategory = Category('-1', null, 'Todas as categorias', -1);
   final List<Category> _categoriesDropdown = <Category>[];
-  final Rx<Category> _selectedCategory = Rx<Category>(null);
   List<Asset> _assetsDropDown = <Asset>[];
-  final Rx<Asset> _selectedAsset = Rx<Asset>(null);
+  final Rx<Category?> _selectedCategory = Rx<Category?>(null);
+  final Rx<Asset?> _selectedAsset = Rx<Asset?>(null);
 
   FilterController() {
     appDataController = Get.find();
   }
 
-  Category get selectedCategory {
+  Category? get selectedCategory {
     if (_selectedCategory.value == null) _selectedCategory.value = _allCategory;
     return _selectedCategory.value;
   }
@@ -34,22 +34,22 @@ class FilterController extends GetxController {
   }
 
   void _seeIfNeedToUpdateCurrentCategory() {
-    if (!_categoriesDropdown.any((e) => e.objectId != selectedCategory.objectId))
+    if (!_categoriesDropdown.any((e) => e.objectId != selectedCategory!.objectId))
       setSelectedCategory(categoriesDropdown.first);
   }
 
-  Asset get selectedAsset {
+  Asset? get selectedAsset {
     if (_selectedAsset.value == null) _selectedAsset.value = assetsDropDown.first;
     return _selectedAsset.value;
   }
 
   List<Asset> get assetsDropDown {
     if (_assetsDropDown.isEmpty) {
-      if (selectedCategory.objectId == '-1') {
+      if (selectedCategory!.objectId == '-1') {
         _assetsDropDown.addAll(appDataController.assets);
       } else {
         final assets = appDataController.assets;
-        _assetsDropDown.addAll(assets.where((e) => e?.category?.objectId == selectedCategory.objectId).toList());
+        _assetsDropDown.addAll(assets.where((e) => e.category.objectId == selectedCategory!.objectId).toList());
       }
     }
     return _assetsDropDown;
@@ -62,11 +62,11 @@ class FilterController extends GetxController {
     _selectedAsset.value = null;
   }
 
-  void setSelectedCategory(Category category) {
+  void setSelectedCategory(Category? category) {
     _selectedCategory.value = category;
     _assetsDropDown.clear();
     _selectedAsset.value = null;
   }
 
-  void setSelectedAsset(Asset asset) => _selectedAsset.value = asset;
+  void setSelectedAsset(Asset? asset) => _selectedAsset.value = asset;
 }

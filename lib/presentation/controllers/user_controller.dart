@@ -6,9 +6,9 @@ import 'package:king_investor/presentation/static/app_routes.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
 class UserController extends GetxController {
-  AppDataController appDataController;
-  UserUseCase userUseCase;
-  Rx<User> _user = Rx<User>(null);
+  late AppDataController appDataController;
+  late UserUseCase userUseCase;
+  Rx<User?> _user = Rx<User?>(null);
   RxBool _userLoad = true.obs;
 
   UserController() {
@@ -33,7 +33,7 @@ class UserController extends GetxController {
 
   bool get validUSer => _user.value != null;
 
-  User get user => _user.value;
+  User? get user => _user.value;
 
   void setUserLoad(bool value) => _userLoad.value = value;
 
@@ -63,7 +63,7 @@ class UserController extends GetxController {
   }
 
   Future<void> passwordReset() async {
-    final response = await userUseCase.requestPasswordReset(_user.value?.email?.address);
+    final response = await userUseCase.requestPasswordReset(_user.value!.email.address);
     response.fold(
       (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
       (notification) {

@@ -9,7 +9,7 @@ enum SelectedFilter { categories, assets }
 enum SelectedOrder { alphabetic, totalInWallet, totalInvested, totalIncomes, totalSales, valorization, bestResult }
 
 class EvolutionController extends GetxController {
-  AppDataController appDataController;
+  late AppDataController appDataController;
   Rx<SelectedFilter> _selectedFilter = Rx<SelectedFilter>(SelectedFilter.categories);
   Rx<SelectedOrder> _selectedOrder = Rx<SelectedOrder>(SelectedOrder.alphabetic);
 
@@ -26,7 +26,7 @@ class EvolutionController extends GetxController {
   Performance categoryPerformance(Category category) {
     final performance = Performance(
       category.name,
-      assets: appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList(),
+      assets: appDataController.assets.where((e) => e.category.objectId == category.objectId).toList(),
       prices: appDataController.prices,
     );
     if (!performance.isValid) _showGeneralErrorSnackBar(performance.firstNotification);
@@ -35,7 +35,7 @@ class EvolutionController extends GetxController {
 
   Performance assetPerformance(Asset asset) {
     final performance = Performance(
-      asset?.company?.symbol,
+      asset.company.symbol,
       assets: [asset],
       prices: appDataController.prices,
     );
@@ -49,7 +49,7 @@ class EvolutionController extends GetxController {
   }
 
   List<Asset> filteredByCategory(Category category) {
-    return appDataController.assets.where((e) => e?.category?.objectId == category?.objectId).toList();
+    return appDataController.assets.where((e) => e.category.objectId == category.objectId).toList();
   }
 
   void applySort(List<Performance> results, SelectedOrder order) {

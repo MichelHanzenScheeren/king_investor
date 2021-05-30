@@ -30,7 +30,7 @@ class AssetPage extends StatelessWidget {
       body: Obx(() {
         if (assetController.isLoadingSomething) return ListView(children: [SizedBox(height: 4), LoadCardWidget()]);
         if (!assetController.isValid) return EmptyAssetCard();
-        final asset = assetController.asset;
+        final asset = assetController.asset!;
         return ListView(
           children: [
             SizedBox(height: 4),
@@ -95,6 +95,6 @@ class AssetPage extends StatelessWidget {
   }
 
   void _editAsset() {
-    Get.bottomSheet(EditAssetForm(asset: assetController.asset, assetController: assetController));
+    Get.bottomSheet(EditAssetForm(asset: assetController.asset!, assetController: assetController));
   }
 }

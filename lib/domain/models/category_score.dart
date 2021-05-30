@@ -8,8 +8,8 @@ class CategoryScore extends Model {
   final String walletForeignKey;
 
   CategoryScore(
-    String objectId,
-    DateTime createdAt,
+    String? objectId,
+    DateTime? createdAt,
     this.score,
     this.category,
     this.walletForeignKey,

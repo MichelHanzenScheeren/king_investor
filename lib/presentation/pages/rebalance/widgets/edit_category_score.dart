@@ -12,7 +12,7 @@ class EditCategoryScore extends StatelessWidget {
   final Score score = Score(10);
 
   EditCategoryScore(this.categoryScore, this.rebalanceController) {
-    score.setValue(categoryScore?.score?.value);
+    score.setValue(categoryScore.score.value);
   }
 
   @override
@@ -26,7 +26,7 @@ class EditCategoryScore extends StatelessWidget {
               SizedBox(height: 15),
               Flexible(
                 child: Text(
-                  'Nota da categoria "${categoryScore?.category?.name ?? ""}"',
+                  'Nota da categoria "${categoryScore.category.name}"',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, color: theme.hintColor),
                 ),
@@ -40,7 +40,7 @@ class EditCategoryScore extends StatelessWidget {
                 onChanged: (value) => score.setValueFromString(value),
                 validator: (value) => score.isValid ? null : score.notifications.first.message,
                 onSubmit: (value) {
-                  if (!Form.of(context).validate()) return;
+                  if (!Form.of(context)!.validate()) return;
                   Get.back();
                   categoryScore.score.setValue(score.value);
                   rebalanceController.updateCategoryScore(categoryScore);

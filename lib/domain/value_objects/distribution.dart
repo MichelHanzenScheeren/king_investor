@@ -21,7 +21,7 @@ class Distribution extends ValueObject {
       totalValue += (asset.quantity.value * price.lastPrice.value);
       if (!categoriesTotal.containsKey(asset.category.objectId))
         categoriesTotal[asset.category.objectId] = {_kTotalValue: 0.0, _kQuantity: 0, _kPrice: 0.0};
-      final auxMap = categoriesTotal[asset.category.objectId];
+      final auxMap = categoriesTotal[asset.category.objectId]!;
       auxMap[_kIdentifier] = asset.category.objectId;
       auxMap[_kTotalValue] += (asset.quantity.value * price.lastPrice.value);
       auxMap[_kQuantity] += asset.quantity.value;
@@ -57,7 +57,7 @@ class Distribution extends ValueObject {
       assetsTotal[asset.company.symbol] = auxMap;
     });
     assetsTotal.forEach((key, current) {
-      double value = current[_kTotalValue] * 100 / totalValue;
+      double? value = current[_kTotalValue] * 100 / totalValue;
       _items.add(DistributionResultItem(
         current[_kIdentifier],
         key,
