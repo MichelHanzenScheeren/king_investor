@@ -4,6 +4,7 @@ import 'package:king_investor/domain/agreements/finance_agreement.dart';
 import 'package:king_investor/domain/agreements/request_agreement.dart';
 import 'package:king_investor/domain/models/app_data.dart';
 import 'package:king_investor/domain/models/company.dart';
+import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/use_cases/finance_use_case.dart';
 
 import '../../mocks/app_request_service_simulated.dart';
@@ -46,12 +47,12 @@ main() {
     test('Should return Left when send null to getPrices', () async {
       final response = await finance.getPrices(null);
       expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l.message, (r) => null), 'A lista de ativos não pode ser vazia');
+      expect(response.fold((l) => l.message, (r) => null), 'A lista de ativos não pode ser nula');
     });
-    test('Should return Left when send empty list to getPrices', () async {
+    test('Should return empty list when send empty list to getPrices', () async {
       final response = await finance.getPrices([]);
-      expect(response.isLeft(), isTrue);
-      expect(response.fold((l) => l.message, (r) => null), 'A lista de ativos não pode ser vazia');
+      expect(response.isRight(), isTrue);
+      expect(response.fold((l) => l.message, (r) => r), <Price>[]);
     });
     test('Should return Right when send valid list of tickets to getPrices', () async {
       final response = await finance.getPrices(['PSSA3:BZ', 'XPML11:BZ']);
