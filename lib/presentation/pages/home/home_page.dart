@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/home_controller.dart';
+import 'package:king_investor/presentation/pages/distribution/distribution_page.dart';
 import 'package:king_investor/presentation/pages/evolution/evolution_page.dart';
 import 'package:king_investor/presentation/pages/home/widgets/asset_options.dart';
 import 'package:king_investor/presentation/pages/rebalance/rebalance_page.dart';
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
         children: [
           ListView(controller: scrollController, children: [WalletPage()]),
           ListView(controller: scrollController, children: [EvolutionPage()]),
+          ListView(controller: scrollController, children: [DistributionPage()]),
           ListView(controller: scrollController, children: [RebalancePage()]),
         ],
       ),
@@ -53,6 +55,7 @@ class HomePage extends StatelessWidget {
           items: [
             _getIcon("Carteira", Icons.account_balance_wallet, theme.primaryColor),
             _getIcon("Evolução", Icons.show_chart, theme.primaryColor),
+            _getIcon("Distribuição", Icons.pie_chart, theme.primaryColor),
             _getIcon("Rebalancear ", Icons.account_balance, theme.primaryColor),
           ],
         ),

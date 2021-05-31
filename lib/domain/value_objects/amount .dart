@@ -27,6 +27,7 @@ class Amount extends ValueObject {
   }
 
   void setValueFromString(String value) {
+    if (value != null) value = value.replaceAll(',', '.');
     clearNotifications();
     _applyStringContracts(value);
     if (isValid) _value = double.parse(value);

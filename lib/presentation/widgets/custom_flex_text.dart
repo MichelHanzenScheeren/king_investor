@@ -34,7 +34,11 @@ class CustomFlexText extends StatelessWidget {
           children: texts.map((text) {
             return Container(
               child: Flexible(
-                child: Text(text ?? '!', style: aux),
+                child: Text(
+                  text ?? '!',
+                  style: aux,
+                  textAlign: alignment == MainAxisAlignment.center ? TextAlign.center : TextAlign.justify,
+                ),
               ),
             );
           }).toList(),

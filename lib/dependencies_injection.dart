@@ -53,7 +53,7 @@ class DependenciesInjection {
     Get.lazyPut<FinanceAgreement>(() => FinanceRepository(Get.find()), fenix: true);
 
     /* APP DATA */
-    Get.put(AppData(), permanent: true);
+    Get.lazyPut(() => AppData(), fenix: true);
 
     /* USE CASES */
     Get.lazyPut(() => UserUseCase(Get.find(), Get.find()), fenix: true);

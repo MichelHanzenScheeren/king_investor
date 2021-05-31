@@ -65,7 +65,11 @@ class HomeController extends GetxController {
 
   int get currentPage => _currentPage.value;
 
-  void setCurrentPage(int value) => _currentPage.value = value ?? 0;
+  void setCurrentPage(int value) {
+    _currentPage.value = value ?? 0;
+    _isScrollingDown = false;
+    _mustShowFloatButton.value = true;
+  }
 
   void jumpToPage(int page) {
     if (page != currentPage)

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.king_investor">
    <application
-        android:label="king_investor"
+        android:label="King Investor"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
