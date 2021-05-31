@@ -63,7 +63,7 @@ class EvolutionPage extends StatelessWidget {
                 children: results.map((e) => EvolutionCard(resultTitle: e.identifier, result: e)).toList(),
               );
             }),
-            SizedBox(height: 4),
+            SizedBox(height: 8),
           ],
         );
       },

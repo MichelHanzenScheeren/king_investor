@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 const kLoginSucessResponseMap = {
-  "objectId": "ySHIHT13xA",
+  "objectId": "WWxADcHG2i",
   "username": "usuario_teste@gmail.com",
   "email": "usuario_teste@gmail.com",
   "firstName": "Usuario",
@@ -15,7 +15,7 @@ const kLoginSucessResponseMap = {
 };
 
 const kSignUpSucessResponseMap = {
-  "objectId": "ySHIHT13xA",
+  "objectId": "WWxADcHG2i",
   "createdAt": "2018-11-08T13:08:42.914Z",
   "sessionToken": "r:acc24187bc16109398c5a2fad2f06d0a"
 };

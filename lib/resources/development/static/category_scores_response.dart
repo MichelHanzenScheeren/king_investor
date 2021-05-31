@@ -1,36 +1,42 @@
 const kGetAllCategoryScoresResponseMap = {
   "results": [
     {
-      "objectId": "cxgmtUYfM4",
-      "score": 75,
+      "objectId": "b9d416d0b7",
+      "score": 80,
       "category": {
         "__type": "Pointer",
         "className": "Category",
-        "objectId": "zJxVP17mTi",
-        "createdAt": "2018-10-31T14:16:13.616Z",
-        "updatedAt": "2018-11-07T12:12:20.758Z",
+        "objectId": "qnB4cH9sJs",
         "name": "Ação",
         "order": 0,
+        "createdAt": "2021-05-17T19:07:47.097Z",
+        "updatedAt": "2021-05-17T19:07:47.097Z",
+        "ACL": {
+          "*": {"read": true}
+        }
       },
-      "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "7jgnYX0BBi"},
-      "createdAt": "2021-04-22T01:30:10.315Z",
-      "updatedAt": "2021-04-22T01:30:10.315Z"
+      "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "00d8ced0b7"},
+      "createdAt": "2021-05-17T18:14:39.343Z",
+      "updatedAt": "2021-05-26T17:48:52.404Z"
     },
     {
-      "objectId": "UYfM4cxgmt",
-      "score": 25,
+      "objectId": "7b8f53c0b7",
+      "score": 20,
       "category": {
         "__type": "Pointer",
         "className": "Category",
-        "objectId": "gd8djpy4lk",
-        "createdAt": "2018-10-31T14:16:13.616Z",
-        "updatedAt": "2018-11-07T12:12:20.758Z",
+        "objectId": "ukhIcvLzZl",
         "name": "Fii",
         "order": 1,
+        "createdAt": "2021-05-17T19:07:47.096Z",
+        "updatedAt": "2021-05-17T19:07:47.096Z",
+        "ACL": {
+          "*": {"read": true}
+        }
       },
-      "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "7jgnYX0BBi"},
-      "createdAt": "2021-04-22T01:30:10.315Z",
-      "updatedAt": "2021-04-22T01:30:10.315Z"
+      "wallet": {"__type": "Pointer", "className": "Wallet", "objectId": "00d8ced0b7"},
+      "createdAt": "2021-05-17T18:55:55.244Z",
+      "updatedAt": "2021-05-26T17:48:59.899Z"
     }
   ]
 };

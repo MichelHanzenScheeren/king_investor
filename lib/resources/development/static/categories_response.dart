@@ -1,71 +1,71 @@
 const kGetAllCategoriesResponseMap = {
   "results": [
     {
-      "objectId": "zJxVP17mTi",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "Ações",
-      "order": 0,
-      "ACL": {
-        "*": {"read": true}
-      }
-    },
-    {
-      "objectId": "gd8djpy4lk",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "FIIs",
+      "objectId": "ukhIcvLzZl",
+      "name": "Fii",
       "order": 1,
+      "createdAt": "2021-05-17T19:07:47.096Z",
+      "updatedAt": "2021-05-17T19:07:47.096Z",
       "ACL": {
         "*": {"read": true}
       }
     },
     {
-      "objectId": "sDX2g0D7WP",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "ETFs (BRL)",
-      "order": 2,
+      "objectId": "qnB4cH9sJs",
+      "name": "Ação",
+      "order": 0,
+      "createdAt": "2021-05-17T19:07:47.097Z",
+      "updatedAt": "2021-05-17T19:07:47.097Z",
       "ACL": {
         "*": {"read": true}
       }
     },
     {
-      "objectId": "E6Bzg4w3lX",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "Stocks",
-      "order": 3,
-      "ACL": {
-        "*": {"read": true}
-      }
-    },
-    {
-      "objectId": "rvwdRmdpP4",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "REITs",
+      "objectId": "9FUYvukR5U",
+      "name": "REIT",
       "order": 4,
+      "createdAt": "2021-05-17T19:07:47.098Z",
+      "updatedAt": "2021-05-17T19:07:47.098Z",
       "ACL": {
         "*": {"read": true}
       }
     },
     {
-      "objectId": "uEMtszTO2V",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "ETFs",
+      "objectId": "IPiNzUPjEG",
+      "name": "Stock",
+      "order": 3,
+      "createdAt": "2021-05-17T19:07:47.099Z",
+      "updatedAt": "2021-05-17T19:07:47.099Z",
+      "ACL": {
+        "*": {"read": true}
+      }
+    },
+    {
+      "objectId": "AJt8uBvitz",
+      "name": "Fundo de Índice",
+      "order": 2,
+      "createdAt": "2021-05-17T19:07:47.099Z",
+      "updatedAt": "2021-05-17T19:07:47.099Z",
+      "ACL": {
+        "*": {"read": true}
+      }
+    },
+    {
+      "objectId": "4kTBPSnzFC",
+      "name": "ETF",
       "order": 5,
+      "createdAt": "2021-05-17T19:07:47.100Z",
+      "updatedAt": "2021-05-17T19:07:47.100Z",
       "ACL": {
         "*": {"read": true}
       }
     },
     {
-      "objectId": "YNs2Ehoady",
-      "createdAt": "2018-10-31T14:16:13.616Z",
-      "updatedAt": "2018-11-07T12:12:20.758Z",
-      "name": "Outros",
+      "objectId": "WvAEPxbeiz",
+      "name": "Outro",
       "order": 6,
+      "createdAt": "2021-05-17T19:07:47.101Z",
+      "updatedAt": "2021-05-17T19:07:47.101Z",
       "ACL": {
         "*": {"read": true}
       }

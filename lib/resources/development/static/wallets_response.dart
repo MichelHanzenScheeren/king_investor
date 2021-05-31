@@ -1,20 +1,12 @@
 const kGetAllWalletsResponseMap = {
   "results": [
     {
-      "objectId": "7jgnYX0BBi",
-      "name": "Principal",
+      "objectId": "00d8ced0b7",
       "isMainWallet": true,
-      "user": {"__type": "Pointer", "className": "_User", "objectId": "4BwpMWdCnm"},
-      "createdAt": "2021-04-19T00:12:32.750Z",
-      "updatedAt": "2021-04-19T00:12:32.750Z"
-    },
-    {
-      "objectId": "sI92wSvh9l",
-      "name": "Adicional",
-      "isMainWallet": false,
-      "user": {"__type": "Pointer", "className": "_user", "objectId": "4BwpMWdCnm"},
-      "createdAt": "2021-04-19T00:12:32.750Z",
-      "updatedAt": "2021-04-19T00:12:32.750Z"
+      "name": "Principal",
+      "user": {"__type": "Pointer", "className": "_User", "objectId": "WWxADcHG2i"},
+      "createdAt": "2021-05-17T14:48:56.367Z",
+      "updatedAt": "2021-05-17T14:48:56.367Z"
     }
   ]
 };
