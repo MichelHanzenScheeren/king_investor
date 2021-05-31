@@ -41,11 +41,14 @@ class FinanceRepository implements FinanceAgreement {
   Future<Either<Notification, List<Price>>> getPrices(List<String> tickers) async {
     String symbols = '';
     tickers.forEach((e) => symbols += ',' + e);
-    final response = await _requestService.request('/get-compact?id=${symbols.replaceFirst(",", "")}');
-    return response.fold(
-      (notification) => Left(notification),
-      (map) => Right(_convertToPricesList(map)),
-    );
+    Either<Notification, Map>? response;
+    for (int i = 1; i < 5; i++) {
+      response = await _requestService.request('/get-compact?id=${symbols.replaceFirst(",", "")}');
+      if (response.isRight()) return Right(_convertToPricesList(response.getOrElse(() => {})));
+      print('Falha na requisição $i "getPrices"');
+      await Future.delayed(Duration(seconds: 5 * i));
+    }
+    return Left(response!.fold((notification) => notification, (r) => Notification('', '')));
   }
 
   @override
