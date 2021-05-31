@@ -159,7 +159,7 @@ class Rebalance extends ValueObject {
 
   void _filterValidCategoriesToBuy(Map<String, double> map, List<String> _boughtCategories) {
     if (_categoriesMaxNumber.value == 0 || _assetsMaxNumber.value == 0)
-      map.removeWhere((key, value) => _boughtCategories.any((element) => element == key));
+      map.removeWhere((key, value) => !_boughtCategories.any((element) => element == key));
   }
 
   String _getCategoryToBuy(Map<String, double> total, Map<String, double> ideal) {
@@ -172,7 +172,7 @@ class Rebalance extends ValueObject {
 
   void _filterValidAssetsToBuy(Map<String, double> map, Map<String, dynamic> boughtAssets) {
     if (_assetsMaxNumber.value == 0)
-      map.removeWhere((key, value) => boughtAssets.keys.any((element) => element == key));
+      map.removeWhere((key, value) => !boughtAssets.keys.any((element) => element == key));
   }
 
   String _getAssetToBuy(String categoryId, Map<String, double> total, Map<String, double> ideal) {
