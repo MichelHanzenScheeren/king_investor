@@ -16,31 +16,35 @@ class DistributionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 8),
-        GetX<DistributionController>(
-          init: distributionController,
-          builder: (distributionController) {
-            if (appDataController.isLoadingSomething) return LoadCardWidget();
-            if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyDistributionCard();
-            return CustomCardWidget(
-              margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-              children: [
-                CustomDropdownWidget<Category>(
-                  prefixText: 'Agrupar por',
-                  initialValue: distributionController.selectedCategory,
-                  onChanged: (item) => distributionController.setSelectedFilter(item!),
-                  values: _filterDropdownValues(),
-                ),
-              ],
-            );
-          },
-        ),
-        ChartCard(distributionController),
-        ChartLegendCard(distributionController),
-        SizedBox(height: 8),
-      ],
+    return GetX<DistributionController>(
+      init: distributionController,
+      builder: (distributionController) {
+        if (appDataController.isLoadingSomething) return LoadCardWidget();
+        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyDistributionCard();
+        return Column(
+          children: [
+            SizedBox(height: 4),
+            GetX<DistributionController>(
+              builder: (distributionController) {
+                return CustomCardWidget(
+                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  children: [
+                    CustomDropdownWidget<Category>(
+                      prefixText: 'Agrupar por',
+                      initialValue: distributionController.selectedCategory,
+                      onChanged: (item) => distributionController.setSelectedFilter(item!),
+                      values: _filterDropdownValues(),
+                    ),
+                  ],
+                );
+              },
+            ),
+            ChartCard(),
+            ChartLegendCard(),
+            SizedBox(height: 4),
+          ],
+        );
+      },
     );
   }
 

@@ -1,6 +1,5 @@
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/company.dart';
-import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/value_objects/amount%20.dart';
 import 'package:king_investor/domain/value_objects/quantity.dart';
 import 'package:king_investor/domain/value_objects/score.dart';
@@ -45,8 +44,6 @@ class Asset extends Model {
   Category get category => _category;
 
   String get walletForeignKey => _walletForeignKey;
-
-  Price get falsePrice => Price.fromDefaultValues(company.ticker);
 
   Amount get sales => _sales;
 

@@ -13,14 +13,14 @@ class WalletPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 8),
+        SizedBox(height: 4),
         WalletsTopCard(appDataController: appDataController, walletController: walletController),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           child: Divider(color: Theme.of(context).primaryColorLight),
         ),
         CategorizedListOfAssets(appDataController: appDataController, walletController: walletController),
-        SizedBox(height: 8),
+        SizedBox(height: 4),
       ],
     );
   }

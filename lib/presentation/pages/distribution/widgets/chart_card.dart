@@ -1,26 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/distribution_controller.dart';
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 
 class ChartCard extends StatelessWidget {
-  final DistributionController controller;
-  final AppDataController appDataController = Get.find();
-
-  ChartCard(this.controller);
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GetX<DistributionController>(
-      init: controller,
       builder: (controller) {
         final result = controller.getDistributionItems();
-        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return Container();
         if (result.items.isEmpty) CustomCardWidget(children: [Icon(Icons.warning, size: 150)]);
         return CustomCardWidget(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           children: [
             Text(
               'Valor Total: ${result.totalValue.toMonetary("BRL")}',

@@ -15,52 +15,58 @@ class EvolutionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 8),
-        Obx(() {
-          if (appDataController.isLoadingSomething) return LoadCardWidget();
-          if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyEvolutionCard();
-          final result = evolutionController.getGeneralPerformance();
-          return EvolutionCard(resultTitle: 'Desempenho Geral', result: result, initiallyExpanded: true);
-        }),
-        Obx(() {
-          if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();
-          return CustomCardWidget(
-            margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-            children: [
-              CustomDropdownWidget<SelectedFilter>(
-                prefixText: 'Filtrar por',
-                initialValue: evolutionController.selectedFilter,
-                onChanged: (item) => evolutionController.setSelectedFilter(item!),
-                values: _filterDropdownValues() as List<CustomDropdownItems<SelectedFilter>>,
-              ),
-              SizedBox(height: 12),
-              CustomDropdownWidget<SelectedOrder>(
-                prefixText: 'Ordenar por',
-                initialValue: evolutionController.selectedOrder,
-                onChanged: (item) => evolutionController.setSelectedOrder(item!),
-                values: _orderDropdownValues() as List<CustomDropdownItems<SelectedOrder>>,
-              ),
-            ],
-          );
-        }),
-        Obx(() {
-          if (appDataController.isLoadingSomething || appDataController.assets.isEmpty) return Container();
-          final List<Performance> results = <Performance>[];
-          if (evolutionController.selectedFilter == SelectedFilter.categories) {
-            final categories = appDataController.usedCategories;
-            categories.forEach((cat) => results.add(evolutionController.categoryPerformance(cat)));
-          } else {
-            appDataController.assets.forEach((asset) => results.add(evolutionController.assetPerformance(asset)));
-          }
-          evolutionController.applySort(results, evolutionController.selectedOrder);
-          return Column(
-            children: results.map((e) => EvolutionCard(resultTitle: e.identifier, result: e)).toList(),
-          );
-        }),
-        SizedBox(height: 8),
-      ],
+    return GetX<EvolutionController>(
+      init: evolutionController,
+      builder: (evolutionController) {
+        if (appDataController.isLoadingSomething) return LoadCardWidget();
+        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyEvolutionCard();
+        return Column(
+          children: [
+            SizedBox(height: 4),
+            EvolutionCard(
+              resultTitle: 'Desempenho Geral',
+              result: evolutionController.getGeneralPerformance(),
+              initiallyExpanded: true,
+            ),
+            GetX<EvolutionController>(
+              builder: (evolutionController) {
+                return CustomCardWidget(
+                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                  children: [
+                    CustomDropdownWidget<SelectedFilter>(
+                      prefixText: 'Filtrar por',
+                      initialValue: evolutionController.selectedFilter,
+                      onChanged: (item) => evolutionController.setSelectedFilter(item!),
+                      values: _filterDropdownValues() as List<CustomDropdownItems<SelectedFilter>>,
+                    ),
+                    SizedBox(height: 12),
+                    CustomDropdownWidget<SelectedOrder>(
+                      prefixText: 'Ordenar por',
+                      initialValue: evolutionController.selectedOrder,
+                      onChanged: (item) => evolutionController.setSelectedOrder(item!),
+                      values: _orderDropdownValues() as List<CustomDropdownItems<SelectedOrder>>,
+                    ),
+                  ],
+                );
+              },
+            ),
+            GetX<EvolutionController>(builder: (evolutionController) {
+              final List<Performance> results = <Performance>[];
+              if (evolutionController.selectedFilter == SelectedFilter.categories) {
+                final categories = appDataController.usedCategories;
+                categories.forEach((cat) => results.add(evolutionController.categoryPerformance(cat)));
+              } else {
+                appDataController.assets.forEach((asset) => results.add(evolutionController.assetPerformance(asset)));
+              }
+              evolutionController.applySort(results, evolutionController.selectedOrder);
+              return Column(
+                children: results.map((e) => EvolutionCard(resultTitle: e.identifier, result: e)).toList(),
+              );
+            }),
+            SizedBox(height: 4),
+          ],
+        );
+      },
     );
   }
 

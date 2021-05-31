@@ -4,15 +4,10 @@ import 'package:king_investor/presentation/controllers/distribution_controller.d
 import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 
 class ChartLegendCard extends StatelessWidget {
-  final DistributionController distributionController;
-
-  ChartLegendCard(this.distributionController);
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GetX<DistributionController>(
-      init: distributionController,
       builder: (distributionController) {
         if (distributionController.selectedResultItem == null) return Container();
         final style = TextStyle(color: theme.hintColor, fontWeight: FontWeight.w600, fontSize: 16);

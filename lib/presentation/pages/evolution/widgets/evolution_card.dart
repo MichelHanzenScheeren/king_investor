@@ -17,7 +17,7 @@ class EvolutionCard extends StatelessWidget {
     final style = TextStyle(fontSize: 21, fontWeight: FontWeight.bold);
     return CustomExpansionTileWidget(
       initiallyExpanded: initiallyExpanded,
-      margin: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       childrenPadding: EdgeInsets.fromLTRB(20, 0, 20, 2),
       title: Text(resultTitle ?? '?', style: style),
       children: [

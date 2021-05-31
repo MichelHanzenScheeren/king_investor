@@ -20,6 +20,7 @@ class RebalanceForm extends StatelessWidget {
     return Form(child: Builder(
       builder: (context) {
         return CustomCardWidget(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           children: [
             SizedBox(height: 6),
             Container(

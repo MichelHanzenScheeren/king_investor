@@ -61,14 +61,14 @@ class AssetController extends GetxController {
   }
 
   String getTotalInWallet() {
-    final price = appDataController.prices.firstWhere((e) => e.ticker == asset!.company.ticker);
+    final price = getAssetPrice();
     final total = (asset!.quantity.value) * (price.lastPrice.value);
     return Amount(total).toMonetary(asset!.company.currency);
   }
 
   String getAssetResult() {
-    final price = appDataController.prices.firstWhereOrNull((e) => e.ticker == asset!.company.ticker);
-    final total = (asset!.quantity.value) * (price!.lastPrice.value);
+    final price = getAssetPrice();
+    final total = (asset!.quantity.value) * (price.lastPrice.value);
     final cost = (asset!.quantity.value) * (asset!.averagePrice.value);
     final result = Amount(total - cost + (asset!.sales.value) + (asset!.incomes.value));
     return result.toMonetary(asset!.company.currency);

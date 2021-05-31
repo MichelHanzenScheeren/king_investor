@@ -14,27 +14,22 @@ class RebalancePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 8),
-        GetX<RebalanceController>(
-          init: rebalanceController,
-          autoRemove: true,
-          builder: (rebalanceController) {
-            if (appDataController.categoryScoresLoad || appDataController.assetsLoad || appDataController.pricesLoad)
-              return LoadCardWidget();
-            if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyRebalanceCard();
-            if (rebalanceController.containsRebalanceResults) return RebalanceResultsCard(rebalanceController);
-            return Column(
-              children: [
-                CategoryScoresExpansionTile(rebalanceController),
-                RebalanceForm(rebalanceController),
-                SizedBox(height: 8),
-              ],
-            );
-          },
-        )
-      ],
+    return GetX<RebalanceController>(
+      init: rebalanceController,
+      builder: (rebalanceController) {
+        if (appDataController.categoryScoresLoad || appDataController.assetsLoad || appDataController.pricesLoad)
+          return LoadCardWidget();
+        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyRebalanceCard();
+        if (rebalanceController.containsRebalanceResults) return RebalanceResultsCard(rebalanceController);
+        return Column(
+          children: [
+            SizedBox(height: 4),
+            CategoryScoresExpansionTile(rebalanceController),
+            RebalanceForm(rebalanceController),
+            SizedBox(height: 4),
+          ],
+        );
+      },
     );
   }
 }
