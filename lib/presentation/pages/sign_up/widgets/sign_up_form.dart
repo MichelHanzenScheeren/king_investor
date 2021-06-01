@@ -21,7 +21,7 @@ class SignUpForm extends StatelessWidget {
               Obx(() {
                 return CustomTextFieldWidget(
                   placeHolder: "Nome",
-                  prefixIcon: Icon(Icons.person_pin_outlined),
+                  prefixIcon: Icons.person_pin_outlined,
                   enabled: !controller!.loading,
                   onChanged: controller!.setFirstName,
                   validator: controller!.firstNameValidator,
@@ -31,7 +31,7 @@ class SignUpForm extends StatelessWidget {
               Obx(() {
                 return CustomTextFieldWidget(
                   placeHolder: "Sobrenome",
-                  prefixIcon: Icon(Icons.person_add_alt),
+                  prefixIcon: Icons.person_add_alt,
                   enabled: !controller!.loading,
                   onChanged: controller!.setLastName,
                   validator: controller!.lastNameNameValidator,
@@ -41,7 +41,7 @@ class SignUpForm extends StatelessWidget {
               Obx(() {
                 return CustomTextFieldWidget(
                   placeHolder: "E-mail",
-                  prefixIcon: Icon(Icons.alternate_email),
+                  prefixIcon: Icons.alternate_email,
                   textInputType: TextInputType.emailAddress,
                   enabled: !controller!.loading,
                   onChanged: controller!.setEmail,
@@ -52,7 +52,7 @@ class SignUpForm extends StatelessWidget {
               Obx(() {
                 return CustomTextFieldWidget(
                   placeHolder: "Senha",
-                  prefixIcon: Icon(Icons.lock_outline),
+                  prefixIcon: Icons.lock_outline,
                   textInputType: controller!.showPassword ? TextInputType.visiblePassword : TextInputType.text,
                   enablePasteOption: false,
                   enabled: !controller!.loading,

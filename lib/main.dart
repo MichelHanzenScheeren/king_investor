@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
         focusColor: Colors.grey[800],
         errorColor: Colors.red[400],
         hoverColor: Colors.green[400],
-        iconTheme: IconThemeData(
-          color: Colors.white.withAlpha(200),
-        ),
+        iconTheme: IconThemeData(color: Colors.white.withAlpha(200)),
       ),
       initialRoute: AppRoutes.splash,
       getPages: AppRoutes.getAll(),
