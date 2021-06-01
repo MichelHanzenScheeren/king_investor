@@ -17,7 +17,7 @@ class Distribution extends ValueObject {
     Map<String, Map<String, dynamic>> categoriesTotal = <String, Map<String, dynamic>>{};
     double totalValue = 0;
     assets.forEach((asset) {
-      final Price price = prices.firstWhere((element) => element.ticker == asset.company.ticker);
+      final Price price = _getPrice(asset, prices);
       totalValue += (asset.quantity.value * price.lastPrice.value);
       if (!categoriesTotal.containsKey(asset.category.objectId))
         categoriesTotal[asset.category.objectId] = {_kTotalValue: 0.0, _kQuantity: 0, _kPrice: 0.0};
@@ -47,7 +47,7 @@ class Distribution extends ValueObject {
     Map<String, Map<String, dynamic>> assetsTotal = <String, Map<String, dynamic>>{};
     double totalValue = 0;
     assets.forEach((asset) {
-      final Price price = prices.firstWhere((element) => element.ticker == asset.company.ticker);
+      final Price price = _getPrice(asset, prices);
       totalValue += (asset.quantity.value * price.lastPrice.value);
       final auxMap = <String, dynamic>{};
       auxMap[_kIdentifier] = asset.company.ticker;
@@ -68,6 +68,12 @@ class Distribution extends ValueObject {
       ));
     });
     return DistributionResult(_items, Amount(totalValue));
+  }
+
+  Price _getPrice(Asset asset, List<Price> prices) {
+    if (prices.any((element) => element.ticker == asset.company.ticker))
+      return prices.firstWhere((element) => element.ticker == asset.company.ticker);
+    return Price.fromDefaultValues(asset.company.ticker);
   }
 }
 

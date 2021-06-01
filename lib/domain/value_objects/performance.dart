@@ -53,7 +53,7 @@ class Performance extends ValueObject {
     double auxTotalValue = 0.0;
     for (int index = 0; index < _assets.length; index++) {
       final currentAsset = _assets[index];
-      final currentPrice = _prices.firstWhere((element) => element.ticker == currentAsset.company.ticker);
+      final currentPrice = _getPrice(currentAsset.company.ticker);
       /* SUM INCOMES */
       auxIncomes += currentAsset.incomes.value;
       /* SUM SALES */
@@ -70,5 +70,11 @@ class Performance extends ValueObject {
     assetsValorization.setValue(auxTotalValue - auxTotalInvested);
     totalResultValue.setValue(assetsValorization.value + totalSales.value + totalIncomes.value);
     totalResultPorcentage.setValue(totalResultValue.value * 100 / auxTotalInvested);
+  }
+
+  Price _getPrice(String ticker) {
+    if (_prices.any((element) => element.ticker == ticker))
+      return _prices.firstWhere((element) => element.ticker == ticker);
+    return Price.fromDefaultValues(ticker);
   }
 }

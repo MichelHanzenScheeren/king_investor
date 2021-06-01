@@ -75,6 +75,7 @@ class Rebalance extends ValueObject {
 
   Future<void> _doRebalance() async {
     await Future.delayed(Duration(milliseconds: 50));
+    _removeAssetsWithoutPrice();
     while (true) {
       final individualAssetsTotalValue = _calculeIndividualAssetsTotalValue();
       final individualCategoriesTotalValue = _calculeIndividualCategoriesTotalValue(individualAssetsTotalValue);
@@ -104,6 +105,10 @@ class Rebalance extends ValueObject {
       }
       _aportValue.setValue(_aportValue.value - priceOfToBuyAsset);
     }
+  }
+
+  void _removeAssetsWithoutPrice() {
+    _assets.removeWhere((element) => !_prices.any((price) => price.ticker == element.company.ticker));
   }
 
   Map<String, double> _calculeIndividualAssetsTotalValue() {
