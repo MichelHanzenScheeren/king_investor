@@ -8,17 +8,35 @@ import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
+enum AssetsOrder { alphabeticAZ, variationMaxToMin, priceMaxToMin }
+
 class WalletController extends GetxController {
   late AppDataController appDatacontroller;
   late UserUseCase userUseCase;
   late WalletsUseCase walletsUseCase;
   bool get isValidData => appDatacontroller.wallets.isNotEmpty && appDatacontroller.categories.isNotEmpty;
   bool get isEmptyData => appDatacontroller.assets.isEmpty;
+  Rx<AssetsOrder> _currentAssetOrder = Rx<AssetsOrder>(AssetsOrder.alphabeticAZ);
 
   WalletController() {
     appDatacontroller = Get.find();
     userUseCase = Get.find();
     walletsUseCase = Get.find();
+  }
+
+  AssetsOrder get currentAssetOrder => _currentAssetOrder.value;
+
+  void setAssetOrder(AssetsOrder newAssetOrder) => _currentAssetOrder.value = newAssetOrder;
+
+  String getAssetOrderDescription(AssetsOrder assetOrder) {
+    switch (assetOrder) {
+      case AssetsOrder.alphabeticAZ:
+        return 'Símbolo';
+      case AssetsOrder.variationMaxToMin:
+        return 'Variação';
+      case AssetsOrder.priceMaxToMin:
+        return 'Preço';
+    }
   }
 
   List<Category> validCategories() {

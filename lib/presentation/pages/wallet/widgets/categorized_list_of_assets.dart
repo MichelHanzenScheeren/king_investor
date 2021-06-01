@@ -13,24 +13,25 @@ import 'package:king_investor/presentation/widgets/load_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class CategorizedListOfAssets extends StatelessWidget {
-  final AppDataController? appDataController;
-  final WalletController? walletController;
+  final AppDataController appDataController = Get.find();
+  final WalletController walletController;
 
-  CategorizedListOfAssets({this.appDataController, this.walletController});
+  CategorizedListOfAssets(this.walletController);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (appDataController!.walletsLoad || appDataController!.categoriesLoad || appDataController!.assetsLoad)
+      if (appDataController.walletsLoad || appDataController.categoriesLoad || appDataController.assetsLoad)
         return LoadCardWidget();
-      if (!walletController!.isValidData) return LoadAssetsFailed();
-      if (walletController!.isEmptyData) return EmptyAssets();
-      final validCategories = walletController!.validCategories();
+      if (!walletController.isValidData) return LoadAssetsFailed();
+      if (walletController.isEmptyData) return EmptyAssets();
+      final validCategories = walletController.validCategories();
       return Column(
         children: validCategories.map((category) {
-          final categoryAssets = walletController!.getCategoryAssets(category);
+          final categoryAssets = walletController.getCategoryAssets(category);
           return CustomExpansionTileWidget(
+            margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
             initiallyExpanded: true,
             title: Text(category.name, style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
@@ -70,8 +71,8 @@ class CategorizedListOfAssets extends StatelessWidget {
 
   Widget companyPrice(Company company, ThemeData theme) {
     return Obx(() {
-      if (appDataController!.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
-      final price = walletController!.getPriceByTicker(company.ticker);
+      if (appDataController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+      final price = walletController.getPriceByTicker(company.ticker);
       return Container(
         margin: const EdgeInsets.only(left: 8),
         child: Column(

@@ -20,7 +20,7 @@ class DistributionPage extends StatelessWidget {
       init: distributionController,
       builder: (distributionController) {
         if (appDataController.isLoadingSomething) return LoadCardWidget();
-        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyDistributionCard();
+        if (appDataController.isMissingData) return EmptyDistributionCard();
         return Column(
           children: [
             SizedBox(height: 4),

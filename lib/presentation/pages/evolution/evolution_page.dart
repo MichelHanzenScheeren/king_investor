@@ -19,7 +19,7 @@ class EvolutionPage extends StatelessWidget {
       init: evolutionController,
       builder: (evolutionController) {
         if (appDataController.isLoadingSomething) return LoadCardWidget();
-        if (appDataController.assets.isEmpty || appDataController.prices.isEmpty) return EmptyEvolutionCard();
+        if (appDataController.isMissingData) return EmptyEvolutionCard();
         return Column(
           children: [
             SizedBox(height: 4),
@@ -37,14 +37,14 @@ class EvolutionPage extends StatelessWidget {
                       prefixText: 'Filtrar por',
                       initialValue: evolutionController.selectedFilter,
                       onChanged: (item) => evolutionController.setSelectedFilter(item!),
-                      values: _filterDropdownValues() as List<CustomDropdownItems<SelectedFilter>>,
+                      values: _filterDropdownValues(),
                     ),
                     SizedBox(height: 12),
                     CustomDropdownWidget<SelectedOrder>(
                       prefixText: 'Ordenar por',
                       initialValue: evolutionController.selectedOrder,
                       onChanged: (item) => evolutionController.setSelectedOrder(item!),
-                      values: _orderDropdownValues() as List<CustomDropdownItems<SelectedOrder>>,
+                      values: _orderDropdownValues(),
                     ),
                   ],
                 );
@@ -70,14 +70,14 @@ class EvolutionPage extends StatelessWidget {
     );
   }
 
-  List _filterDropdownValues() {
+  List<CustomDropdownItems<SelectedFilter>> _filterDropdownValues() {
     final map = SelectedFilter.values.map(
       (filter) => CustomDropdownItems(filter, evolutionController.filterDescription(filter)),
     );
     return map.toList();
   }
 
-  List _orderDropdownValues() {
+  List<CustomDropdownItems<SelectedOrder>> _orderDropdownValues() {
     final map = SelectedOrder.values.map(
       (order) => CustomDropdownItems(order, evolutionController.orderDescription(order)),
     );

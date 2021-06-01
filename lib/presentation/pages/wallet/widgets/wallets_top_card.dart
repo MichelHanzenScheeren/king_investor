@@ -7,10 +7,10 @@ import 'package:king_investor/presentation/widgets/custom_card_widget.dart';
 import 'package:king_investor/presentation/widgets/load_indicator_widget.dart';
 
 class WalletsTopCard extends StatelessWidget {
-  final AppDataController appDataController;
+  final AppDataController appDataController = Get.find();
   final WalletController walletController;
 
-  WalletsTopCard({required this.appDataController, required this.walletController});
+  WalletsTopCard(this.walletController);
 
   @override
   Widget build(BuildContext context) {

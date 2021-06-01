@@ -42,7 +42,7 @@ class ChartCard extends StatelessWidget {
                       value: items[i].percentageValue.value,
                       title: '',
                       radius: MediaQuery.of(context).size.width * (isSelected ? 0.88 : 0.84) / 2,
-                      badgePositionPercentageOffset: isSelected ? 0.84 : 0.8,
+                      badgePositionPercentageOffset: isSelected ? 0.82 : 0.78,
                       badgeWidget: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
