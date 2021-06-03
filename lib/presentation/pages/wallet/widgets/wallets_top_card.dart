@@ -16,6 +16,7 @@ class WalletsTopCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CustomCardWidget(
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       direction: Axis.horizontal,
       children: <Widget>[
         Icon(Icons.account_balance_wallet),
@@ -26,7 +27,7 @@ class WalletsTopCard extends StatelessWidget {
             child: Text(
               appDataController.currentWallet?.name ?? "!",
               style: TextStyle(
-                color: theme.primaryColorLight,
+                color: theme.hintColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/domain/models/category.dart';
 import 'package:king_investor/domain/models/price.dart';
 import 'package:king_investor/domain/models/wallet.dart';
 import 'package:king_investor/domain/use_cases/user_use_case.dart';
 import 'package:king_investor/domain/use_cases/wallets_use_case.dart';
+import 'package:king_investor/domain/value_objects/day_performance.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/static/app_snackbar.dart';
 
@@ -65,6 +67,27 @@ class WalletController extends GetxController {
       (price) => price.ticker == asset.company.ticker,
       orElse: () => Price.fromDefaultValues(asset.company.ticker),
     );
+  }
+
+  List<DayPerformanceResult> getDayPerformance() {
+    try {
+      final categories = appDatacontroller.usedCategories;
+      final performance = DayPerformance(appDatacontroller.prices, appDatacontroller.assets, categories);
+      return performance.measurePerformance();
+    } catch (eror) {
+      String message = 'Um erro inesperado impediu que o resumo de hoje fosse mostrado';
+      AppSnackbar.show(message: message, type: AppSnackbarType.error);
+      return [];
+    }
+  }
+
+  String getFormattedDayOfPerformance() {
+    DateTime date = appDatacontroller.prices.first.lastUpdate;
+    appDatacontroller.prices.forEach((price) {
+      if (price.lastUpdate.isAfter(date)) date = price.lastUpdate;
+    });
+    var model = DateFormat("dd/MM/yyyy");
+    return '${model.format(date)}';
   }
 
   Future<void> changeCurrentWallet(Wallet wallet) async {

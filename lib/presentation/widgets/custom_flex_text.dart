@@ -4,6 +4,7 @@ class CustomFlexText extends StatelessWidget {
   final MainAxisAlignment alignment;
   final List<String?> texts;
   final TextStyle? style;
+  final List<TextStyle>? individualStyles;
   final FontWeight weight;
   final double size;
   final Color? color;
@@ -14,6 +15,7 @@ class CustomFlexText extends StatelessWidget {
     this.alignment: MainAxisAlignment.center,
     this.texts: const <String>[],
     this.style,
+    this.individualStyles,
     this.weight: FontWeight.w500,
     this.size: 17,
     this.color,
@@ -31,17 +33,17 @@ class CustomFlexText extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: alignment,
-          children: texts.map((text) {
+          children: List.generate(texts.length, (i) {
             return Container(
               child: Flexible(
                 child: Text(
-                  text ?? '!',
-                  style: aux,
+                  texts[i] ?? '!',
+                  style: individualStyles != null && individualStyles!.length > i ? individualStyles![i] : aux,
                   textAlign: alignment == MainAxisAlignment.center ? TextAlign.center : TextAlign.justify,
                 ),
               ),
             );
-          }).toList(),
+          }),
         ),
         showDivider ? Divider(color: theme.primaryColorLight.withAlpha(50), height: 10) : Container(),
         SizedBox(height: 2),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/categorized_list_of_assets.dart';
+import 'package:king_investor/presentation/pages/wallet/widgets/day_resum_card.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/filter_list_of_assets.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/wallets_top_card.dart';
 
@@ -16,10 +17,7 @@ class WalletPage extends StatelessWidget {
       children: [
         SizedBox(height: 4),
         WalletsTopCard(walletController),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          child: Divider(color: Theme.of(context).primaryColorLight),
-        ),
+        DayResumCard(walletController),
         FilterListOfAssets(walletController),
         CategorizedListOfAssets(walletController),
         SizedBox(height: 8),
