@@ -46,13 +46,24 @@ class WalletController extends GetxController {
   }
 
   List<Asset> getCategoryAssets(Category category) {
-    return appDatacontroller.assets.where((asset) => asset.category.objectId == category.objectId).toList();
+    final assets = appDatacontroller.assets.where((asset) => asset.category.objectId == category.objectId).toList();
+    return _orderAssets(assets);
   }
 
-  Price getPriceByTicker(String ticker) {
+  List<Asset> _orderAssets(List<Asset> assets) {
+    if (currentAssetOrder == AssetsOrder.priceMaxToMin)
+      assets.sort((a, b) => getPriceByTicker(b).lastPrice.value.compareTo(getPriceByTicker(a).lastPrice.value));
+    else if (currentAssetOrder == AssetsOrder.variationMaxToMin)
+      assets.sort((a, b) => getPriceByTicker(b).variation.value.compareTo(getPriceByTicker(a).variation.value));
+    else if (currentAssetOrder == AssetsOrder.alphabeticAZ)
+      assets.sort((a, b) => a.company.ticker.compareTo(b.company.ticker));
+    return assets;
+  }
+
+  Price getPriceByTicker(Asset asset) {
     return appDatacontroller.prices.firstWhere(
-      (price) => price.ticker == ticker,
-      orElse: () => Price.fromDefaultValues(ticker),
+      (price) => price.ticker == asset.company.ticker,
+      orElse: () => Price.fromDefaultValues(asset.company.ticker),
     );
   }
 

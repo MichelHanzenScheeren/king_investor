@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:king_investor/domain/models/company.dart';
+import 'package:king_investor/domain/models/asset.dart';
 import 'package:king_investor/presentation/controllers/app_data_controller.dart';
 import 'package:king_investor/presentation/controllers/wallet_controller.dart';
 import 'package:king_investor/presentation/pages/wallet/widgets/empty_assets.dart';
@@ -22,6 +22,7 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
+      print('PASSEII');
       if (appDataController.walletsLoad || appDataController.categoriesLoad || appDataController.assetsLoad)
         return LoadCardWidget();
       if (!walletController.isValidData) return LoadAssetsFailed();
@@ -56,7 +57,7 @@ class CategorizedListOfAssets extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(company.name, style: subtitleStyle, overflow: TextOverflow.ellipsis),
-                    trailing: companyPrice(company, theme),
+                    trailing: companyPrice(categoryAssets[index], theme),
                     onTap: () => Get.toNamed(AppRoutes.asset, arguments: categoryAssets[index].objectId),
                   ),
                   Divider(color: theme.primaryColorLight, height: 2),
@@ -69,10 +70,10 @@ class CategorizedListOfAssets extends StatelessWidget {
     });
   }
 
-  Widget companyPrice(Company company, ThemeData theme) {
+  Widget companyPrice(Asset asset, ThemeData theme) {
     return Obx(() {
       if (appDataController.pricesLoad) return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
-      final price = walletController.getPriceByTicker(company.ticker);
+      final price = walletController.getPriceByTicker(asset);
       return Container(
         margin: const EdgeInsets.only(left: 8),
         child: Column(
@@ -81,7 +82,7 @@ class CategorizedListOfAssets extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              '${price.lastPrice.toMonetary(company.currency)}',
+              '${price.lastPrice.toMonetary(asset.company.currency)}',
               style: theme.textTheme.headline1!.copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
