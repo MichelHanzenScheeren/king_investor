@@ -71,4 +71,54 @@ Para utilizar o aplicativo, algumas ferramentas serão necessárias:
   * Shared: Define Notifications, Contracts e classes genéricas utilizadas por diversas outras camadas da aplicação.
 * Há ainda a pasta "resources", onde são definidos mocks e arquivos estáticos para simular os retornos de apis e do banco de dados, muito útil no ambiente de desenvolvimento ou para testar a aplicação.
 
+## Imagens
+<table>
+  <tr>
+   <td align="center">Login</td>
+   <td align="center">Cadastro</td>
+   <td align="center">Tela inicial (vazia)</td>
+  </tr>
+  <tr>
+   <td><img alt="Login" src="images/1-login.jpg" height="600"></td>
+   <td><img alt="Cadastro" src="images/2-cadastro.jpg" height="600"></td>
+   <td><img alt="Home" src="images/3-pagina-inicial-vazia.jpg" height="600"></td>
+  </tr>
+ </table>
+ 
+ <table>
+  <tr>
+   <td align="center">Gerenciamento do usuário</td>
+   <td align="center">Busca por ativos</td>
+   <td align="center">Cadastro de ativos</td>
+  </tr>
+  <tr>
+   <td><img alt="Tela do usuario" src="images/4-gerenciamento-usuario.jpg" height="600"></td>
+   <td><img alt="Busca por ativos" src="images/5-busca-papeis.jpg" height="600"></td>
+   <td><img alt="Cadastro de ativos" src="images/6-cadastro-acoes.jpg" height="600"></td>
+  </tr>
+ </table>
+ 
+  <table>
+  <tr>
+   <td align="center">Resumo dos ativos cadastrados</td>
+   <td align="center">Evolução da carteira</td>
+   <td align="center">Gráfico de distribuição</td>
+  </tr>
+  <tr>
+   <td><img alt="Resumo dos ativos" src="images/7-resumo.jpg" height="600"></td>
+   <td><img alt="Evolucao da carteira" src="images/8-evolucao.jpg" height="600"></td>
+   <td><img alt="Grafico de distribuicao" src="images/9-distribuicao-geral.jpg" height="600"></td>
+  </tr>
+ </table>
+ 
+  <table>
+  <tr>
+   <td align="center">Filtros da distribuição da carteira</td>
+   <td align="center">Ferramenta de rebalanceamento</td>
+  </tr>
+  <tr>
+   <td><img alt="Filtros da distribuicao" src="images/10-distribuicao-papeis.jpg" height="600"></td>
+   <td><img alt="Ferramenta de rebalanceamento" src="images/11-ferramenta-rebalanceamento.jpg" height="600"></td>
+  </tr>
+ </table>
 
