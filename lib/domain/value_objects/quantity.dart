@@ -5,7 +5,7 @@ class Quantity extends ValueObject {
   int _value;
   bool _mustBeGreaterThanZero;
 
-  Quantity(int value, {mustBeGreaterThanZero: false}) {
+  Quantity(int value, {mustBeGreaterThanZero = false}) {
     _mustBeGreaterThanZero = mustBeGreaterThanZero ?? false;
     _applyContracts(value);
     _value = isValid ? value : (mustBeGreaterThanZero ? 1 : 0);
@@ -29,14 +29,18 @@ class Quantity extends ValueObject {
     if (_mustBeGreaterThanZero) {
       addNotifications(
         Contract()
-            .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
-            .isGreatherThan(value, 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
+            .isNotNull(
+                value, 'Quantity.value', 'A quantidade não pode ser nula')
+            .isGreatherThan(value, 0, 'Quantity.value',
+                'A quantidade precisa ser maior do que zero'),
       );
     } else {
       addNotifications(
         Contract()
-            .isNotNull(value, 'Quantity.value', 'A quantidade não pode ser nula')
-            .isGreatherOrEqualTo(value, 0, 'Quantity.value', 'A quantidade precisa ser maior ou igual a zero'),
+            .isNotNull(
+                value, 'Quantity.value', 'A quantidade não pode ser nula')
+            .isGreatherOrEqualTo(value, 0, 'Quantity.value',
+                'A quantidade precisa ser maior ou igual a zero'),
       );
     }
   }
@@ -46,8 +50,10 @@ class Quantity extends ValueObject {
       Contract()
           .requires()
           .isNotNull(value, 'Quantity.value', 'O número não pode ser nulo')
-          .canBeConvertedToInt(value, 'Quantity.value', 'A quantidade precisa ser um número inteiro')
-          .isGreatherThan(int.tryParse(value), 0, 'Quantity.value', 'A quantidade precisa ser maior do que zero'),
+          .canBeConvertedToInt(value, 'Quantity.value',
+              'A quantidade precisa ser um número inteiro')
+          .isGreatherThan(int.tryParse(value), 0, 'Quantity.value',
+              'A quantidade precisa ser maior do que zero'),
     );
   }
 }

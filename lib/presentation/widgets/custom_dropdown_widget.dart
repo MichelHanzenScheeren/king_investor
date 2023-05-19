@@ -15,11 +15,11 @@ class CustomDropdownWidget<T> extends StatelessWidget {
     @required this.initialValue,
     @required this.values,
     this.onChanged,
-    this.icon: Icons.filter_list,
-    this.isDense: true,
-    this.hasUnderline: false,
-    this.isFilled: true,
-    this.prefixText: '',
+    this.icon = Icons.filter_list,
+    this.isDense = true,
+    this.hasUnderline = false,
+    this.isFilled = true,
+    this.prefixText = '',
   });
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,8 @@ class CustomDropdownWidget<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButton<T>(
-          dropdownColor: isFilled ? Colors.grey[100] : theme.dialogBackgroundColor,
+          dropdownColor:
+              isFilled ? Colors.grey[100] : theme.dialogBackgroundColor,
           icon: Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
             child: Icon(icon, color: isFilled ? Colors.black : theme.hintColor),
@@ -62,7 +63,8 @@ class CustomDropdownWidget<T> extends StatelessWidget {
               value: item.value,
               child: Container(
                 padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                child: Text(item.text, style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: Text(item.text,
+                    style: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             );
           }).toList()),

@@ -6,12 +6,16 @@ enum AppSnackbarType { success, error }
 class AppSnackbar {
   AppSnackbar._();
 
-  static void show({String message: '', AppSnackbarType type: AppSnackbarType.error}) {
+  static void show({
+    String message = '',
+    AppSnackbarType type = AppSnackbarType.error,
+  }) {
     try {
       if (Get.isSnackbarOpen) Get.back();
 
       String _message = _getMessage(message, type);
-      TextStyle style = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
+      TextStyle style = TextStyle(
+          color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
       Get.snackbar(
         null,
         null,
@@ -22,10 +26,12 @@ class AppSnackbar {
           children: [Text(_message, style: style)],
         ),
         duration: Duration(seconds: type == AppSnackbarType.success ? 3 : 5),
-        backgroundColor: type == AppSnackbarType.success ? Colors.green[400] : Colors.red[400],
+        backgroundColor: type == AppSnackbarType.success
+            ? Colors.green[400]
+            : Colors.red[400],
         colorText: Colors.white,
         borderRadius: 15,
-        dismissDirection: SnackDismissDirection.HORIZONTAL,
+        dismissDirection: DismissDirection.startToEnd,
         isDismissible: true,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -38,6 +44,8 @@ class AppSnackbar {
 
   static String _getMessage(String message, AppSnackbarType type) {
     if (message.isNotEmpty) return message;
-    return type == AppSnackbarType.success ? 'Operação concluída' : 'Não foi possível concluir a operação';
+    return type == AppSnackbarType.success
+        ? 'Operação concluída'
+        : 'Não foi possível concluir a operação';
   }
 }

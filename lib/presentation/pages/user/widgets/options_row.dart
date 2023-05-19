@@ -11,14 +11,17 @@ class OptionRow extends StatelessWidget {
     @required this.leftIcon,
     this.itemsColor,
     this.text,
-    this.showRrightIcon: true,
+    this.showRrightIcon = true,
     this.function,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textStyle = TextStyle(color: itemsColor ?? theme.hintColor, fontSize: 16, fontWeight: FontWeight.w500);
+    final textStyle = TextStyle(
+        color: itemsColor ?? theme.hintColor,
+        fontSize: 16,
+        fontWeight: FontWeight.w500);
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       child: Padding(

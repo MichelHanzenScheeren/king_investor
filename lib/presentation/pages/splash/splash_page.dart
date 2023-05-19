@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/presentation/controllers/splash_controller.dart';
@@ -10,21 +9,25 @@ class SplashPage extends StatefulWidget {
   _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
   final controller = SplashController();
 
   @override
   void initState() {
     super.initState();
-    controller.control = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    controller.curve = CurvedAnimation(parent: controller.control, curve: Curves.easeInOutExpo);
+    controller.control = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1500));
+    controller.curve = CurvedAnimation(
+        parent: controller.control, curve: Curves.easeInOutExpo);
     controller.initialConfiguration();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double width = 0.4 * (size.width < size.height ? size.width : size.height);
+    final double width =
+        0.4 * (size.width < size.height ? size.width : size.height);
     final theme = Theme.of(context);
     return Scaffold(
       body: Container(
@@ -39,18 +42,23 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                 Container(
                   alignment: Alignment.center,
                   child: Container(
-                    decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
+                    decoration:
+                        BoxDecoration(color: theme.scaffoldBackgroundColor),
                     width: width * control.value,
-                    child: Image(image: AssetImage(AppImages.transparentLogo), fit: BoxFit.fill),
+                    child: Image(
+                        image: AssetImage(AppImages.transparentLogo),
+                        fit: BoxFit.fill),
                   ),
                 ),
                 Container(
                   height: 25 * control.value,
-                  child: Text('KING INVESTOR', style: TextStyle(color: theme.hintColor, fontSize: 26)),
+                  child: Text('KING INVESTOR',
+                      style: TextStyle(color: theme.hintColor, fontSize: 26)),
                 ),
                 SizedBox(height: 50),
                 Obx(() {
-                  if (controller.error.isEmpty) return _loadingWidget(control.value, theme.hintColor);
+                  if (controller.error.isEmpty)
+                    return _loadingWidget(control.value, theme.hintColor);
                   return _errorWidget(theme, controller.error);
                 }),
               ],
@@ -85,7 +93,10 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             alignment: Alignment.center,
             child: Text(
               'NÃO TEM JEITO FÁCIL DE DIZER ISSO...',
-              style: TextStyle(color: theme.errorColor, fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: theme.errorColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),

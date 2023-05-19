@@ -10,7 +10,12 @@ class UpdateUserData extends StatelessWidget {
   final Function(String) validate;
   final Function onSubmit;
 
-  UpdateUserData({this.prefixText: '', this.value: '', this.onChange, this.validate, this.onSubmit});
+  UpdateUserData(
+      {this.prefixText = '',
+      this.value = '',
+      this.onChange,
+      this.validate,
+      this.onSubmit});
 
   @override
   Widget build(BuildContext context) {

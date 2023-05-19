@@ -12,12 +12,12 @@ class CustomButtonWidget extends StatelessWidget {
   CustomButtonWidget({
     this.backGroundColor,
     this.borderColor,
-    this.buttonText: "",
+    this.buttonText = "",
     this.textStyle,
     this.onPressed,
     this.heigth,
-    this.width: double.infinity,
-    this.borderRadius: 10,
+    this.width = double.infinity,
+    this.borderRadius = 10,
   });
 
   @override
@@ -28,9 +28,11 @@ class CustomButtonWidget extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 16)),
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 16)),
           elevation: MaterialStateProperty.all(1),
-          backgroundColor: MaterialStateProperty.all((backGroundColor ?? theme.primaryColor)),
+          backgroundColor: MaterialStateProperty.all(
+              (backGroundColor ?? theme.primaryColor)),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
             side: BorderSide(color: borderColor ?? theme.primaryColor),

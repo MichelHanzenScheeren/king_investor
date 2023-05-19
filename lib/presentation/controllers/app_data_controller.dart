@@ -51,10 +51,17 @@ class AppDataController extends GetxController {
   bool get walletsLoad => _walletsLoad.value;
   bool get assetsLoad => _assetsLoad.value;
   bool get pricesLoad => _pricesLoad.value;
-  bool get isLoadingSomething => _categoriesLoad.value || _walletsLoad.value || _assetsLoad.value || _pricesLoad.value;
+  bool get isLoadingSomething =>
+      _categoriesLoad.value ||
+      _walletsLoad.value ||
+      _assetsLoad.value ||
+      _pricesLoad.value;
   Wallet get currentWallet => _currentWallet.value;
   List<Category> get usedCategories {
-    return categories.where((cat) => assets.any((item) => item?.category?.objectId == cat?.objectId)).toList();
+    return categories
+        .where((cat) =>
+            assets.any((item) => item?.category?.objectId == cat?.objectId))
+        .toList();
   }
 
   /* SETTERS */
@@ -83,7 +90,8 @@ class AppDataController extends GetxController {
     setCategoriesLoad(true);
     final response = await categoriesUseCase.getCategories();
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) {
         setList(categories, list);
         sortCategories();
@@ -96,15 +104,17 @@ class AppDataController extends GetxController {
     categories.sort((cat1, cat2) => cat1.order.compareTo(cat2.order));
   }
 
-  Future<void> loadAllWallets({bool replaceCurrentWallet: false}) async {
+  Future<void> loadAllWallets({bool replaceCurrentWallet = false}) async {
     setWalletsLoad(true);
     final response = await walletsUseCase.getAllUserWallets();
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) {
         setList(wallets, list);
         if (replaceCurrentWallet) {
-          Wallet current = wallets.firstWhere((e) => e.isMainWallet, orElse: () => wallets.first);
+          Wallet current = wallets.firstWhere((e) => e.isMainWallet,
+              orElse: () => wallets.first);
           setCurrentWalet(current);
         }
       },
@@ -116,7 +126,8 @@ class AppDataController extends GetxController {
     setAssetsLoad(true);
     final response = await assetsUseCase.getAssets(currentWallet?.objectId);
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) {
         setList(assets, list);
         sortAssets();
@@ -126,16 +137,19 @@ class AppDataController extends GetxController {
   }
 
   void sortAssets() {
-    assets.sort((asset1, asset2) => asset1?.company?.ticker?.compareTo(asset2?.company?.ticker));
+    assets.sort((asset1, asset2) =>
+        asset1?.company?.ticker?.compareTo(asset2?.company?.ticker));
   }
 
   Future<void> loadAllPrices() async {
     if (assets.isEmpty) return <Price>[];
     setPricesLoad(true);
-    final List<String> tickers = List<String>.generate(assets.length, (index) => assets[index]?.company?.ticker);
+    final List<String> tickers = List<String>.generate(
+        assets.length, (index) => assets[index]?.company?.ticker);
     final response = await financeUseCase.getPrices(tickers);
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) => setList(prices, list),
     );
     setPricesLoad(false);
@@ -143,9 +157,11 @@ class AppDataController extends GetxController {
 
   Future<void> loadAllCategoryScores() async {
     setCategoryScoresLoad(true);
-    final response = await categoriesUseCase.getCategoryScores(currentWallet?.objectId);
+    final response =
+        await categoriesUseCase.getCategoryScores(currentWallet?.objectId);
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) => setList(categoryScores, list),
     );
     setCategoryScoresLoad(false);

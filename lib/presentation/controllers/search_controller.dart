@@ -32,7 +32,8 @@ class SearchController extends GetxController {
   String get saveId => _saveId.value;
   List<Company> get companies => _companies;
   Category get currentCategory => _currentCategory.value;
-  bool isSavedAsset(String ticker) => appDataController.assets.any((e) => e?.company?.ticker == ticker);
+  bool isSavedAsset(String ticker) =>
+      appDataController.assets.any((e) => e?.company?.ticker == ticker);
 
   void setLoad(bool value) => _load.value = value;
   void setSave(bool value) => _save.value = value;
@@ -43,11 +44,12 @@ class SearchController extends GetxController {
     _companies.addAll(newCompanies);
   }
 
-  Future<void> search(String value, {needSetLoad: true}) async {
+  Future<void> search(String value, {needSetLoad = true}) async {
     setLoad(true);
     final response = await financeUseCase.search(value);
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (list) => setCompanies(list),
     );
     setLoad(false);
@@ -66,12 +68,16 @@ class SearchController extends GetxController {
     try {
       final categories = appDataController.categories;
       if (company?.currency == 'BRL') {
-        if (company?.securityType == 'Common Stock') return categories.where((e) => e.order == 0)?.first;
-        if (company?.securityType == 'Closed-End Fund') return categories.where((e) => e.order == 1)?.first;
+        if (company?.securityType == 'Common Stock')
+          return categories.where((e) => e.order == 0)?.first;
+        if (company?.securityType == 'Closed-End Fund')
+          return categories.where((e) => e.order == 1)?.first;
         return categories.where((e) => e.order == 2)?.first;
       } else if (company?.currency == 'USD') {
-        if (company?.securityType == 'Common Stock') return categories.where((e) => e.order == 3)?.first;
-        if (company?.securityType == 'Closed-End Fund') return categories.where((e) => e.order == 4)?.first;
+        if (company?.securityType == 'Common Stock')
+          return categories.where((e) => e.order == 3)?.first;
+        if (company?.securityType == 'Closed-End Fund')
+          return categories.where((e) => e.order == 4)?.first;
         return categories.where((e) => e.order == 5)?.first;
       }
       return categories.where((e) => e.order == 6)?.first;
@@ -84,13 +90,16 @@ class SearchController extends GetxController {
     setSaveId(company?.objectId);
     setSave(true);
     final walletId = appDataController.currentWallet?.objectId;
-    Asset asset = Asset(null, null, company, currentCategory, amount, score, quantity, walletId);
+    Asset asset = Asset(null, null, company, currentCategory, amount, score,
+        quantity, walletId);
     final response = await assetsUseCase.addAsset(asset);
     response.fold(
-      (notification) => AppSnackbar.show(message: notification.message, type: AppSnackbarType.error),
+      (notification) => AppSnackbar.show(
+          message: notification.message, type: AppSnackbarType.error),
       (notification) {
         appDataController.assets.add(asset);
-        AppSnackbar.show(message: notification.message, type: AppSnackbarType.success);
+        AppSnackbar.show(
+            message: notification.message, type: AppSnackbarType.success);
       },
     );
     setSaveId('');

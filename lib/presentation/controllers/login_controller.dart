@@ -52,15 +52,18 @@ class LoginController extends GetxController {
     setLoading(false);
   }
 
-  void _showMessage(String message, {bool error: true}) {
-    AppSnackbar.show(message: message, type: error ? AppSnackbarType.error : AppSnackbarType.success);
+  void _showMessage(String message, {bool error = true}) {
+    AppSnackbar.show(
+        message: message,
+        type: error ? AppSnackbarType.error : AppSnackbarType.success);
   }
 
   void goToSignUpPage() => Get.offNamed(AppRoutes.signUp);
 
   void resetPassword() async {
     if (_email == null || _email.isEmpty) {
-      _showMessage('Informe o email associado a sua conta para recuperar sua senha');
+      _showMessage(
+          'Informe o email associado a sua conta para recuperar sua senha');
     } else {
       final response = await _userUseCase.requestPasswordReset(_email);
       response.fold(

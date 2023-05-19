@@ -59,7 +59,8 @@ class AssetsOptions extends StatelessWidget {
     );
   }
 
-  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme, {Function onTap, bool actived: true}) {
+  SpeedDialChild _getFloatButton(String label, IconData icon, ThemeData theme,
+      {Function onTap, bool actived = true}) {
     return SpeedDialChild(
       child: Icon(icon, color: theme.hintColor),
       label: label,
@@ -79,14 +80,16 @@ class AssetsOptions extends StatelessWidget {
 
   void _buyOperation(HomeController homeController) {
     Get.bottomSheet(
-      AssetOperation(dividerOperation: 'compra', onSave: homeController.saveAssetBuy),
+      AssetOperation(
+          dividerOperation: 'compra', onSave: homeController.saveAssetBuy),
       isDismissible: false,
     );
   }
 
   void _saleOperation(HomeController homeController) {
     Get.bottomSheet(
-      AssetOperation(dividerOperation: 'venda', onSave: homeController.saveAssetSale),
+      AssetOperation(
+          dividerOperation: 'venda', onSave: homeController.saveAssetSale),
       isDismissible: false,
     );
   }

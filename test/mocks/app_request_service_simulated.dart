@@ -8,11 +8,11 @@ import '../static/search_response.dart';
 class AppRequestServiceSimulated implements RequestAgreement {
   @override
   void configureRequests({
-    int conectTimeoutMiliseconds: 5000,
-    int sendTimeoutMiliseconds: 5000,
-    int receiveTimeoutMiliseconds: 10000,
+    int conectTimeoutMiliseconds = 5000,
+    int sendTimeoutMiliseconds = 5000,
+    int receiveTimeoutMiliseconds = 10000,
     Map headers,
-    String baseUrl: '',
+    String baseUrl = '',
   }) {}
 
   @override
@@ -24,7 +24,8 @@ class AppRequestServiceSimulated implements RequestAgreement {
     } else if (url.contains('USD')) {
       return Future.value(Right(kExchangeRateResponseMap));
     } else {
-      return Future.value(Left(Notification('request_service.unkown', 'Erro desconhecido')));
+      return Future.value(
+          Left(Notification('request_service.unkown', 'Erro desconhecido')));
     }
   }
 }

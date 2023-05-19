@@ -11,14 +11,14 @@ class CustomFlexText extends StatelessWidget {
   final bool showDivider;
 
   CustomFlexText({
-    this.alignment: MainAxisAlignment.center,
-    this.texts: const <String>[],
+    this.alignment = MainAxisAlignment.center,
+    this.texts = const <String>[],
     this.style,
-    this.weight: FontWeight.w500,
-    this.size: 17,
+    this.weight = FontWeight.w500,
+    this.size = 17,
     this.color,
-    this.strong: true,
-    this.showDivider: true,
+    this.strong = true,
+    this.showDivider = true,
   });
 
   @override
@@ -26,7 +26,11 @@ class CustomFlexText extends StatelessWidget {
     final theme = Theme.of(context);
     final light = theme.primaryColorLight;
     final hint = theme.hintColor;
-    final aux = style ?? TextStyle(fontWeight: weight, fontSize: size, color: color ?? (strong ? hint : light));
+    final aux = style ??
+        TextStyle(
+            fontWeight: weight,
+            fontSize: size,
+            color: color ?? (strong ? hint : light));
     return Column(
       children: [
         Row(
@@ -37,13 +41,17 @@ class CustomFlexText extends StatelessWidget {
                 child: Text(
                   text ?? '!',
                   style: aux,
-                  textAlign: alignment == MainAxisAlignment.center ? TextAlign.center : TextAlign.justify,
+                  textAlign: alignment == MainAxisAlignment.center
+                      ? TextAlign.center
+                      : TextAlign.justify,
                 ),
               ),
             );
           }).toList(),
         ),
-        showDivider ? Divider(color: theme.primaryColorLight.withAlpha(50), height: 10) : Container(),
+        showDivider
+            ? Divider(color: theme.primaryColorLight.withAlpha(50), height: 10)
+            : Container(),
         SizedBox(height: 2),
       ],
     );

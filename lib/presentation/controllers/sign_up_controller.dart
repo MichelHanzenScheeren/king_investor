@@ -60,10 +60,13 @@ class SignUpController extends GetxController {
 
   Future<void> doSignUp() async {
     setLoading(true);
-    if (!Password(_password).isValid || !Email(_email).isValid || !Name(_firstName, _lastName).isValid) {
+    if (!Password(_password).isValid ||
+        !Email(_email).isValid ||
+        !Name(_firstName, _lastName).isValid) {
       _showMessage('Um ou mais campos do formulário não são válidos');
     } else {
-      final User user = User(null, null, Name(_firstName, _lastName), Email(_email));
+      final User user =
+          User(null, null, Name(_firstName, _lastName), Email(_email));
       final response = await _userUseCase.signUp(user, _password);
       response.fold(
         (notification) => _showMessage(notification.message),
@@ -73,8 +76,10 @@ class SignUpController extends GetxController {
     setLoading(false);
   }
 
-  void _showMessage(String message, {bool error: true}) {
-    AppSnackbar.show(message: message, type: error ? AppSnackbarType.error : AppSnackbarType.success);
+  void _showMessage(String message, {bool error = true}) {
+    AppSnackbar.show(
+        message: message,
+        type: error ? AppSnackbarType.error : AppSnackbarType.success);
   }
 
   void goToLoginPage() => Get.offNamed(AppRoutes.login);

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:king_investor/domain/models/company.dart';
@@ -22,8 +20,9 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      if (appDataController.walletsLoad || appDataController.categoriesLoad || appDataController.assetsLoad)
-        return LoadCardWidget();
+      if (appDataController.walletsLoad ||
+          appDataController.categoriesLoad ||
+          appDataController.assetsLoad) return LoadCardWidget();
       if (!walletController.isValidData) return LoadAssetsFailed();
       if (walletController.isEmptyData) return EmptyAssets();
       final validCategories = walletController.validCategories();
@@ -35,9 +34,12 @@ class CategorizedListOfAssets extends StatelessWidget {
             title: Text(category?.name ?? "?", style: TextStyle(fontSize: 20)),
             children: List<Widget>.generate(categoryAssets.length, (index) {
               final company = categoryAssets[index].company;
-              final normalStyle = TextStyle(color: theme.primaryColorLight, fontSize: 13);
-              final subtitleStyle = TextStyle(color: theme.primaryColorLight.withAlpha(220), fontSize: 14);
-              final titleStyle = TextStyle(color: theme.hintColor, fontSize: 18);
+              final normalStyle =
+                  TextStyle(color: theme.primaryColorLight, fontSize: 13);
+              final subtitleStyle = TextStyle(
+                  color: theme.primaryColorLight.withAlpha(220), fontSize: 14);
+              final titleStyle =
+                  TextStyle(color: theme.hintColor, fontSize: 18);
               return Column(
                 children: <Widget>[
                   ListTile(
@@ -51,14 +53,19 @@ class CategorizedListOfAssets extends StatelessWidget {
                           text: company.symbol + '   ',
                           style: titleStyle,
                           children: [
-                            TextSpan(text: "${company.exchange} - ${company.country}", style: normalStyle)
+                            TextSpan(
+                                text:
+                                    "${company.exchange} - ${company.country}",
+                                style: normalStyle)
                           ],
                         ),
                       ),
                     ),
-                    subtitle: Text(company.name, style: subtitleStyle, overflow: TextOverflow.ellipsis),
+                    subtitle: Text(company.name,
+                        style: subtitleStyle, overflow: TextOverflow.ellipsis),
                     trailing: companyPrice(company, theme),
-                    onTap: () => Get.toNamed(AppRoutes.asset, arguments: categoryAssets[index].objectId),
+                    onTap: () => Get.toNamed(AppRoutes.asset,
+                        arguments: categoryAssets[index].objectId),
                   ),
                   Divider(color: theme.primaryColorLight, height: 2),
                 ],
@@ -73,7 +80,8 @@ class CategorizedListOfAssets extends StatelessWidget {
   Widget companyPrice(Company company, ThemeData theme) {
     return Obx(() {
       if (appDataController.pricesLoad)
-        return LoadIndicatorWidget(size: 30, strokeWidth: 3, usePrimaryColor: false);
+        return LoadIndicatorWidget(
+            size: 30, strokeWidth: 3, usePrimaryColor: false);
       final price = walletController.getPriceByTicker(company?.ticker);
       return Container(
         margin: const EdgeInsets.only(left: 8),
@@ -98,7 +106,9 @@ class CategorizedListOfAssets extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: price.variation.value > 0
                     ? theme.hoverColor
-                    : (price.variation.value < 0 ? theme.errorColor : theme.primaryColorLight),
+                    : (price.variation.value < 0
+                        ? theme.errorColor
+                        : theme.primaryColorLight),
               ),
             ),
           ],

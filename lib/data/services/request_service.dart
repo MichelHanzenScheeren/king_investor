@@ -13,11 +13,11 @@ class RequestService implements RequestAgreement {
 
   @override
   void configureRequests({
-    int conectTimeoutMiliseconds: 5000,
-    int sendTimeoutMiliseconds: 5000,
-    int receiveTimeoutMiliseconds: 10000,
+    int conectTimeoutMiliseconds = 5000,
+    int sendTimeoutMiliseconds = 5000,
+    int receiveTimeoutMiliseconds = 10000,
     Map<String, dynamic> headers,
-    String baseUrl: '',
+    String baseUrl = '',
   }) {
     _dio.options = BaseOptions(
       connectTimeout: conectTimeoutMiliseconds,
@@ -41,7 +41,8 @@ class RequestService implements RequestAgreement {
 
   Either<Notification, Map> _validateResponse(Response response) {
     if (response == null || response.statusCode != 200) {
-      return Left(Notification('RequestService.invalidResponse', 'O servidor retornou uma resposta inválida.'));
+      return Left(Notification('RequestService.invalidResponse',
+          'O servidor retornou uma resposta inválida.'));
     } else {
       return Right(Map.from(response.data));
     }
@@ -49,7 +50,8 @@ class RequestService implements RequestAgreement {
 
   Notification _onError(error) {
     if (error.runtimeType == TimeoutException) {
-      return Notification('RequestService.timeout', 'O servidor demorou muito para responder a solicitação.');
+      return Notification('RequestService.timeout',
+          'O servidor demorou muito para responder a solicitação.');
     } else if (error.runtimeType == DioError) {
       return _dioError(error);
     } else {
@@ -61,11 +63,14 @@ class RequestService implements RequestAgreement {
     switch (error.type) {
       case DioErrorType.connectTimeout:
       case DioErrorType.sendTimeout:
-        return Notification('RequestService.networkError', 'Não foi possível conectar-se a rede.');
+        return Notification('RequestService.networkError',
+            'Não foi possível conectar-se a rede.');
       case DioErrorType.receiveTimeout:
-        return Notification('RequestService.receiveTimeout', 'O Servidor demorou para responder.');
+        return Notification('RequestService.receiveTimeout',
+            'O Servidor demorou para responder.');
       case DioErrorType.response:
-        return Notification('RequestService.invalidResponse', 'O servidor retornou uma resposta inválida.');
+        return Notification('RequestService.invalidResponse',
+            'O servidor retornou uma resposta inválida.');
       default:
         return Notification('RequestService.unkown', 'Erro desconhecido');
     }

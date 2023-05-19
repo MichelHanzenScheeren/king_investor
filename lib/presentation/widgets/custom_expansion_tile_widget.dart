@@ -12,7 +12,7 @@ class CustomExpansionTileWidget extends StatelessWidget {
     this.children,
     this.margin,
     this.childrenPadding,
-    this.initiallyExpanded: false,
+    this.initiallyExpanded = false,
   });
 
   @override
@@ -27,7 +27,9 @@ class CustomExpansionTileWidget extends StatelessWidget {
       child: Theme(
         data: theme.copyWith(
           unselectedWidgetColor: theme.primaryColorLight,
-          textTheme: TextTheme(subtitle1: TextStyle(fontSize: 20, color: theme.primaryColorLight)),
+          textTheme: TextTheme(
+              subtitle1:
+                  TextStyle(fontSize: 20, color: theme.primaryColorLight)),
           accentColor: theme.hintColor,
         ),
         child: ExpansionTile(

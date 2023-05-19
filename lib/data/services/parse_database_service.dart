@@ -16,12 +16,15 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> create(String table, Map map, {String ownerId}) async {
+  Future<Either<Notification, Notification>> create(String table, Map map,
+      {String ownerId}) async {
     try {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.create(allowCustomObjectId: true);
-      if (response.success) return Right(Notification('ParseDatabaseService.create', 'Item salvo com sucesso'));
+      if (response.success)
+        return Right(Notification(
+            'ParseDatabaseService.create', 'Item salvo com sucesso'));
       return Left(_getError('create', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.create', erro.toString()));
@@ -29,12 +32,15 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> update(String table, Map map) async {
+  Future<Either<Notification, Notification>> update(
+      String table, Map map) async {
     try {
       final parseObject = ParseObject(table, client: _client);
       _registerDataOfCreateObject(parseObject, map);
       final response = await parseObject.update();
-      if (response.success) return Right(Notification('ParseDatabaseService.edit', 'Item editado com sucesso'));
+      if (response.success)
+        return Right(Notification(
+            'ParseDatabaseService.edit', 'Item editado com sucesso'));
       return Left(_getError('update', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.edit', erro.toString()));
@@ -42,11 +48,15 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, Notification>> delete(String table, String objectId) async {
+  Future<Either<Notification, Notification>> delete(
+      String table, String objectId) async {
     try {
-      final parseObject = ParseObject(table, client: _client)..objectId = objectId;
+      final parseObject = ParseObject(table, client: _client)
+        ..objectId = objectId;
       final response = await parseObject.delete();
-      if (response.success) return Right(Notification('ParseDatabaseService.delete', 'Item deletado com sucesso'));
+      if (response.success)
+        return Right(Notification(
+            'ParseDatabaseService.delete', 'Item deletado com sucesso'));
       return Left(_getError('delete', response.statusCode));
     } catch (erro) {
       return Left(Notification('ParseDatabaseService.delete', erro.toString()));
@@ -54,9 +64,11 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(String table, {List<String> include: const <String>[]}) async {
+  Future<Either<Notification, List>> getAll(String table,
+      {List<String> include = const <String>[]}) async {
     try {
-      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      QueryBuilder myQuery =
+          QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       myQuery.includeObject(include);
       final response = await myQuery.query();
       if (response.success) return Right(response.results);
@@ -71,10 +83,11 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     String table,
     List<String> relations,
     List<String> keys, {
-    List<String> include: const <String>[],
+    List<String> include = const <String>[],
   }) async {
     try {
-      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      QueryBuilder myQuery =
+          QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       for (int i = 0; i < relations.length; i++) {
         dynamic parse;
         if (relations[i] == 'User')
@@ -88,7 +101,8 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       if (response.success) return Right(response.results);
       return Left(_getError('filterByRelation', response.statusCode));
     } catch (erro) {
-      return Left(Notification('ParseDatabaseService.filterByRelation', erro.toString()));
+      return Left(Notification(
+          'ParseDatabaseService.filterByRelation', erro.toString()));
     }
   }
 
@@ -97,10 +111,11 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
     String table,
     List<String> properties,
     List<String> values, {
-    List<String> include: const <String>[],
+    List<String> include = const <String>[],
   }) async {
     try {
-      QueryBuilder myQuery = QueryBuilder<ParseObject>(ParseObject(table, client: _client));
+      QueryBuilder myQuery =
+          QueryBuilder<ParseObject>(ParseObject(table, client: _client));
       for (int i = 0; i < properties.length; i++) {
         myQuery.whereEqualTo(properties[i], values[i]);
       }
@@ -109,7 +124,8 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       if (response.success) return Right(response.results);
       return Left(_getError('filterByProperties', response.statusCode));
     } catch (erro) {
-      return Left(Notification('ParseDatabaseService.filterByProperties', erro.toString()));
+      return Left(Notification(
+          'ParseDatabaseService.filterByProperties', erro.toString()));
     }
   }
 
@@ -119,9 +135,11 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
       if (key.contains(pointerIndicator)) {
         String newKey = key.replaceAll(pointerIndicator, '');
         if (newKey.firstToUpper() == kUserTable)
-          parseObject.set<ParseUser>(newKey, ParseUser('', '', '')..objectId = map[key]);
+          parseObject.set<ParseUser>(
+              newKey, ParseUser('', '', '')..objectId = map[key]);
         else
-          parseObject.set<ParseObject>(newKey, ParseObject(newKey.firstToUpper())..objectId = map[key]);
+          parseObject.set<ParseObject>(
+              newKey, ParseObject(newKey.firstToUpper())..objectId = map[key]);
       } else {
         parseObject.set(key, map[key]);
       }
@@ -129,6 +147,7 @@ class ParseDatabaseService implements DatabaseServiceAgreement {
   }
 
   Notification _getError(String function, int number) {
-    return Notification('ParseDatabaseService.$function', ParseException.getDescription(number));
+    return Notification('ParseDatabaseService.$function',
+        ParseException.getDescription(number));
   }
 }

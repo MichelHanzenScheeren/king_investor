@@ -29,7 +29,8 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     try {
       String tableName = getTableName(appObject.runtimeType);
       Map converted = convertToMap(appObject);
-      return await _database.create(tableName, converted, ownerId: converted[kUserForeignKey]);
+      return await _database.create(tableName, converted,
+          ownerId: converted[kUserForeignKey]);
     } catch (erro) {
       return Left(_getError('create', erro));
     }
@@ -58,10 +59,12 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
   }
 
   @override
-  Future<Either<Notification, List>> getAll(Type appClass, {List<Type> include: const []}) async {
+  Future<Either<Notification, List>> getAll(Type appClass,
+      {List<Type> include = const []}) async {
     try {
       String tableName = getTableName(appClass);
-      final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
+      final toInclude = List<String>.generate(
+          include.length, (i) => getObjectsToInclude(include[i]));
       final response = await _database.getAll(tableName, include: toInclude);
       return response.fold(
         (notification) => Left(notification),
@@ -77,13 +80,16 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     Type appClass,
     List<Type> relations,
     List<String> keys, {
-    List<Type> include: const [],
+    List<Type> include = const [],
   }) async {
     try {
       String table = getTableName(appClass);
-      final relationsName = List<String>.generate(relations.length, (i) => getTableName(relations[i]));
-      final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
-      final response = await _database.filterByRelation(table, relationsName, keys, include: toInclude);
+      final relationsName = List<String>.generate(
+          relations.length, (i) => getTableName(relations[i]));
+      final toInclude = List<String>.generate(
+          include.length, (i) => getObjectsToInclude(include[i]));
+      final response = await _database
+          .filterByRelation(table, relationsName, keys, include: toInclude);
       return response.fold(
         (notification) => Left(notification),
         (list) => Right(_convertList(list, appClass)),
@@ -98,11 +104,13 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     Type appClass,
     List<String> properties,
     List<String> values, {
-    List<Type> include: const [],
+    List<Type> include = const [],
   }) async {
     String table = getTableName(appClass);
-    final toInclude = List<String>.generate(include.length, (i) => getObjectsToInclude(include[i]));
-    final response = await _database.filterByProperties(table, properties, values, include: toInclude);
+    final toInclude = List<String>.generate(
+        include.length, (i) => getObjectsToInclude(include[i]));
+    final response = await _database
+        .filterByProperties(table, properties, values, include: toInclude);
     return response.fold(
       (notification) => Left(notification),
       (list) => Right(_convertList(list, appClass)),
@@ -116,32 +124,46 @@ class DatabaseRepository implements DatabaseRepositoryAgreement {
     if (type == Company) return kCompanyTable;
     if (type == Wallet) return kWalletTable;
     if (type == User) return kUserTable;
-    throw Exception('O tipo de dado não corresponde a nenhuma tabela válida do banco de dados');
+    throw Exception(
+        'O tipo de dado não corresponde a nenhuma tabela válida do banco de dados');
   }
 
   Map convertToMap(Object object) {
     if (object is Asset) return AssetConverter().fromModelToMap(object);
-    if (object is CategoryScore) return CategoryScoreConverter().fromModelToMap(object);
+    if (object is CategoryScore)
+      return CategoryScoreConverter().fromModelToMap(object);
     if (object is Company) return CompanyConverter().fromModelToMap(object);
     if (object is Wallet) return WalletConverter().fromModelToMap(object);
-    throw Exception('O tipo de dado não corresponde a uma conversão válida para o banco de dados');
+    throw Exception(
+        'O tipo de dado não corresponde a uma conversão válida para o banco de dados');
   }
 
   String getObjectsToInclude(Type type) {
     if (type == Category) return kCategory;
     if (type == Company) return kCompany;
-    throw Exception('O tipo de dado não corresponde a uma inclusão válida de uma tabela');
+    throw Exception(
+        'O tipo de dado não corresponde a uma inclusão válida de uma tabela');
   }
 
   List _convertList(List list, Type type) {
     int len = list?.length ?? 0;
-    if (type == Asset) return List<Asset>.generate(len, (i) => AssetConverter().fromMapToModel(list[i]));
-    if (type == Category) return List<Category>.generate(len, (i) => CategoryConverter().fromMapToModel(list[i]));
-    if (type == Company) return List<Company>.generate(len, (i) => CompanyConverter().fromMapToModel(list[i]));
-    if (type == Wallet) return List<Wallet>.generate(len, (i) => WalletConverter().fromMapToModel(list[i]));
+    if (type == Asset)
+      return List<Asset>.generate(
+          len, (i) => AssetConverter().fromMapToModel(list[i]));
+    if (type == Category)
+      return List<Category>.generate(
+          len, (i) => CategoryConverter().fromMapToModel(list[i]));
+    if (type == Company)
+      return List<Company>.generate(
+          len, (i) => CompanyConverter().fromMapToModel(list[i]));
+    if (type == Wallet)
+      return List<Wallet>.generate(
+          len, (i) => WalletConverter().fromMapToModel(list[i]));
     if (type == CategoryScore)
-      return List<CategoryScore>.generate(len, (i) => CategoryScoreConverter().fromMapToModel(list[i]));
-    throw Exception('O tipo de dado não corresponde a uma conversão válida de modelo');
+      return List<CategoryScore>.generate(
+          len, (i) => CategoryScoreConverter().fromMapToModel(list[i]));
+    throw Exception(
+        'O tipo de dado não corresponde a uma conversão válida de modelo');
   }
 
   Notification _getError(String key, dynamic error) {
